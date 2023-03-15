@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 function isValidName(str){
   const regex = /^[\w]{3,10}$/;
   return regex.test(str);
@@ -86,6 +88,7 @@ export default {
   methods: {
 
     onSubmit() {
+      router.replace('/login')
       console.log('submit!')
       if(!isValidName(this.form.name)) alert("不符合格式的用户名！")
       else if(!isValidPhone(this.form.phone)) alert("不符合格式的手机号！")
@@ -109,6 +112,7 @@ export default {
             .then(resp => {
               if (resp.data.code === 1) {
                 alert("注册成功！");
+                router.replace('/login')
                 //跳转
               }
             })

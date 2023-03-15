@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   data() {
     return {
@@ -39,6 +41,7 @@ export default {
             .then(resp =>{
               if(resp.data.code === 1){
                 alert("登陆成功！");
+                router.replace('/user')
                 //跳转
               }
             })
