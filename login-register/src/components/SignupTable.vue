@@ -30,7 +30,35 @@
 </template>
 
 <script>
-import axios from "axios";
+function isValidName(str){
+  const regex = /^[\w]{3,10}$/;
+  return regex.test(str);
+}
+
+function isValidPhone(str) {
+  const regex = /^\d{11}$/;
+  return regex.test(str);
+}
+
+function isValidId(str) {
+  const regex = /^\d{17}(\d|X)$/;
+  return regex.test(str);
+}
+
+function isValidEmail(email) {
+  const regex = /^\S+@\S+\.\S+$/;
+  return regex.test(email);
+}
+
+function isValidPassword(str) {
+  // ^ 表示匹配字符串的开始，$ 表示匹配字符串的结尾
+  // (?=.*[a-z]) 匹配包含至少一个小写字母的字符串
+  // (?=.*[A-Z]) 匹配包含至少一个大写字母的字符串
+  // (?=.*\d) 匹配包含至少一个数字的字符串
+  // [\w-]{6,32} 匹配包含 6 到 32 个英文字符、数字、下划线或短横线的字符串
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w-]{6,32}$/;
+  return regex.test(str);
+}
 
 export default {
   data() {
@@ -56,8 +84,15 @@ export default {
     }
   },
   methods: {
+
     onSubmit() {
       console.log('submit!')
+      if(!isValidName(this.form.name)) alert("不符合格式的用户名！")
+      else if(!isValidPhone(this.form.phone)) alert("不符合格式的手机号！")
+      else if(!isValidId(this.form.id)) alert("不符合格式的身份证号！")
+      else if(!isValidEmail(this.form.mail)) alert("不符合格式的邮箱！")
+      else if(!isValidPassword(this.form.key)) alert("不符合格式的密码！")
+
       if (this.form.character !== "" && this.form.name !== "" && this.form.phone !== "" && this.form.id !== "" && this.form.mail !== "" && this.form.key !== "") {
         this.$axios({
           method: 'post',

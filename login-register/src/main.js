@@ -16,8 +16,6 @@ axios.defaults.baseURL = "/api";
 // 请求时带上cookie
 axios.defaults.withCredentials = true;
 
-
-
 app.use(router)
 app.use(ElementPlus)
 app.mount('#app')
