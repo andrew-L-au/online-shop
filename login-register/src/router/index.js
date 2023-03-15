@@ -3,6 +3,7 @@ import LoginTable from "@/components/LoginTable.vue";
 import WelcomePage from "@/components/WelcomePage.vue";
 import SignupTable from "@/components/SignupTable.vue";
 import UserPage from "@/components/UserPage.vue";
+import OpenStoreView from '../views/OpenStoreView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +26,12 @@ const router = createRouter({
     {
       path:'/user',
       component:UserPage
-    }
+    },
+    {
+      path: '/openStore',
+      name: 'openStore',
+      component: OpenStoreView
+    },
 
   ]
 })
