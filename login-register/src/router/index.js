@@ -2,14 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginTable from "@/components/LoginTable.vue";
 import WelcomePage from "@/components/WelcomePage.vue";
 import SignupTable from "@/components/SignupTable.vue";
-import UserPage from "@/components/UserPage.vue";
+import UserPage from "@/components/MainPage.vue";
+import OpenStoreView from '../views/OpenStoreView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      username: 'home',
       component: WelcomePage
     },
 
@@ -25,7 +26,12 @@ const router = createRouter({
     {
       path:'/user',
       component:UserPage
-    }
+    },
+    {
+      path: '/openStore',
+      name: 'openStore',
+      component: OpenStoreView
+    },
 
   ]
 })

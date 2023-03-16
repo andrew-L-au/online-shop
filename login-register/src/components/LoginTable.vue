@@ -32,18 +32,23 @@ export default {
       if(this.form.account !== "" && this.form.key !== ""){
         this.$axios({
           method:'post',
-          url: 'http://127.0.0.1:8080/api/user/login',
+          url: 'http://192.168.31.196:53539/user/Login',
+          // url: 'http://127.0.0.1:8080/api/user/login',
           data: {
-            account: this.form.account,
-            key: this.form.key
+            principal: "desfweffew",
+            credential: "Zz1234567"
+            // principal: this.form.account,
+            // credential: this.form.key
           }
         })
             .then(resp =>{
-              if(resp.data.code === 1){
+              // console.log("1")
+              if(resp.data === "success"){
                 alert("登陆成功！");
                 router.replace('/user')
                 //跳转
               }
+              // console.log("2")
             })
             .catch( err => {
               console.log(err);

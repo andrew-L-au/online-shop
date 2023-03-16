@@ -2,25 +2,25 @@
   <h1>Sign up</h1>
   <el-form ref="form" :model="form" label-width="80px">
     <el-form-item label="角色">
-      <el-select v-model="form.character" placeholder="请选择身份">
-        <el-option label="普通用户" value="user"></el-option>
-        <el-option label="商户" value="merchant"></el-option>
+      <el-select v-model="form.userRole" placeholder="请选择身份">
+        <el-option label="普通用户" value="CUSTOMER"></el-option>
+        <el-option label="商户" value="SHOP_OWNER"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="用户名">
-      <el-input v-model="form.name"></el-input>
+      <el-input v-model="form.username"></el-input>
     </el-form-item>
     <el-form-item label="手机号">
-      <el-input v-model="form.phone"></el-input>
+      <el-input v-model="form.phoneNumber"></el-input>
     </el-form-item>
     <el-form-item label="身份证号">
-      <el-input v-model="form.id"></el-input>
+      <el-input v-model="form.idCardNumber"></el-input>
     </el-form-item>
     <el-form-item label="邮箱">
-      <el-input v-model="form.mail"></el-input>
+      <el-input v-model="form.email"></el-input>
     </el-form-item>
     <el-form-item label="密码">
-      <el-input v-model="form.key"></el-input>
+      <el-input v-model="form.credential"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">确认</el-button>
@@ -65,52 +65,51 @@ function isValidPassword(str) {
 export default {
   data() {
     return {
-      // UserInfo:{
-      //   character: '',
-      //   name: '',
-      //   phone: '',
-      //   id: '',
-      //   mail: '',
-      //   key: '',
-      // },
-      // key: '',
-      // character: '',
       form: {
-        character: '',
-        name: '',
-        phone: '',
-        id: '',
-        mail: '',
-        key: '',
+        userRole: '',
+        username: '',
+        phoneNumber: '',
+        idCardNumber: '',
+        email: '',
+        credential: '',
       },
     }
   },
   methods: {
 
     onSubmit() {
-      router.replace('/login')
       console.log('submit!')
-      if(!isValidName(this.form.name)) alert("不符合格式的用户名！")
-      else if(!isValidPhone(this.form.phone)) alert("不符合格式的手机号！")
-      else if(!isValidId(this.form.id)) alert("不符合格式的身份证号！")
-      else if(!isValidEmail(this.form.mail)) alert("不符合格式的邮箱！")
-      else if(!isValidPassword(this.form.key)) alert("不符合格式的密码！")
-
-      if (this.form.character !== "" && this.form.name !== "" && this.form.phone !== "" && this.form.id !== "" && this.form.mail !== "" && this.form.key !== "") {
+      let flag = 0;
+      if(!isValidName(this.form.username)) alert("不符合格式的用户名！")
+      else if(!isValidPhone(this.form.phoneNumber)) alert("不符合格式的手机号！")
+      else if(!isValidId(this.form.idCardNumber)) alert("不符合格式的身份证号！")
+      else if(!isValidEmail(this.form.email)) alert("不符合格式的邮箱！")
+      else if(!isValidPassword(this.form.credential)) alert("不符合格式的密码！")
+      else flag = 1;
+      if (this.form.userRole !== "" && this.form.username !== "" && this.form.phoneNumber !== "" && this.form.idCardNumber !== "" && this.form.email !== "" && this.form.credential !== "") {
         this.$axios({
           method: 'post',
-          url: 'http://127.0.0.1:8080/api/user/register',
+          url: 'http://192.168.31.196:60940/user/registration',
+
+         // url: 'http://127.0.0.1:8080/api/user/register',
           data: {
-            character: this.form.character,
-            name: this.form.name,
-            phone: this.form.phone,
-            id: this.form.id,
-            mail: this.form.mail,
-            key: this.form.key,
+            userBasicInfo:{
+              username: this.form.username,
+              phoneNumber: this.form.phoneNumber,
+              idCardNumber: this.form.idCardNumber,
+              email: this.form.email,
+            },
+            userAuthentication:{
+              principal: this.form.username,
+              credential: this.form.credential,
+            },
+            userRole: this.form.userRole,
           }
         })
             .then(resp => {
-              if (resp.data.code === 1) {
+              console.log("succeed")
+              console.log(resp)
+              if (resp.data === "success") {
                 alert("注册成功！");
                 router.replace('/login')
                 //跳转
@@ -120,7 +119,7 @@ export default {
               console.log(err);
             })
       } else {
-        alert("填写不能为空！");
+        if(flag !== 0) alert("填写不能为空！");
       }
       // const resp = axios.post(this.form.character, this.form.name, this.form.phone, this.form.id, this.form.mail, this.form.key);
       // console.log(resp)
