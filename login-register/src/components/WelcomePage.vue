@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  username: "WelcomePage"
+  name: "WelcomePage"
 }
 </script>
 
