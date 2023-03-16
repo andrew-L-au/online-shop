@@ -15,6 +15,33 @@ const mainForm = reactive({
 
 })
 
+const checkIdentityId = (rule: any, value: any, callback: any) => {
+    if (value === '') {
+        callback(new Error('Please input identityId'))
+    }
+    else {
+        const regex = /^\d{17}(\d|X)$/;
+        if (!regex.test(mainForm.identityId)) {
+            callback(new Error('Input is not valid'))
+        } else {
+            callback()
+        }
+    }
+}
+const checkMoney = (rule: any, value: any, callback: any) => {
+    if (value === '') {
+        callback(new Error('Please input the amount of register money'))
+    }
+    else {
+        if (value <= 1000) {
+            callback(new Error('Register money should be greater than 1000'))
+        }
+        else {
+            callback()
+        }
+    }
+}
+
 const rules = reactive<FormRules>({
     storeName: [
         { required: true, message: 'Please input store name', trigger: 'blur' },
@@ -25,9 +52,8 @@ const rules = reactive<FormRules>({
 
     ],
     identityId: [
-        { required: true, message: 'Please input identityId', trigger: 'blur' },
-        //add identity check rules
-        
+        { validator: checkIdentityId, required: true, trigger: 'blur' },
+
     ],
     description: [
         { required: true, message: 'Please input store description', trigger: 'blur' },
@@ -40,7 +66,7 @@ const rules = reactive<FormRules>({
     money: [
         { required: true, message: 'Please input the amount of register money', trigger: 'blur' },
         { type: 'number', message: 'Please input a number' },
-        //
+        { validator: checkMoney },
     ],
     date: [
         {
@@ -62,13 +88,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 method: 'post',
                 url: '/openStore',
                 data: {
-                   storeName: mainForm.storeName,
+                    storeName: mainForm.storeName,
                     commodityCategory: mainForm.commodityCategory,
                     identityId: mainForm.identityId,
                     description: mainForm.description,
                     recordAddress: mainForm.recordAddress,
                     money: mainForm.money,
-                    date: mainForm.date, 
+                    date: mainForm.date,
 
                 }
             })
