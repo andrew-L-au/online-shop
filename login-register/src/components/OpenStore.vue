@@ -7,13 +7,40 @@ const mainFormRef = ref<FormInstance>();
 const mainForm = reactive({
     storeName: '',
     commodityCategory: '',
-    identityId: '',
+    IdCardNumber: '',
     description: '',
     recordAddress: '',
     money: '',
     date: '',
 
 })
+
+const checkIdCardNumber = (rule: any, value: any, callback: any) => {
+    if (value === '') {
+        callback(new Error('Please input IdCardNumber'))
+    }
+    else {
+        const regex = /^\d{17}(\d|X)$/;
+        if (!regex.test(mainForm.IdCardNumber)) {
+            callback(new Error('Input is not valid'))
+        } else {
+            callback()
+        }
+    }
+}
+const checkMoney = (rule: any, value: any, callback: any) => {
+    if (value === '') {
+        callback(new Error('Please input the amount of register money'))
+    }
+    else {
+        if (value <= 1000) {
+            callback(new Error('Register money should be greater than 1000'))
+        }
+        else {
+            callback()
+        }
+    }
+}
 
 const rules = reactive<FormRules>({
     storeName: [
@@ -24,10 +51,9 @@ const rules = reactive<FormRules>({
         { required: true, message: 'Please input commodity categories', trigger: 'blur' },
 
     ],
-    identityId: [
-        { required: true, message: 'Please input identityId', trigger: 'blur' },
-        //add identity check rules
-        
+    IdCardNumber: [
+        { validator: checkIdCardNumber, required: true, trigger: 'blur' },
+
     ],
     description: [
         { required: true, message: 'Please input store description', trigger: 'blur' },
@@ -40,7 +66,7 @@ const rules = reactive<FormRules>({
     money: [
         { required: true, message: 'Please input the amount of register money', trigger: 'blur' },
         { type: 'number', message: 'Please input a number' },
-        //
+        { validator: checkMoney },
     ],
     date: [
         {
@@ -62,13 +88,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 method: 'post',
                 url: '/openStore',
                 data: {
-                   storeName: mainForm.storeName,
+                    storeName: mainForm.storeName,
                     commodityCategory: mainForm.commodityCategory,
-                    identityId: mainForm.identityId,
+                    IdCardNumber: mainForm.IdCardNumber,
                     description: mainForm.description,
                     recordAddress: mainForm.recordAddress,
                     money: mainForm.money,
-                    date: mainForm.date, 
+                    date: mainForm.date,
 
                 }
             })
@@ -103,8 +129,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
         <el-form-item label="商品类别" prop="commodityCategory">
             <el-input v-model="mainForm.commodityCategory"></el-input>
         </el-form-item>
-        <el-form-item label="身份证号" prop="identityId">
-            <el-input v-model="mainForm.identityId"></el-input>
+        <el-form-item label="身份证号" prop="IdCardNumber">
+            <el-input v-model="mainForm.IdCardNumber"></el-input>
         </el-form-item>
         <el-form-item label="商店简介" prop="description">
             <el-input v-model="mainForm.description" type="textarea" placeholder="不超过128个字" />
