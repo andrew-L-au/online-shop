@@ -24,6 +24,7 @@ export default {
         account: '',
         key: '',
       },
+      userToken:'',
     }
   },
   methods: {
@@ -35,16 +36,18 @@ export default {
           url: 'http://192.168.31.196:53539/user/Login',
           // url: 'http://127.0.0.1:8080/api/user/login',
           data: {
-            principal: "desfweffew",
-            credential: "Zz1234567"
-            // principal: this.form.account,
-            // credential: this.form.key
+            // principal: "desfweffew",
+            // credential: "Zz1234567"
+            principal: this.form.account,
+            credential: this.form.key
           }
         })
             .then(resp =>{
               // console.log("1")
               if(resp.data === "success"){
                 alert("登陆成功！");
+                this.userToken = resp.data.token;
+                localStorage.setItem("token",this.userToken);
                 router.replace('/user')
                 //跳转
               }

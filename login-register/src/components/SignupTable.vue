@@ -90,8 +90,7 @@ export default {
         this.$axios({
           method: 'post',
           url: 'http://192.168.31.196:60940/user/registration',
-
-         // url: 'http://127.0.0.1:8080/api/user/register',
+          //url: 'http://127.0.0.1:8080/api/user/register',
           data: {
             userBasicInfo:{
               username: this.form.username,
