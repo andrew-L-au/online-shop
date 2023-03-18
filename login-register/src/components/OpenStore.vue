@@ -6,7 +6,7 @@ const formSize = ref('default');
 const mainFormRef = ref<FormInstance>();
 const mainForm = reactive({
     storeName: '',
-    commodityCategory: '',
+    commodityCategory: [],
     IdCardNumber: '',
     description: '',
     recordAddress: '',
@@ -88,14 +88,22 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 method: 'post',
                 url: '/openStore',
                 data: {
-                    storeName: mainForm.storeName,
-                    commodityCategory: mainForm.commodityCategory,
-                    IdCardNumber: mainForm.IdCardNumber,
-                    description: mainForm.description,
-                    recordAddress: mainForm.recordAddress,
-                    money: mainForm.money,
-                    date: mainForm.date,
-
+                  shopBasicInfo:{
+                    shop:mainForm.storeName,
+                    profile:mainForm.description,
+                    address:mainForm.recordAddress,
+                    totalCapital:mainForm.money,
+                    registrationDate:mainForm.date,
+                  },
+                  shopOwner:this.userToken.principal,
+                  commodityType:mainForm.commodityCategory,
+                    // storeName: mainForm.storeName,
+                    // commodityCategory: mainForm.commodityCategory,
+                    // IdCardNumber: mainForm.IdCardNumber,
+                    // description: mainForm.description,
+                    // recordAddress: mainForm.recordAddress,
+                    // money: mainForm.money,
+                    // date: mainForm.date,
                 }
             })
                 .then((resp) => {

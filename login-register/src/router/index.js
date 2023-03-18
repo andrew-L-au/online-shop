@@ -4,7 +4,7 @@ import WelcomePage from "@/components/WelcomePage.vue";
 import SignupTable from "@/components/SignupTable.vue";
 import MainPage from "@/components/MainPage.vue";
 import OpenStoreView from '../views/OpenStoreView.vue'
-import Admin from "@/components/Admin.vue";
+import Admin from "@/components/AdminPage.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
