@@ -4,11 +4,14 @@
       <nav>
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#545c64"
           text-color="#fff" active-text-color="#ffd04b">
-          <el-menu-item index="1"><RouterLink to="/user">首页</RouterLink></el-menu-item>
+          <el-menu-item index="1">
+            <RouterLink to="/user">首页</RouterLink>
+          </el-menu-item>
           <div class="flex-grow" />
           <el-menu-item index="2">欢迎:<span v-bind=""></span></el-menu-item>
-          <el-menu-item index="3"><RouterLink to="/openStore">申请开店</RouterLink></el-menu-item>
-          <el-menu-item index="4"><RouterLink to="/">登出</RouterLink></el-menu-item>
+          <el-menu-item index="3">
+            <RouterLink to="/">登出</RouterLink>
+          </el-menu-item>
         </el-menu>
       </nav>
     </header>
@@ -27,8 +30,8 @@
 
 <script lang="ts" setup>
 
-import { ref } from 'vue'
-
+import { ref, onMounted } from 'vue'
+import axios from 'axios';
 const activeIndex = ref('1')
 const tableData = [
   {
