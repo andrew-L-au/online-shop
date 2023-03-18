@@ -2,7 +2,7 @@
   <h1>Log in</h1>
   <el-form ref="form" :model="form" label-width="80px">
     <el-form-item label="账号">
-      <el-input placeholder="请输入账号" v-model="form.account" clearable></el-input>
+      <el-input placeholder="请输入用户名" v-model="form.account" clearable></el-input>
     </el-form-item>
     <el-form-item label="密码">
       <el-input placeholder="请输入密码" v-model="form.key" show-password></el-input>
@@ -24,15 +24,15 @@ export default {
         account: '',
         key: '',
       },
-      userToken:'',
+      userToken: '',
     }
   },
   methods: {
     onSubmit() {
       console.log('submit!')
-      if(this.form.account !== "" && this.form.key !== ""){
+      if (this.form.account !== "" && this.form.key !== "") {
         this.$axios({
-          method:'post',
+          method: 'post',
           url: 'http://192.168.31.196:53539/user/Login',
           // url: 'http://127.0.0.1:8080/api/user/login',
           data: {
@@ -42,22 +42,31 @@ export default {
             credential: this.form.key
           }
         })
-            .then(resp =>{
-              // console.log("1")
-              if(resp.data === "success"){
+            .then(resp => {
+              console.log(resp)
+              if (resp.data.token) {
                 alert("登陆成功！");
                 this.userToken = resp.data.token;
-                localStorage.setItem("token",this.userToken);
-                router.replace('/user')
+                localStorage.setItem("token", this.userToken);
+                //判断为商户和用户
+                // var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlcklkXCI6MTYzNjk3Njg4MDU5NjgxNTg3MyxcInVzZXJCYXNpY0luZm9cIjp7XCJ1c2VyQmFzaWNJbmZvSWRcIjoxNjM2OTc2ODgwNTY3NDU1NzQ1LFwidXNlclwiOm51bGwsXCJ1c2VybmFtZVwiOlwiYWJjXCIsXCJwaG9uZU51bWJlclwiOlwiMTIzNDU2XCIsXCJpZENhcmROdW1iZXJcIjpcIjMyMzUzMjEyMzRcIixcImVtYWlsXCI6XCIzNDI1QGRmc2Fkcy5jb21cIn0sXCJ1c2VyQXV0aGVudGljYXRpb25cIjp7XCJ1c2VyQXV0aGVudGljYXRpb25JZFwiOm51bGwsXCJ1c2VyXCI6bnVsbCxcInByaW5jaXBhbFwiOlwiYWJjXCIsXCJjcmVkZW50aWFsXCI6XCIzMjkwODQyM1wifSxcInVzZXJSb2xlXCI6XCJTSE9QX09XTkVSXCJ9In0.4tgrJAyQ_K92YxtxV-Kdk1IclkKC2Oa6POxgRYOsEyc'
+                let strings = this.userToken.split("."); //截取token，获取载体
+                var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
+                var info = JSON.parse(userinfo.user)
+                console.log(userinfo)
+                console.log(info.userRole)
+                let role = info.userRole
+                if(role === "CUSTOMER") router.replace('/user')
+                else if (role === "SHOP_OWNER") router.replace('/openStore')
+                else if (role === "ADMIN") router.replace('/admin')
                 //跳转
               }
               // console.log("2")
             })
-            .catch( err => {
+            .catch(err => {
               console.log(err);
             })
-      }
-      else{
+      } else {
         alert("填写不能为空！");
       }
       //axios.post('/api/user/login',this.form.account,this.form.key);

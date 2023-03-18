@@ -99,9 +99,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 }
             })
                 .then((resp) => {
-                    if (resp.data.code === 200) {
+                    if (resp.data === "success") {
                         alert('申请成功！')
-                        //跳转
                     }
                 })
                 .catch((err) => {
@@ -150,6 +149,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
                 申请
             </el-button>
             <el-button @click="resetForm(mainFormRef)">重置</el-button>
+          <el-button onclick="window.location.href ='http://127.0.0.1:8000/'">取消</el-button>
         </el-form-item>
     </el-form>
 </template>

@@ -2,7 +2,6 @@
   <header>
     <h1>Welcome to online shopping system!</h1>
   </header>
-  <br>
 <!--  <el-button type="primary">log in</el-button>-->
   <router-link to="/login">log in</router-link>
   <br>
