@@ -1,9 +1,9 @@
-<template>
+<template style="max-width:100%">
   <body>
     <header>
       <el-button link type="primary" @click="getShopInfo">更新数据</el-button>
       <nav>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#545c64"
+        <el-menu :default-active="activeIndex" class="el-menu-demo" background-color="#545c64"
           text-color="#fff" active-text-color="#ffd04b">
           <el-menu-item index="1">
             <RouterLink to="/user">首页</RouterLink>
@@ -31,10 +31,6 @@
 
 
 <script>
-
-import { ref, onMounted } from 'vue'
-import axios from 'axios';
-const activeIndex = ref('1')
 
 export default {
   data() {
@@ -91,8 +87,17 @@ export default {
 
 </script>
 
-<style scoped>
+<style scoped max-width="100%">
 .flex-grow {
   flex-grow: 1;
+}
+.el-menu-demo {
+  margin-left: 0;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  width: 10rem;
+  height: 40rem;
+  padding: 0;
+  float: left;
 }
 </style>
