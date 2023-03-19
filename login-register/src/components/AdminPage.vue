@@ -1,6 +1,6 @@
 <template>
   <section>
-    <!-- <el-table :data="shopRequest" height="500" id="shopRequest">
+     <el-table :data="shopRequest" height="500" id="shopRequest">
       <el-table-column prop="storeName" label="商店名称" width="180"></el-table-column>
       <el-table-column prop="commodityTypes" label="商品类别" width="200"></el-table-column>
       <el-table-column prop="IdCardNumber" label="身份证号" width="200"></el-table-column>
@@ -15,7 +15,7 @@
         </template>
       </el-table-column>
 
-    </el-table> -->
+    </el-table>
   </section>
 </template>
 

@@ -6,7 +6,8 @@ const formSize = ref('default');
 const mainFormRef = ref<FormInstance>();
 const mainForm = reactive({
     storeName: '',
-    commodityCategory: [],
+    commodityCategory: '',
+    commodityTypes: [],
     IdCardNumber: '',
     description: '',
     recordAddress: '',
@@ -79,32 +80,40 @@ const rules = reactive<FormRules>({
 
 })
 
+
+
 const submitForm = async (formEl: FormInstance | undefined) => {
+    mainForm.commodityTypes = mainForm.commodityCategory.split(/\s+/);
+    // console.log(mainForm.commodityTypes[0])
+    // console.log(mainForm.commodityTypes[1])
+    // console.log(mainForm.commodityTypes[2])
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (valid) {
             console.log('submit!')
+            console.log(mainForm)
             axios({
                 method: 'post',
-                url: '/openStore',
+                url: 'http://101.200.57.208:36007/shop/request-open-shop',
                 data: {
-                  shopBasicInfo:{
-                    shop:mainForm.storeName,
-                    profile:mainForm.description,
-                    address:mainForm.recordAddress,
-                    totalCapital:mainForm.money,
-                    registrationDate:mainForm.date,
+                  shop:{
+                    shopBasicInfo:{
+                      name:mainForm.storeName,
+                      profile:mainForm.description,
+                      address:mainForm.recordAddress,
+                      totalCapital:mainForm.money,
+                      registrationDate:mainForm.date,
+                    },
+                    // shopOwner:this.userToken.principal,
+                    commodityTypes : mainForm.commodityTypes,
                   },
-                  shopOwner:this.userToken.principal,
-                  commodityType:mainForm.commodityCategory,
-                    // storeName: mainForm.storeName,
-                    // commodityCategory: mainForm.commodityCategory,
-                    // IdCardNumber: mainForm.IdCardNumber,
+                  idCardNumber: mainForm.IdCardNumber,
                     // description: mainForm.description,
                     // recordAddress: mainForm.recordAddress,
                     // money: mainForm.money,
                     // date: mainForm.date,
                 }
+                console.log(this.data)
             })
                 .then((resp) => {
                     if (resp.data === "success") {
