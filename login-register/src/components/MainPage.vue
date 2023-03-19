@@ -1,6 +1,7 @@
 <template>
   <body>
     <header>
+      <el-button link type="primary" @click="getShopInfo">更新数据</el-button>
       <nav>
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#545c64"
           text-color="#fff" active-text-color="#ffd04b">
@@ -28,18 +29,47 @@
 </template>
 
 
-<script lang="ts" setup>
+<script>
 
 import { ref, onMounted } from 'vue'
 import axios from 'axios';
 const activeIndex = ref('1')
-const tableData = [
-  {
-    storeName: '',
-    commodityTypes: '',
-    description: '',
+// const tableData = [
+//   {
+//     storeName: '',
+//     commodityTypes: '',
+//     description: '',
+//   },
+// ]
+
+export default{
+  data(){
+    return{
+      shopInfo : [],
+    }
   },
-]
+
+  methods :{
+    getShopInfo(){
+      this.$axios({
+        method: 'get',
+        url: 'http://101.200.57.208:36007/shop/current-shops',
+      })
+          .then(resp =>{
+            console.log(resp.data)
+            for (let i = 0; i < resp.data.length; i++){
+              this.shopInfo.push(resp.data[i])
+            }
+            console.log(this.shopInfo)
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    }
+  }
+
+}
+
 
 </script>
 

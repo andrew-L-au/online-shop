@@ -7,7 +7,7 @@ const mainFormRef = ref<FormInstance>();
 const mainForm = reactive({
     storeName: '',
     commodityCategory: '',
-    commodityTypes: [],
+    commodityTypeArray: [],
     IdCardNumber: '',
     description: '',
     recordAddress: '',
@@ -15,6 +15,8 @@ const mainForm = reactive({
     date: '',
 
 })
+
+
 
 const checkIdCardNumber = (rule: any, value: any, callback: any) => {
     if (value === '') {
@@ -83,15 +85,23 @@ const rules = reactive<FormRules>({
 
 
 const submitForm = async (formEl: FormInstance | undefined) => {
-    mainForm.commodityTypes = mainForm.commodityCategory.split(/\s+/);
-    // console.log(mainForm.commodityTypes[0])
-    // console.log(mainForm.commodityTypes[1])
+  //  mainForm.commodityTypes = mainForm.commodityCategory.split(/\s+/);
+  var stringArray = mainForm.commodityCategory.split(/\s+/);
+  //var commodityTypeArray = new Array;
+  for (let index = 0; index < stringArray.length; index++) {
+    mainForm.commodityTypeArray.push(
+        {
+          commodityType : stringArray[index]
+        })
+  }
+    // console.log(commodityTypeArray[0])
+    // console.log(commodityTypeArray[1])
     // console.log(mainForm.commodityTypes[2])
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (valid) {
             console.log('submit!')
-            console.log(mainForm)
+          console.log(mainForm.commodityTypeArray[0])
             axios({
                 method: 'post',
                 url: 'http://101.200.57.208:36007/shop/request-open-shop',
@@ -104,16 +114,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                       totalCapital:mainForm.money,
                       registrationDate:mainForm.date,
                     },
-                    // shopOwner:this.userToken.principal,
-                    commodityTypes : mainForm.commodityTypes,
+
+                    commodityTypes : mainForm.commodityTypeArray,
                   },
                   idCardNumber: mainForm.IdCardNumber,
-                    // description: mainForm.description,
-                    // recordAddress: mainForm.recordAddress,
-                    // money: mainForm.money,
-                    // date: mainForm.date,
+                  // shopOwner:this.userToken.principal,
                 }
-                console.log(this.data)
             })
                 .then((resp) => {
                     if (resp.data === "success") {

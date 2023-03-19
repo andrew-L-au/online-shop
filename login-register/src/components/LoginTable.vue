@@ -60,6 +60,9 @@ export default {
                 else if (role === "ADMINISTRATOR") router.replace('/admin')
                 //跳转
               }
+              else{
+                alert("登录失败！");
+              }
               // console.log("2")
             })
             .catch(err => {

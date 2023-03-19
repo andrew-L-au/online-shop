@@ -1,4 +1,5 @@
 <template>
+  <el-button link type="primary" @click="getShopInfo">更新数据</el-button>
   <section>
      <el-table :data="shopRequest" height="500" id="shopRequest">
       <el-table-column prop="storeName" label="商店名称" width="180"></el-table-column>
@@ -14,8 +15,8 @@
           <el-button link type="primary" @click="onSubmit">批准申请</el-button>
         </template>
       </el-table-column>
-
     </el-table>
+
   </section>
 </template>
 
@@ -25,43 +26,72 @@ export default {
   data() {
     return {
       shopRequest:[],
-      openShopRequestId:'',
-      shop : {
-        shopId :'',
-      }
+      //openShopRequestId:'',
+      // shop : {
+      //   shopId :'',
+      // }
     }
   },
   methods: {
     getShopInfo() {
+      console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://101.200.57.208:33909/shop/get-open-shop-requests',
+        url: 'http://101.200.57.208:36007/shop/open-shop-requests',
       })
           .then(resp =>{
-            this.shopRequest = resp.data
-            this.openShopRequestId = this.shopRequest.openShopRequestId
-            this.shop.shopId = this.shopRequest.shop.shopId
-            console.log(this.shopRequest[0].shop.profile);
-            console.log(this.shopRequest[0].shop.shopId);
+            console.log(resp.data)
+            for (let i = 0; i < resp.data.length; i++){
+              this.shopRequest.push(resp.data[i])
+            }
+            // for (let i = 0; i < resp.data.length; i++) {
+            //   this.shopRequest.push({
+            //     openShopRequestId : resp.data[i].openShopRequestId,
+            //     shop:{
+            //       shopId :resp.data[i].shopId,
+            //       shopBasicInfo: {
+            //         shopBasicInfoId : resp.data[i].shopBasicInfoId,
+            //         shop : resp.data[i].shop,
+            //         profile : resp.data[i].profile,
+            //         address : resp.data[i].address,
+            //         totalCapital: resp.data[i].totalCapital,
+            //         registrationDate: resp.data[i].registrationDate,
+            //       },
+            //       shopOwner : resp.data[i].shopOwner,
+            //       commodityTypes: resp.data[i].commodityTypes,
+            //       shopStatus :resp.data[i].shopStatus,
+            //     },
+            //     requestStatus : resp.data[i].requestStatus,
+            //   })
+            // }
+           // this.shopRequest = resp.data
+            console.log(this.shopRequest)
+            // this.openShopRequestId = this.shopRequest.openShopRequestId
+            // this.shop.shopId = this.shopRequest.shop.shopId
+            // console.log(this.shopRequest[0].shop.profile);
+            // console.log(this.shopRequest[0].shop.shopId);
           })
           .catch(err => {
             console.log(err);
           })
+      console.log(this.shopRequest)
     },
 
     onSubmit(){
       console.log('submit!')
       this.$axios({
         method: 'post',
-        url:'http://101.200.57.208:33909/shop/approve-open-shop-request',
+        url:'http://101.200.57.208:36007/shop/approve-open-shop-request',
         data: {
-          openShopRequestId : this.openShopRequestId,
+          openShopRequestId : this.shopRequest.openShopRequestId,
           shop : {
-            shopId : this.shop.shopId,
+            shopId : this.shopRequest.shopId,
           }
         }
       })
           .then(resp =>{
+            console.log(this.shopRequest[0].openShopRequestId)
+            console.log(this.shopRequest[0].shop.shopId)
               alert("批准成功！");
           })
           .catch(err => {
