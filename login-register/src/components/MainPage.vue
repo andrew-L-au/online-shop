@@ -9,7 +9,7 @@
             <RouterLink to="/user">首页</RouterLink>
           </el-menu-item>
           <div class="flex-grow" />
-          <el-menu-item index="2">欢迎:<span v-bind=""></span></el-menu-item>
+          <el-menu-item index="2">欢迎<span v-bind=""></span></el-menu-item>
           <el-menu-item index="3">
             <RouterLink to="/">登出</RouterLink>
           </el-menu-item>
@@ -19,10 +19,11 @@
 
 
     <section>
-      <el-table :data="tableData" border="true" height="500" style="width: 100%;">
+      <el-table :data="shopInfo" border height="500" style="width: 100%;">
+        <el-table-column type="index" label="No." width="50"></el-table-column>
         <el-table-column prop="storeName" label="商店名称" width="180"></el-table-column>
         <el-table-column prop="commodityTypes" label="商品类别" width="200"></el-table-column>
-        <el-table-column prop="description" label="商店简介" width="300"></el-table-column>
+        <el-table-column prop="profile" label="商店简介" width="300"></el-table-column>
       </el-table>
     </section>
   </body>
@@ -34,37 +35,49 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios';
 const activeIndex = ref('1')
-// const tableData = [
-//   {
-//     storeName: '',
-//     commodityTypes: '',
-//     description: '',
-//   },
-// ]
 
-export default{
-  data(){
-    return{
-      shopInfo : [],
+export default {
+  data() {
+    return {
+      shopInfo: [
+        {storeName: ''},
+        {commodityTypes: ''},
+        {profile: ''},
+      ],
     }
+    
   },
 
-  methods :{
-    getShopInfo(){
+  methods: {
+    getShopInfo() {
       this.$axios({
         method: 'get',
         url: 'http://101.200.57.208:36007/shop/current-shops',
       })
-          .then(resp =>{
-            console.log(resp.data)
-            for (let i = 0; i < resp.data.length; i++){
-              this.shopInfo.push(resp.data[i])
+        .then(resp => {
+          console.log(resp.data.length)
+          console.log(resp.data)
+          for (let i = 0; i < resp.data.length; i++) {
+            let tmp = resp.data[i]
+            if (i !== 0) {
+              this.shopInfo.push(this.shopInfo[i - 1])
             }
-            console.log(this.shopInfo)
-          })
-          .catch(err => {
-            console.log(err);
-          })
+
+            this.shopInfo[i].storeName = tmp.shopBasicInfo.name
+            for (let j = 0; j < tmp.commodityTypes.length; j++){
+              this.shopInfo[i].commodityTypes += tmp.commodityTypes[j].commodityType;
+              this.shopInfo[i].commodityTypes += ' ';
+            }
+            this.shopInfo[i].profile = tmp.shopBasicInfo.profile
+
+            console.log(resp.data[i])
+            console.log(this.shopInfo[i])
+          }
+          // console.log(this.shopInfo)
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
   }
 
