@@ -37,7 +37,7 @@ export default {
       console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://101.200.57.208:36007/shop/open-shop-requests',
+        url: 'http://101.200.57.208:39419/shop/open-shop-requests',
       })
           .then(resp =>{
             console.log(resp.data)
@@ -81,7 +81,7 @@ export default {
       console.log('submit!')
       this.$axios({
         method: 'post',
-        url:'http://101.200.57.208:36007/shop/approve-open-shop-request',
+        url:'http://101.200.57.208:39419/shop/approve-open-shop-request',
         data: {
           openShopRequestId : this.shopRequest.openShopRequestId,
           shop : {

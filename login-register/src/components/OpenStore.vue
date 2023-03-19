@@ -104,7 +104,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           console.log(mainForm.commodityTypeArray[0])
             axios({
                 method: 'post',
-                url: 'http://101.200.57.208:36007/shop/request-open-shop',
+                url: 'http://101.200.57.208:39419/shop/request-open-shop',
                 data: {
                   shop:{
                     shopBasicInfo:{
