@@ -57,6 +57,7 @@ export default {
         .then(resp => {
           console.log(resp.data.length)
           console.log(resp.data)
+<<<<<<< HEAD
           this.shopInfo[0].commodityTypes = ' '
           console.log(this.shopInfo.commodityTypes)
           for (let i = 0; i < resp.data.length; i++) {
@@ -75,6 +76,24 @@ export default {
             console.log(resp.data[i])
           }
 
+=======
+          for (let i = 0; i < resp.data.length; i++) {
+            let tmp = resp.data[i]
+            if (i !== 0) {
+              this.shopInfo.push(this.shopInfo[i - 1])
+            }
+
+            this.shopInfo[i].storeName = tmp.shopBasicInfo.name
+            for (let j = 0; j < tmp.commodityTypes.length; j++){
+              this.shopInfo[i].commodityTypes += tmp.commodityTypes[j].commodityType;
+              this.shopInfo[i].commodityTypes += ' ';
+            }
+            this.shopInfo[i].profile = tmp.shopBasicInfo.profile
+
+            console.log(resp.data[i])
+            console.log(this.shopInfo[i])
+          }
+>>>>>>> 6c32e497d65e3045e4805f68ab5ce6999c5372c0
           // console.log(this.shopInfo)
         })
         .catch(err => {
