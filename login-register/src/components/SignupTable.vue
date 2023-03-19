@@ -86,7 +86,7 @@ export default {
       else if(!isValidEmail(this.form.email)) alert("不符合格式的邮箱！")
       else if(!isValidPassword(this.form.credential)) alert("不符合格式的密码！")
       else flag = 1;
-      if (this.form.userRole !== "" && this.form.username !== "" && this.form.phoneNumber !== "" && this.form.idCardNumber !== "" && this.form.email !== "" && this.form.credential !== "") {
+      if (this.form.userRole !== "" && this.form.username !== "" && this.form.phoneNumber !== "" && this.form.idCardNumber !== "" && this.form.email !== "" && this.form.credential !== "" &&flag === 1) {
         this.$axios({
           method: 'post',
           url: 'http://101.200.57.208:34405/user/registration',

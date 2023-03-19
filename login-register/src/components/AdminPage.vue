@@ -31,6 +31,7 @@ const _inputNumber = ref(1)
 export default {
   data() {
     return {
+      index : '',
       shopRequest: [
         { storeName: '' },
         { commodityTypes: ' ' },
@@ -67,6 +68,7 @@ export default {
               string += ' ';
             }
             console.log(string)
+            this.shopRequest[i].index = i
             this.shopRequest[i].storeName = tmp.shop.shopBasicInfo.name
             this.shopRequest[i].commodityTypes = string
             this.shopRequest[i].profile = tmp.shop.shopBasicInfo.profile
