@@ -52,7 +52,7 @@ export default {
     getShopInfo() {
       this.$axios({
         method: 'get',
-        url: 'http://101.200.57.208:36007/shop/current-shops',
+        url: 'http://101.200.57.208:39419/shop/current-shops',
       })
         .then(resp => {
           console.log(resp.data.length)
