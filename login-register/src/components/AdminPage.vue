@@ -29,6 +29,7 @@
 export default {
   data() {
     return {
+      index : '',
       shopRequest: [
         { storeName: '' },
         { commodityTypes: ' ' },
@@ -62,6 +63,7 @@ export default {
               string += ' ';
             }
             console.log(string)
+            this.shopRequest[i].index = i
             this.shopRequest[i].storeName = tmp.shop.shopBasicInfo.name
             this.shopRequest[i].commodityTypes = string
             this.shopRequest[i].profile = tmp.shop.shopBasicInfo.profile
@@ -98,8 +100,8 @@ export default {
         }
       })
         .then(resp => {
-          console.log(this.shopRequest[0].openShopRequestId)
-          console.log(this.shopRequest[0].shop.shopId)
+          // console.log(this.shopRequest[0].openShopRequestId)
+          // console.log(this.shopRequest[0].shop.shopId)
           alert("批准成功！");
         })
         .catch(err => {
