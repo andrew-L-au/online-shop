@@ -1,7 +1,7 @@
 <template>
   <section>
     <el-table :data="shopRequest" height="500" id="shopRequest">
-      <el-table-column type="index" />
+      <el-table-column fixed type="index" />
       <el-table-column label="更新数据" width="120">
         <template #default>
           <el-button link type="primary" @click="getShopInfo()">更新数据</el-button>
@@ -14,10 +14,10 @@
       <el-table-column prop="totalCapital" label="注册资金" width="150"></el-table-column>
       <el-table-column prop="registrationDate" label="注册时间" width="150"></el-table-column>
       <el-table-column fixed="right" prop="requestStatus" label="申请状态" width="120"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="120">
-        <template #default>
-          <el-button type="primary" @click="onSubmit()">批准申请</el-button>
-        </template>
+      <el-table-column fixed="right" label="操作" width="120" type="index">
+        <!-- <el-input placeholder="请确认商品序号" v-model="input"></el-input> -->
+        <el-input-number v-model="_inputNumber" :min="1" size="small" />
+        <el-button type="primary" @click="onSubmit()">批准申请</el-button>
       </el-table-column>
     </el-table>
 
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+const _inputNumber = ref(1)
 
 export default {
   data() {
@@ -37,11 +39,14 @@ export default {
         { totalCapital: '' },
         { registrationDate: '' },
         { requestStatus: '' },
-      ]
+        { openShopRequestId: ' ' },
+        { shop: { shopId: ' ' } }
+      ],
       //openShopRequestId:'',
       // shop : {
       //   shopId :'',
       // }
+        _inputNumber,
     }
   },
   methods: {
@@ -69,7 +74,9 @@ export default {
             this.shopRequest[i].totalCapital = tmp.shop.shopBasicInfo.totalCapital
             this.shopRequest[i].registrationDate = tmp.shop.shopBasicInfo.registrationDate
             this.shopRequest[i].requestStatus = tmp.requestStatus
-
+            this.shopRequest[i].openShopRequestId = tmp.openShopRequestId
+            this.shopRequest[i].shop = tmp.shop
+            this.shopRequest[i].shop.shopId = tmp.shop.shopId
             console.log(this.shopRequest[i])
 
           }
@@ -87,19 +94,22 @@ export default {
 
     onSubmit() {
       console.log('submit!')
+      console.log(_inputNumber._value)
+      let num = _inputNumber._value - 1;
       this.$axios({
         method: 'post',
         url: 'http://101.200.57.208:39419/shop/approve-open-shop-request',
         data: {
-          openShopRequestId: this.shopRequest.openShopRequestId,
+          openShopRequestId: this.shopRequest[num].openShopRequestId,
+          shop :this.shopRequest[num].shop,
           shop: {
-            shopId: this.shopRequest.shopId,
+            shopId: this.shopRequest[num].shop.shopId,
           }
         }
       })
         .then(resp => {
-          console.log(this.shopRequest[0].openShopRequestId)
-          console.log(this.shopRequest[0].shop.shopId)
+          console.log(this.shopRequest[num].openShopRequestId)
+          console.log(this.shopRequest[num].shop.shopId)
           alert("批准成功！");
         })
         .catch(err => {
