@@ -87,16 +87,16 @@ export default {
 
 </script>
 
-<style scoped max-width="100%">
+<style scoped>
 .flex-grow {
   flex-grow: 1;
 }
 .el-menu-demo {
   margin-left: 0;
-  margin-top: 3rem;
+  margin-top: 5rem;
   margin-bottom: 3rem;
   width: 10rem;
-  height: 40rem;
+  height: 35rem;
   padding: 0;
   float: left;
 }
