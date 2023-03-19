@@ -33,7 +33,7 @@ export default {
       if (this.form.account !== "" && this.form.key !== "") {
         this.$axios({
           method: 'post',
-          url: 'http://101.200.57.208:37847/user/Login',
+          url: 'http://101.200.57.208:38781/user/login',
           data: {
             // principal: "desfweffew",
             // credential: "Zz1234567"
@@ -44,7 +44,7 @@ export default {
             .then(resp => {
               console.log(resp)
               if (resp.data.token) {
-                alert("登陆成功！");
+                alert("登录成功！");
                 this.userToken = resp.data.token;
                 localStorage.setItem("token", this.userToken);
                 //判断为商户和用户

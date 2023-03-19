@@ -17,7 +17,7 @@ export default defineConfig({
 // 反向代理，跨域
     proxy: {
       '/api': {
-        target: 'http://xx.xxx.xx.xxx:8080', // 后端部署地址
+        target: 'http://101.200.57.208:37847', // 后端部署地址
         changeOrigin: true, // 跨域
         rewrite: path => path.replace(/^\/api/, '') //
       }
