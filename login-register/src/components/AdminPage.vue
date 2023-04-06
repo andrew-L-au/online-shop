@@ -29,6 +29,9 @@ import { ref } from 'vue'
 const _inputNumber = ref(1)
 
 export default {
+  mounted() {
+    this.getShopInfo()
+  },
   data() {
     return {
       index : '',

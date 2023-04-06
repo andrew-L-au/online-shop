@@ -46,12 +46,14 @@ export default {
               if (resp.data.token) {
                 alert("登录成功！");
                 this.userToken = resp.data.token;
-                localStorage.setItem("token", this.userToken);
+
+                // localStorage.setItem("token", this.userToken);
                 //判断为商户和用户
                 // var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlcklkXCI6MTYzNjk3Njg4MDU5NjgxNTg3MyxcInVzZXJCYXNpY0luZm9cIjp7XCJ1c2VyQmFzaWNJbmZvSWRcIjoxNjM2OTc2ODgwNTY3NDU1NzQ1LFwidXNlclwiOm51bGwsXCJ1c2VybmFtZVwiOlwiYWJjXCIsXCJwaG9uZU51bWJlclwiOlwiMTIzNDU2XCIsXCJpZENhcmROdW1iZXJcIjpcIjMyMzUzMjEyMzRcIixcImVtYWlsXCI6XCIzNDI1QGRmc2Fkcy5jb21cIn0sXCJ1c2VyQXV0aGVudGljYXRpb25cIjp7XCJ1c2VyQXV0aGVudGljYXRpb25JZFwiOm51bGwsXCJ1c2VyXCI6bnVsbCxcInByaW5jaXBhbFwiOlwiYWJjXCIsXCJjcmVkZW50aWFsXCI6XCIzMjkwODQyM1wifSxcInVzZXJSb2xlXCI6XCJTSE9QX09XTkVSXCJ9In0.4tgrJAyQ_K92YxtxV-Kdk1IclkKC2Oa6POxgRYOsEyc'
                 let strings = this.userToken.split("."); //截取token，获取载体
                 var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
                 var info = JSON.parse(userinfo.user)
+                localStorage.setItem("userinfo", userinfo);
                 console.log(userinfo)
                 console.log(info.userRole)
                 let role = info.userRole

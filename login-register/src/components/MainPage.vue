@@ -33,6 +33,10 @@
 <script>
 
 export default {
+  mounted() {
+    this.getShopInfo()
+  },
+
   data() {
     return {
       shopInfo: [

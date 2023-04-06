@@ -42,8 +42,11 @@ const router = createRouter({
 });
 //拦截器
 router.beforeEach((to, from, next) => {
-    let token = localStorage.getItem("token");
-    if (token || to.path === '/' || to.path === '/login' || to.path === '/signup') next();
+    let token = localStorage.getItem("userinfo");
+    if (to.path === '/' || to.path === '/login' || to.path === '/signup') next()
+    if (to.path ==="/admin" && token.user.userRole === "ADMINISTRATOR") next("/AdminPage");
+    // else if (token.user.userRole === "CUSTOMER") next("/MainPage");
+    if (to.path ==="/openStore" && token.user.userRole === "SHOP_OWNER") next("/OpenStore");
     else next("/");
 })
 
