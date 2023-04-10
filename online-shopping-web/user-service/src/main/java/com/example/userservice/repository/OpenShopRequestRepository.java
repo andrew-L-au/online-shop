@@ -25,13 +25,26 @@ public class OpenShopRequestRepository {
     @Autowired
     private ShopRepository shopRepository;
 
-    public void insertOpenShopRequest(OpenShopRequest openShopRequest, Shop shop){
+    public Boolean insertOpenShopRequest(OpenShopRequest openShopRequest, Shop shop){
+        openShopRequest.setOpenShopRequestId(null);
         openShopRequestMapper.insert(openShopRequest);
-        openShopRequestToShopMapper.insert(new OpenShopRequestToShop(null , openShopRequest.getOpenShopRequestId(), shop.getShopId()));
+        if (openShopRequest.getOpenShopRequestId() == null){
+            return false;
+        }
+        OpenShopRequestToShop openShopRequestToShop = new OpenShopRequestToShop(null , openShopRequest.getOpenShopRequestId(), shop.getShopId());
+        openShopRequestToShopMapper.insert(openShopRequestToShop);
+        if (openShopRequestToShop.getOpenShopRequestId() == null){
+            return false;
+        }
+        return true;
     }
 
-    public void updateOpenShopRequest(Long openShopRequestId, RequestStatus requestStatus){
-        openShopRequestMapper.updateById(new OpenShopRequest(openShopRequestId, null, requestStatus));
+    public Boolean updateOpenShopRequest(Long openShopRequestId, RequestStatus requestStatus){
+        int num = openShopRequestMapper.updateById(new OpenShopRequest(openShopRequestId, null, requestStatus));
+        if (num <= 0){
+            return false;
+        }
+        return true;
     }
 
     public List<Long> selectAllIds(){
@@ -42,11 +55,34 @@ public class OpenShopRequestRepository {
     }
 
     public OpenShopRequest selectOpenShopRequestWithAllInfo(Long openShopRequestId){
+        if (openShopRequestId == null){
+            return null;
+        }
         OpenShopRequest openShopRequest = openShopRequestMapper.selectById(openShopRequestId);
+        if (openShopRequest == null){
+            return null;
+        }
         Long shopId = openShopRequestToShopMapper.selectShopByOpenShopRequest(openShopRequestId);
+        if (shopId == null){
+            return null;
+        }
         Shop shop = shopRepository.selectShopWithAllInfo(shopId);
+        if (shop == null){
+            return null;
+        }
         openShopRequest.setShop(shop);
         return openShopRequest;
+    }
+
+    public OpenShopRequest selectOpenShopRequestWithAllInfoByShop(Long shopId){
+        if (shopId == null){
+            return null;
+        }
+        Long openShopRequestId = openShopRequestToShopMapper.selectOpenShopRequestByShop(shopId);
+        if (openShopRequestId == null){
+            return null;
+        }
+        return selectOpenShopRequestWithAllInfo(openShopRequestId);
     }
 
     public List<OpenShopRequest> selectAllOpenShopRequestWithAllInfo(){
@@ -55,4 +91,5 @@ public class OpenShopRequestRepository {
         openShopRequestIds.forEach( e -> openShopRequests.add(selectOpenShopRequestWithAllInfo(e)) );
         return openShopRequests;
     }
+
 }

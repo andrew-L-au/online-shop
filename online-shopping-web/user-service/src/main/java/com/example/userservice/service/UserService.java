@@ -1,6 +1,9 @@
 package com.example.userservice.service;
 
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.example.userservice.model.DTO.LoginResponse;
 import com.example.userservice.model.user.User;
 import com.example.userservice.model.user.info.auth.UserAuthentication;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
@@ -8,6 +11,8 @@ import com.example.userservice.repository.*;
 import com.example.userservice.repository.mapper.UserAuthenticationMapper;
 import com.example.userservice.repository.mapper.UserBasicInfoMapper;
 import com.example.userservice.repository.mapper.user.UserMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,44 +50,24 @@ public class UserService {
         return userBasicInfoRepository.selectUserBasicInfoByEmail(email) != null;
     }
 
-    public boolean existUserAuthentication(UserAuthentication userAuthentication){
-        return userAuthenticationMapper.findOneByUserAuthentication(userAuthentication) != null;
-    }
-
-    public String registerNewUser(User user, UserBasicInfo userBasicInfo,UserAuthentication userAuthentication){
-        boolean userNameDuplicate = existOneInfoWithSameUsername(userBasicInfo.getUsername());
-        boolean phoneNumberDuplicate = existOneInfoWithSamePhoneNumber(userBasicInfo.getPhoneNumber());
-        boolean idCardNumberDuplicate = existOneInfoWithSameIdCardNumber(userBasicInfo.getIdCardNumber());
-        boolean emailDuplicate = existOneInfoWithSameEmail(userBasicInfo.getEmail());
-        if (userNameDuplicate){
-            return "user name duplicate";
+    public LoginResponse login(UserAuthentication userAuthentication) throws JsonProcessingException{
+        if (userAuthentication == null){
+            return new LoginResponse(null,false);
         }
-        if (phoneNumberDuplicate){
-            return "phone number duplicate";
+        User user = this.findUser(userAuthentication);
+        if (user == null || user.getUserId() == null){
+            return new LoginResponse(null,false);
         }
-        if (idCardNumberDuplicate){
-            return "id card duplicate";
+        UserBasicInfo userBasicInfo = this.findUserBasicInfo(user.getUserId());
+        if (userBasicInfo == null){
+            return new LoginResponse(null,false);
         }
-        if (emailDuplicate){
-            return "email duplicate";
-        }
-        if (existUserAuthentication(userAuthentication)){
-            return "password duplicate";
-        }
-        if (user == null || userBasicInfo == null || userAuthentication == null){
-            return "information uncompleted";
-        }
-        if (userBasicInfo.getUsername() == null || userBasicInfo.getIdCardNumber() == null || userBasicInfo.getUsername() == null || userBasicInfo.getUsername() == null){
-            return "information uncompleted";
-        }
-        if (userAuthentication.getCredential() == null || userAuthentication.getPrincipal() == null){
-            return "information uncompleted";
-        }
-        if (user.getUserRole() == null){
-            return "information uncompleted";
-        }
-        userRepository.insertUser(user,userBasicInfo,userAuthentication);
-        return "success";
+        user.setUserBasicInfo(userBasicInfo);
+        user.setUserAuthentication(userAuthentication);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String userJson = objectMapper.writeValueAsString(user);
+        String token = JWT.create().withClaim("user",userJson).sign(Algorithm.HMAC256("1"));
+        return new LoginResponse(token,true);
     }
 
     public User findUser(UserAuthentication userAuthentication){

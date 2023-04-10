@@ -1,15 +1,15 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.model.DTO.ApproveOpenShopRequestDTO;
+import com.example.userservice.model.DTO.RequestOpenShopDTO;
 import com.example.userservice.model.OpenShopRequest;
 import com.example.userservice.model.shop.CommodityType;
 import com.example.userservice.model.shop.Shop;
 import com.example.userservice.model.shop.ShopBasicInfo;
 import com.example.userservice.service.OpenShopRequestService;
+import com.example.userservice.service.ShopOwnerService;
 import com.example.userservice.service.ShopService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,33 +24,54 @@ public class ShopController {
     @Autowired
     private OpenShopRequestService openShopRequestService;
 
+    @Autowired
+    private ShopOwnerService shopOwnerService;
+
     @PostMapping("/request-open-shop")
-    @Transactional
-    String requestOpenShop(@RequestBody JsonNode jsonNode){
-        ObjectMapper objectMapper = new ObjectMapper();
-        Shop shop = objectMapper.convertValue(jsonNode.get("shop"),Shop.class);
-        if (shop == null || shop.getShopBasicInfo() == null || shop.getCommodityTypes() == null){
+    String requestOpenShop(@RequestBody RequestOpenShopDTO requestOpenShopDTO){
+        if (requestOpenShopDTO == null){
             return "format error";
         }
+        if (requestOpenShopDTO.getShop() == null){
+            return "shop format error";
+        }
+        if (requestOpenShopDTO.getShop().getShopBasicInfo() == null){
+            return "shopBasicInfo format error";
+        }
+        if (requestOpenShopDTO.getShop().getCommodityTypes() == null){
+            return "CommodityTypes format error";
+        }
+        if (requestOpenShopDTO.getIdCardNumber() == null){
+            return "IdCardNumber format error";
+        }
+        if (shopOwnerService.findShopOwner(requestOpenShopDTO.getIdCardNumber()) == null){
+            return "no shop owner";
+        }
+        Shop shop = requestOpenShopDTO.getShop();
         ShopBasicInfo shopBasicInfo = shop.getShopBasicInfo();
         List<CommodityType> commodityTypes = shop.getCommodityTypes();
-        String idCardNumber = objectMapper.convertValue(jsonNode.get("idCardNumber"), String.class);
-        if (idCardNumber == null){
-            return "format error";
+        String idCardNumber = requestOpenShopDTO.getIdCardNumber();
+        try{
+            shopService.requestOpenShop(shop, shopBasicInfo, idCardNumber, commodityTypes);
+        }catch (RuntimeException e){
+            return "fail";
         }
-        shopService.requestOpenShop(shop, shopBasicInfo, idCardNumber, commodityTypes);
         return "success";
     }
 
     @PostMapping("/approve-open-shop-request")
-    @Transactional
-    String approveOpenShopRequest(@RequestBody OpenShopRequest openShopRequest){
-        return shopService.approveOpenShopRequest(openShopRequest);
+    String approveOpenShopRequest(@RequestBody ApproveOpenShopRequestDTO approveOpenShopRequestDTO){
+        try {
+            shopService.approveOpenShopRequest(approveOpenShopRequestDTO.getName());
+        }catch (RuntimeException e){
+            return "fail";
+        }
+        return "success";
     }
 
     @GetMapping("/open-shop-requests")
     List<OpenShopRequest> openShopRequests(){
-        return openShopRequestService.findAllOpenShopRequest();
+        return openShopRequestService.selectAllOpenShopRequest();
     }
 
     @GetMapping("/current-shops")

@@ -9,6 +9,7 @@ import com.example.userservice.model.shop.ShopStatus;
 import com.example.userservice.model.user.ShopOwner;
 import com.example.userservice.repository.OpenShopRequestRepository;
 import com.example.userservice.repository.ShopRepository;
+import com.example.userservice.repository.mapper.ShopBasicInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -28,32 +29,60 @@ public class ShopService {
     @Autowired
     OpenShopRequestRepository openShopRequestRepository;
 
-    public void requestOpenShop(Shop shop, ShopBasicInfo shopBasicInfo, String idCardNumber, List<CommodityType> commodityTypes){
-        ShopOwner shopOwner = shopOwnerService.findShopOwner(idCardNumber);
-        requestOpenShop(shop, shopBasicInfo, shopOwner, commodityTypes);
-    }
+    @Autowired
+    private ShopBasicInfoMapper shopBasicInfoMapper;
 
-    @NonNull
-    public void requestOpenShop(Shop shop, ShopBasicInfo shopBasicInfo, ShopOwner shopOwner, List<CommodityType> commodityTypes){
+    @Transactional
+    public void requestOpenShop(Shop shop, ShopBasicInfo shopBasicInfo, String idCardNumber, List<CommodityType> commodityTypes) throws RuntimeException{
+        if (shop == null || shopBasicInfo == null || idCardNumber == null || commodityTypes == null){
+            return;
+        }
+        ShopOwner shopOwner = shopOwnerService.findShopOwner(idCardNumber);
+        if (shopOwner == null){
+            throw new RuntimeException();
+        }
+        if (shopBasicInfo.getName() == null){
+            return;
+        }
+        if (shopBasicInfoMapper.selectShopBasicInfo(shopBasicInfo.getName()) != null){
+            throw new RuntimeException();
+        }
         shop.setShopStatus(ShopStatus.IN_REVIEW);
-        addOneShop(shop, shopBasicInfo, shopOwner, commodityTypes);
+        Boolean insertReturn;
+        insertReturn = shopRepository.insertOneShop(shop, shopBasicInfo, shopOwner, commodityTypes);
+        if (!insertReturn){
+            throw new RuntimeException();
+        }
         OpenShopRequest openShopRequest = new OpenShopRequest();
         openShopRequest.setShop(shop);
         openShopRequest.setRequestStatus(RequestStatus.IN_REVIEW);
-        addOneOpenShopRequest(openShopRequest, shop);
+        if(openShopRequestRepository.insertOpenShopRequest(openShopRequest, shop).equals(false)){
+            throw new RuntimeException();
+        }
+        return;
     }
 
-    private void addOneShop(Shop shop, ShopBasicInfo shopBasicInfo, ShopOwner shopOwner, List<CommodityType> commodityTypes){
-        shopRepository.insertOneShop(shop, shopBasicInfo, shopOwner, commodityTypes);
-    }
-
-    public void addOneOpenShopRequest(OpenShopRequest openShopRequest,Shop shop){
-        openShopRequestRepository.insertOpenShopRequest(openShopRequest, shop);
-    }
-
-    public String approveOpenShopRequest(OpenShopRequest openShopRequest){
-        openShopRequestRepository.updateOpenShopRequest(openShopRequest.getOpenShopRequestId(), RequestStatus.APPROVE);
-        shopRepository.updateShopStatus(openShopRequest.getShop().getShopId(), ShopStatus.NORMAL);
+    @Transactional
+    public String approveOpenShopRequest(String shopName){
+        if (shopName == null){
+            throw new RuntimeException();
+        }
+        Shop shop = shopRepository.selectShopWithAllInfo(shopName);
+        if (shop == null){
+            return null;
+        }
+        OpenShopRequest openShopRequest = openShopRequestRepository.selectOpenShopRequestWithAllInfoByShop(shop.getShopId());
+        if (openShopRequest == null){
+            throw new RuntimeException();
+        }
+        Boolean updateNum = openShopRequestRepository.updateOpenShopRequest(openShopRequest.getOpenShopRequestId(), RequestStatus.APPROVE);
+        if (!updateNum){
+            throw new RuntimeException();
+        }
+        updateNum = shopRepository.updateShopStatus(openShopRequest.getShop().getShopId(), ShopStatus.NORMAL);
+        if (!updateNum){
+            throw new RuntimeException();
+        }
         return "success";
     }
 

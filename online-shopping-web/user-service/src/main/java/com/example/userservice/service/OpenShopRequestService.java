@@ -21,7 +21,7 @@ public class OpenShopRequestService {
     @Autowired
     ShopRepository shopRepository;
 
-    public List<OpenShopRequest> findAllOpenShopRequest(){
+    public List<OpenShopRequest> selectAllOpenShopRequest(){
         return openShopRequestRepository.selectAllOpenShopRequestWithAllInfo();
     }
 }
