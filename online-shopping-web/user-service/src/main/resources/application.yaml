@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: developer
+    username: root
     password: A//4321abcd
     url: jdbc:mysql://localhost:3306/online_shop_user_schema
     hikari:
@@ -9,14 +9,8 @@ spring:
   application:
     name: user-service
 server:
-  port: 0
-eureka:
-  instance:
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka #,http://localhost:8762/eureka
+  port: 50000
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

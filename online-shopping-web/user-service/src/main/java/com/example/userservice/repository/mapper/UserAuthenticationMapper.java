@@ -12,6 +12,9 @@ public interface UserAuthenticationMapper extends BaseMapper<UserAuthentication>
     }
 
     default UserAuthentication findOneByUserAuthentication(UserAuthentication userAuthentication){
+        if (userAuthentication.getPrincipal() == null || userAuthentication.getCredential() == null){
+            return null;
+        }
         return this.selectOne(new QueryWrapper<UserAuthentication>().eq("principal", userAuthentication.getPrincipal()).eq("credential", userAuthentication.getCredential()));
     }
 }

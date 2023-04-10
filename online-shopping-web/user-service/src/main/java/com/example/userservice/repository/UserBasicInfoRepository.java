@@ -39,7 +39,10 @@ public class UserBasicInfoRepository {
 
     public UserBasicInfo selectUserBasicInfo(Long userId){
         UserToUserBasicInfo userToUserBasicInfo = userToUserBasicInfoMapper.findOneByUser(userId);
-        return userBasicInfoMapper.selectById(userToUserBasicInfo.getUserBasicInfoId());
+        if (userToUserBasicInfo != null){
+            return userBasicInfoMapper.selectById(userToUserBasicInfo.getUserBasicInfoId());
+        }
+        return null;
     }
 
 }

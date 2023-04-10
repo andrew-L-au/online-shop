@@ -12,6 +12,9 @@ import java.util.Map;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
     default User findOneByUserToUserAuthentication(UserToUserAuthentication userToUserAuthentication){
+        if (userToUserAuthentication == null || userToUserAuthentication.getUserId() == null){
+            return null;
+        }
         return this.selectOne(new QueryWrapper<User>().eq("user_id",userToUserAuthentication.getUserId()));
     }
 

@@ -32,18 +32,44 @@ public class UserRepository {
     @Autowired
     private UserAuthenticationMapper userAuthenticationMapper;
 
-    public User selectUser(UserAuthentication userAuthentication){
+    public User selectUser(String principal, String credential){
+        if (principal == null || credential == null){
+            return null;
+        }
+        UserAuthentication userAuthentication = new UserAuthentication(null,null,principal,credential);
         userAuthentication = userAuthenticationMapper.findOneByUserAuthentication(userAuthentication);
-        return selectUser(userAuthentication.getUserAuthenticationId());
+        if (userAuthentication.getUserAuthenticationId() == null){
+            return null;
+        }
+        User user = selectUserByUserAuthentication(userAuthentication.getUserAuthenticationId());
+        return user;
     }
 
-    public User selectUser(Long userAuthenticationId){
+    public User selectUser(String principal){
+        if (principal == null){
+            return null;
+        }
+        UserAuthentication userAuthentication = userAuthenticationMapper.findOneByPrincipal(principal);
+        if (userAuthentication.getUserAuthenticationId() == null){
+            return null;
+        }
+        User user = selectUserByUserAuthentication(userAuthentication.getUserAuthenticationId());
+        return user;
+    }
+
+    public User selectUserByUserAuthentication(Long userAuthenticationId){
+        if (userAuthenticationId == null){
+            return null;
+        }
         UserToUserAuthentication userToUserAuthentication = userToUserAuthenticationMapper.findOneByUserAuthentication(userAuthenticationId);
+        if (userToUserAuthentication == null){
+            return null;
+        }
         return userMapper.findOneByUserToUserAuthentication(userToUserAuthentication);
     }
 
-    public User selectUser(UserBasicInfo userBasicInfo){
-        UserToUserBasicInfo userToUserBasicInfo = userToUserBasicInfoMapper.selectUserByUserBasicInfo(userBasicInfo.getUserBasicInfoId());
+    public User selectUserByUserBasicInfo(Long userBasicInfoId){
+        UserToUserBasicInfo userToUserBasicInfo = userToUserBasicInfoMapper.selectUserByUserBasicInfo(userBasicInfoId);
         return userMapper.selectById(userToUserBasicInfo.getUserId());
     }
 
@@ -52,5 +78,29 @@ public class UserRepository {
         return userBasicInfoMapper.selectById(userToUserBasicInfo.getUserBasicInfoId());
     }
 
-
+    public boolean insertUser(User user, UserBasicInfo userBasicInfo, UserAuthentication userAuthentication){
+        userBasicInfoMapper.insert(userBasicInfo);
+        if (userBasicInfo.getUserBasicInfoId() == null){
+            return false;
+        }
+        userAuthenticationMapper.insert(userAuthentication);
+        if (userAuthentication.getUserAuthenticationId() == null){
+            return false;
+        }
+        userMapper.insert(user);
+        if (user.getUserId() == null){
+            return false;
+        }
+        UserToUserBasicInfo userToUserBasicInfo = new UserToUserBasicInfo(null ,user.getUserId(),userBasicInfo.getUserBasicInfoId());
+        userToUserBasicInfoMapper.insert(userToUserBasicInfo);
+        if (userToUserBasicInfo.getId() == null){
+            return false;
+        }
+        UserToUserAuthentication userToUserAuthentication = new UserToUserAuthentication(null, user.getUserId(),userAuthentication.getUserAuthenticationId());
+        userToUserAuthenticationMapper.insert(userToUserAuthentication);
+        if (userToUserAuthentication.getId() == null){
+            return false;
+        }
+        return true;
+    }
 }
