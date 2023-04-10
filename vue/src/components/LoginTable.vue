@@ -37,7 +37,7 @@ export default {
       if (this.form.account !== "" && this.form.key !== "") {
         this.$axios({
           method: 'post',
-          url: 'http://101.200.57.208:34529/user/login',
+          url: 'http://192.168.31.196:50000/user/login',
           data: {
             // principal: "desfweffew",
             // credential: "Zz1234567"
@@ -61,6 +61,7 @@ export default {
                 console.log(userinfo)
                 console.log(info.userRole)
                 let role = info.userRole
+                console.log(role)
                 if(role === "CUSTOMER") router.replace('/user')
                 else if (role === "SHOP_OWNER") router.replace('/openStore')
                 else if (role === "ADMINISTRATOR") router.replace('/admin')

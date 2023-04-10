@@ -33,7 +33,7 @@
       getShopInfo() {
         this.$axios({
           method: 'get',
-          url: '/shop/current-shops',
+          url: 'http://192.168.31.196:50000/shop/current-shops',
         })
           .then(resp => {
             console.log(resp.data.length)

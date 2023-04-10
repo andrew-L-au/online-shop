@@ -105,11 +105,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           // console.log(mainForm)
             axios({
                 method: 'post',
-                url: 'http://101.200.57.208:37281/shop/request-open-shop',
+                url: 'http://192.168.31.196:50000/shop/request-open-shop',
                 data: {
                   shop:{
                     shopBasicInfo:{
-                      //name:mainForm.storeName,
+                      name:mainForm.storeName,
                       profile:mainForm.description,
                       address:mainForm.recordAddress,
                       totalCapital:mainForm.money,

@@ -82,6 +82,7 @@ export default {
   methods: {
 
     onSubmit() {
+      var commitUrl = this.form.userRole === "CUSTOMER" ? 'http://192.168.31.196:50000/user/customer/registration':'http://192.168.31.196:50000/user/shop-owner/registration';
       console.log('submit!')
       let flag = 0;
       if(!isValidName(this.form.username)) alert("不符合格式的用户名！")
@@ -93,7 +94,7 @@ export default {
       if (this.form.userRole !== "" && this.form.username !== "" && this.form.phoneNumber !== "" && this.form.idCardNumber !== "" && this.form.email !== "" && this.form.credential !== "" &&flag === 1) {
         this.$axios({
           method: 'post',
-          url: 'http://101.200.57.208:34529/user/registration',
+          url: commitUrl,
           data: {
             userBasicInfo:{
               username: this.form.username,
@@ -109,12 +110,16 @@ export default {
           }
         })
             .then(resp => {
+              console.log(this.form.userRole)
               console.log("succeed")
               console.log(resp)
               if (resp.data === "success") {
                 alert("注册成功！");
                 router.replace('/login')
                 //跳转
+              }
+              else{
+                alert(resp.data)
               }
             })
             .catch(err => {

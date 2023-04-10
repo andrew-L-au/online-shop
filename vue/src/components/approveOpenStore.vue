@@ -2,11 +2,11 @@
   <section>
     <el-table :data="shopRequest" height="500" id="shopRequest">
       <el-table-column type="index"/>
-      <el-table-column label="更新数据" width="120">
-        <template #default>
-          <el-button link type="primary" @click="getShopInfo()">更新数据</el-button>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="更新数据" width="120">-->
+<!--        <template #default>-->
+<!--          <el-button link type="primary" @click="getShopInfo()">更新数据</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column prop="storeName" label="商店名称" width="180"></el-table-column>
       <el-table-column prop="commodityTypes" label="商品类别" width="200"></el-table-column>
       <el-table-column prop="profile" label="商店简介" width="300"></el-table-column>
@@ -53,7 +53,7 @@ export default {
       console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://101.200.57.208:39419/shop/open-shop-requests',
+        url: 'http://192.168.31.196:50000/shop/open-shop-requests',
       })
           .then(resp => {
             this.shopRequest.pop()
@@ -78,8 +78,8 @@ export default {
               console.log(this.shopRequest[i])
 
             }
-            this.openShopRequestId = this.shopRequest.openShopRequestId
-            this.shop.shopId = this.shopRequest.shop.shopId
+            // this.openShopRequestId = this.shopRequest.openShopRequestId
+            // this.shop.shopId = this.shopRequest.shop.shopId
             // console.log(this.shopRequest[0].shop.profile);
             // console.log(this.shopRequest[0].shop.shopId);
           })
@@ -92,10 +92,10 @@ export default {
       this.isApprove = -1;
       this.$axios({
         method: 'post',
-        url: 'http://101.200.57.208:39419/shop/approve-open-shop-request',
+        url: 'http://192.168.31.196:50000/shop/approve-open-shop-request',
         data: {
+          name: row.storeName,
           isApprove: this.isApprove,
-          name: row.shopRequest.storeName
         }
       })
           .then(resp => {
@@ -109,19 +109,25 @@ export default {
     },
 
     approveShop: async function (row) {
+      console.log(row)
+      console.log(row.storeName)
       this.isApprove = 1;
       this.$axios({
         method: 'post',
-        url: 'http://101.200.57.208:39419/shop/approve-open-shop-request',
-        data: {
+        url: 'http://192.168.31.196:50000/shop/approve-open-shop-request',
+        data:{
+          name: row.storeName,
           isApprove: this.isApprove,
-          name: row.shopRequest.storeName
         }
+        //   isApprove: this.isApprove,
+        //   name: row.storeName
+        // }
       })
           .then(resp => {
             // console.log(this.shopRequest[0].openShopRequestId)
             // console.log(this.shopRequest[0].shop.shopId)
             alert("批准成功！");
+            console.log(resp)
           })
           .catch(err => {
             console.log(err);
