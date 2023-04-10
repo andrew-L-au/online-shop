@@ -42,10 +42,10 @@ export default {
         {requestStatus: ''},
       ],
       isApprove: 0,
-      openShopRequestId: '',
-      shop: {
-        shopId: '',
-      }
+      // openShopRequestId: '',
+      // shop: {
+      //   shopId: '',
+      // }
     }
   },
   methods: {
@@ -95,10 +95,7 @@ export default {
         url: 'http://101.200.57.208:39419/shop/approve-open-shop-request',
         data: {
           isApprove: this.isApprove,
-          openShopRequestId: row.shopRequest.openShopRequestId,
-          shop: {
-            shopId: row.shopRequest.shopId,
-          }
+          name: row.shopRequest.storeName
         }
       })
           .then(resp => {
@@ -118,10 +115,7 @@ export default {
         url: 'http://101.200.57.208:39419/shop/approve-open-shop-request',
         data: {
           isApprove: this.isApprove,
-          openShopRequestId: row.shopRequest.openShopRequestId,
-          shop: {
-            shopId: row.shopRequest.shopId,
-          }
+          name: row.shopRequest.storeName
         }
       })
           .then(resp => {
