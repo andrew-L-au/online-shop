@@ -1,4 +1,6 @@
 <template>
+  <body>
+  <div class="background"></div>
   <h1>Log in</h1>
   <el-form ref="form" :model="form" label-width="80px">
     <el-form-item label="账号">
@@ -12,6 +14,8 @@
       <el-button onclick="window.location.href ='http://127.0.0.1:8000/'">取消</el-button>
     </el-form-item>
   </el-form>
+  </body>
+
 </template>
 
 <script>
@@ -81,6 +85,20 @@ export default {
 </script>
 
 <style scoped>
-
+.background{
+  background: url("../assets/images/background1.png") no-repeat center center fixed;
+  width: 100%; /* 大小设置成100% */
+  height: 100%;
+  opacity: 50%;
+  position: fixed;
+  background-size: 100% 100%;
+}
+body{
+  background: none;
+  justify-content: center;
+  align-items: center;
+  /*height: 100vh;*/
+  flex-direction: column;
+}
 </style>
 
