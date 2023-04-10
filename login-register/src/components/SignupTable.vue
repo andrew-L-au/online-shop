@@ -20,7 +20,7 @@
       <el-input v-model="form.email"></el-input>
     </el-form-item>
     <el-form-item label="密码">
-      <el-input v-model="form.credential"></el-input>
+      <el-input v-model="form.credential" show-password></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">确认</el-button>

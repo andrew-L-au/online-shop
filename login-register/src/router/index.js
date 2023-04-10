@@ -2,9 +2,9 @@ import {createRouter, createWebHistory} from 'vue-router'
 import LoginTable from "@/components/LoginTable.vue";
 import WelcomePage from "@/components/WelcomePage.vue";
 import SignupTable from "@/components/SignupTable.vue";
-import MainPage from "@/components/MainPage.vue";
+import MainPage from "@/components/ShoppingPage.vue";
 import OpenStoreView from '../views/OpenStoreView.vue'
-import AdminPage from "@/components/AdminPage.vue";
+import AdminPage from "@/components/AdminManage.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
