@@ -89,7 +89,7 @@ export default {
       if (this.form.userRole !== "" && this.form.username !== "" && this.form.phoneNumber !== "" && this.form.idCardNumber !== "" && this.form.email !== "" && this.form.credential !== "" &&flag === 1) {
         this.$axios({
           method: 'post',
-          url: 'http://101.200.57.208:34405/user/registration',
+          url: 'http://101.200.57.208:34529/user/registration',
           data: {
             userBasicInfo:{
               username: this.form.username,

@@ -7,7 +7,7 @@ const mainFormRef = ref<FormInstance>();
 const mainForm = reactive({
     storeName: '',
     commodityCategory: '',
-    commodityTypeArray: [{}],
+    commodityTypeArray: [],
     IdCardNumber: '',
     description: '',
     recordAddress: '',
@@ -94,22 +94,22 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           commodityType : stringArray[index]
         })
   }
-    // console.log(commodityTypeArray[0])
-    // console.log(commodityTypeArray[1])
-    // console.log(mainForm.commodityTypes[2])
+    console.log(mainForm.commodityTypeArray[0])
+    console.log(mainForm.commodityTypeArray[1])
+    // console.log(mainForm.commodityTypes[0])
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (valid) {
             console.log('submit!')
-          console.log(mainForm.commodityTypeArray)
-          console.log(mainForm)
+          // console.log(mainForm.commodityTypeArray)
+          // console.log(mainForm)
             axios({
                 method: 'post',
-                url: 'http://101.200.57.208:39419/shop/request-open-shop',
+                url: 'http://101.200.57.208:37281/shop/request-open-shop',
                 data: {
                   shop:{
                     shopBasicInfo:{
-                      name:mainForm.storeName,
+                      //name:mainForm.storeName,
                       profile:mainForm.description,
                       address:mainForm.recordAddress,
                       totalCapital:mainForm.money,
@@ -119,6 +119,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     commodityTypes : mainForm.commodityTypeArray,
                   },
                   idCardNumber: mainForm.IdCardNumber,
+
                   // shopOwner:this.userToken.principal,
                 }
             })

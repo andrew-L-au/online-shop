@@ -33,7 +33,7 @@ export default {
       if (this.form.account !== "" && this.form.key !== "") {
         this.$axios({
           method: 'post',
-          url: 'http://101.200.57.208:34405/user/login',
+          url: 'http://101.200.57.208:34529/user/login',
           data: {
             // principal: "desfweffew",
             // credential: "Zz1234567"

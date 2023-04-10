@@ -10,7 +10,7 @@
           </el-menu-item>
           <div class="flex-grow" />
           <el-menu-item index="2">欢迎<span v-bind=""></span></el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="3" onclick="exit()">
             <RouterLink to="/">登出</RouterLink>
           </el-menu-item>
         </el-menu>
@@ -49,10 +49,13 @@ export default {
   },
 
   methods: {
+    exit(){
+      localStorage.removeItem('token')
+    },
     getShopInfo() {
       this.$axios({
         method: 'get',
-        url: 'http://101.200.57.208:39419/shop/current-shops',
+        url: 'http://101.200.57.208:37281/shop/current-shops',
       })
         .then(resp => {
           console.log(resp.data.length)
