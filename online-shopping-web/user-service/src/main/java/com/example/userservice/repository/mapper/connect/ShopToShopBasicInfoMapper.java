@@ -8,6 +8,18 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ShopToShopBasicInfoMapper extends BaseMapper<ShopToShopBasicInfo> {
     default Long selectShopBasicInfoByShop(Long shopId){
-        return this.selectOne(new QueryWrapper<ShopToShopBasicInfo>().eq("shop_id",shopId)).getShopBasicInfoId();
+        ShopToShopBasicInfo shopToShopBasicInfo = this.selectOne(new QueryWrapper<ShopToShopBasicInfo>().eq("shop_id",shopId));
+        if (shopToShopBasicInfo == null){
+            return null;
+        }
+        return shopToShopBasicInfo.getShopBasicInfoId();
+    }
+
+    default Long selectShopByShopBasicInfo(Long shopBasicInfoId){
+        ShopToShopBasicInfo shopToShopBasicInfo = this.selectOne(new QueryWrapper<ShopToShopBasicInfo>().eq("shop_basic_info_id",shopBasicInfoId));
+        if (shopToShopBasicInfo == null){
+            return null;
+        }
+        return shopToShopBasicInfo.getShopId();
     }
 }

@@ -63,7 +63,7 @@ public class UserController {
             return "email duplicate";
         }
         try{
-            shopOwnerService.registerNewUser(new ShopOwner(), new User(),userBasicInfo,userAuthentication,new PersonalAccount());
+            shopOwnerService.registerNewUser(new ShopOwner(), new User(null,null,null,UserRole.SHOP_OWNER),userBasicInfo,userAuthentication,new PersonalAccount());
         }catch (RuntimeException e) {
             return "false";
         }
@@ -71,7 +71,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/customer/registration")
-    String customerRegistration(@RequestBody RegistrationRequest registrationRequest) {
+    String customerRegistration(RegistrationRequest registrationRequest) {
         if (registrationRequest == null){
             return "format error";
         }
@@ -103,7 +103,7 @@ public class UserController {
             return "email duplicate";
         }
         try{
-            customerService.registerNewUser(new Customer(),new User(),userBasicInfo,userAuthentication,new PersonalAccount());
+            customerService.registerNewUser(new Customer(),new User(null,null,null,UserRole.CUSTOMER),userBasicInfo,userAuthentication,new PersonalAccount());
         }catch (RuntimeException e) {
             return "false";
         }
@@ -115,19 +115,10 @@ public class UserController {
         if (userAuthentication == null){
             return new LoginResponse(null,false);
         }
-        User user = userService.findUser(userAuthentication);
-        if (user == null || user.getUserId() == null){
+        try {
+            return userService.login(userAuthentication);
+        }catch (RuntimeException e){
             return new LoginResponse(null,false);
         }
-        UserBasicInfo userBasicInfo = userService.findUserBasicInfo(user.getUserId());
-        if (userBasicInfo == null){
-            return new LoginResponse(null,false);
-        }
-        user.setUserBasicInfo(userBasicInfo);
-        user.setUserAuthentication(userAuthentication);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String userJson = objectMapper.writeValueAsString(user);
-        String token = JWT.create().withClaim("user",userJson).sign(Algorithm.HMAC256("1"));
-        return new LoginResponse(token,true);
     }
 }

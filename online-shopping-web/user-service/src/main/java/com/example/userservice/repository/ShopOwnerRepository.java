@@ -40,7 +40,7 @@ public class ShopOwnerRepository {
             return "fail"; //if args are null, exception
         }
         user.setUserId(null);
-        user.setUserRole(UserRole.CUSTOMER); //prepare user object, need to clear id (if it has)
+        user.setUserRole(UserRole.SHOP_OWNER); //prepare user object, need to clear id (if it has)
         Boolean ret = userRepository.insertUser(user,userBasicInfo,userAuthentication); //insert user object, maybe has error
         if (!ret){
             return "fail";
