@@ -1,9 +1,0 @@
-package com.example.userservice.repository.mapper.user;
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.userservice.model.user.ShopOwner;
-import org.apache.ibatis.annotations.Mapper;
-
-@Mapper
-public interface ShopOwnerMapper extends BaseMapper<ShopOwner> {
-}
