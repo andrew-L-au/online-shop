@@ -1,0 +1,3 @@
+<template>
+    approveModifyCommodity
+</template>
