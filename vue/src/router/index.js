@@ -14,6 +14,10 @@ import userBasicInfo from "@/components/userBasicInfo.vue"
 import userPersonalAccount from "@/components/userPersonalAccount.vue"
 import userShopAccount from "@/components/userShopAccount.vue"
 import userShoppingCarts from "@/components/userShoppingCarts.vue"
+import addNewItem from "@/components/addNewItem.vue";
+import itemRecord from "@/components/itemRecord.vue";
+import itemDisplay from "@/components/itemDisplay.vue";
+import modifyItem from "@/components/modifyItem.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -85,6 +89,23 @@ const router = createRouter({
         {
             path: '/admin/approveModifyCommodity',
             component: approveModifyCommodity
+        },
+        // 商户部分
+        {
+            path:'/vendor/addNewItem',
+            component: addNewItem
+        },
+        {
+            path:'/vendor/itemRecord',
+            component: itemRecord
+        },
+        {
+            path:'/vendor/itemDisplay',
+            component: itemDisplay
+        },
+        {
+            path:'/vendor/modifyItem',
+            component:modifyItem
         },
 
     ]
