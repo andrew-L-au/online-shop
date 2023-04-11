@@ -45,9 +45,9 @@ const router = createRouter({
         {
             path: '/user',
             component: MainPage,
-            redirect: to => { 
-                return { path: '/user/display'}
-            },
+            // redirect: to => {
+            //     return { path: '/user/display'}
+            // },
         },
         {
             path: '/user/userCenter/basicInfo',
