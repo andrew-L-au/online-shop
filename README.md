@@ -375,6 +375,8 @@ insert 等操作也是同理的，通过中间表来实现嵌套对象的insert
 
 ### 个人信息修改
 
+#### get个人信息，返回UserBasicInfo
+
 #### 修改普通信息，提交Long userId 和 UserBasicInfo
 
 ```json
@@ -412,3 +414,57 @@ insert 等操作也是同理的，通过中间表来实现嵌套对象的insert
         }
     }    
 ```
+
+#### 查询某一用户的账户，提交userId
+
+#### 查询某一商店的账户，提交shopId
+
+### 申请删除商店，提交shopId
+
+#### get某一商户的商店，提交userId
+
+### 新增商品，提交shopId,Merchandise
+
+```json
+    {
+        "shopId" : 122341234123512351344,
+        "merchandise" : {
+                "merchandiseName" : "aaaa", //string
+                "images" : [{"a"},{"a"},{"a"}], //string array
+                "description" : "sdfasda",
+                "price" : 2142.324
+        }
+    }
+```
+
+### get所有的新增商品请求，返回NewMerchandiseRequest的数组
+
+### 批准某一个新增商品请求，提交NewMerchandiseRequestId
+
+### 修改商品, 提交 MerchandiseId, Merchandise
+
+```json
+    {
+        "merchandiseId" : 122341234123512351344,
+        "merchandise" : {
+                "merchandiseName" : "aaaa", //string
+                "images" : [{"a"},{"a"},{"a"}], //string array
+                "description" : "sdfasda",
+                "price" : 2142.324
+        }
+    }
+```
+
+### get所有的修改商品请求，返回ModifyMerchandiseRequest的数组
+
+### 批准某一个修改商品请求，提交ModifyMerchandiseRequestId
+
+### get某一商店的商品，提交shopId返回Merchandise的数组
+
+### 下架商品，提交merchandiseId
+
+### 添加商品到购物车,提交userId和merchandiseId
+
+### 删除购物车商品,提交userId和merchandiseId
+
+### get某个用户的购物车，返回ShoppingCart
