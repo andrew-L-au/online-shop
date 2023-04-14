@@ -3,7 +3,7 @@ package com.example.userservice.repository;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.userservice.model.connect.UserToUserBasicInfo;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
-import com.example.userservice.repository.mapper.UserBasicInfoMapper;
+import com.example.userservice.repository.mapper.user.UserBasicInfoMapper;
 import com.example.userservice.repository.mapper.connect.UserToUserBasicInfoMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

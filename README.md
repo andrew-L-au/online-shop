@@ -1,7 +1,7 @@
 
-##### Lab2实现
+# Lab2实现
 
-### api
+## api
 
 服务器ip地址 ip-address : 101.200.57.208
 
@@ -371,3 +371,239 @@ public class ARepository{
 
 insert 等操作也是同理的，通过中间表来实现嵌套对象的insert
 
+## Lab3
+
+### 个人信息修改
+
+#### get个人信息，返回UserBasicInfo
+
+```json
+    {
+        "username" : "abc",
+        "phoneNumber" : "123456",
+        "idCardNumber" : "3235321234",
+        "email" : "3425@dfsads.com"
+    }       
+```
+
+#### 修改普通信息，提交Long userId 和 UserBasicInfo
+
+```json
+    {
+        "userId" : 122341234123512351344,
+        "userBasicInfo" : {
+            "username" : "abc",
+            "phoneNumber" : "123456",
+            "idCardNumber" : "3235321234",
+            "email" : "3425@dfsads.com"
+        }
+    }       
+```
+
+#### 修改密码,提交Long userId 和 UserAuthentication
+
+```json
+    {
+        "userId" : 122341234123512351344,
+        "userAuthentication" : {
+            "principal" : "abc",
+            "credential" : "32908423"
+        }
+    }    
+```
+
+### 账户充值，提交Long accountId 和 Double amount(充值金额)
+
+```json
+    {
+        "userId" : 122341234123512351344,
+        "userAuthentication" : {
+            "principal" : "abc",
+            "credential" : "32908423"
+        }
+    }    
+```
+
+#### 查询某一用户的账户，提交userId,返回Account对象
+
+```json
+{
+    "accountId" : 122341234123512351344,
+    "balance" : 2341.325
+}
+```
+
+#### 查询某一商店的账户，提交shopId,返回Account对象
+
+### 申请删除商店，提交shopId
+
+#### get某一商户的商店，提交userId，返回商店对象
+
+```json
+{
+    "shopId" : 122341234123512351344,
+    "shopBasicInfo" : {
+        "name" : "a",
+        "profile" : "b",
+        "address" : "c",
+        "totalCapital" : 3452.23,
+        "registrationDate" "3-234-2354":,
+    },
+    "commodityTypes" : ["dsfa","aswd","dsf"], 
+    "shopStatus" : "sdf"
+}
+```
+
+### 新增商品，提交shopId,Merchandise
+
+```json
+    {
+        "shopId" : 122341234123512351344,
+        "merchandise" : {
+                "merchandiseName" : "aaaa", //string
+                "images" : [{"a"},{"a"},{"a"}], //string array
+                "description" : "sdfasda",
+                "price" : 2142.324
+        }
+    }
+```
+
+### get所有的新增商品请求，返回NewMerchandiseRequest的数组
+
+```json
+[
+    {
+        "newMerchandiseRequestId" : 122341234123512351344,
+        "requestRecordMerchandise" : {
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        "requestStatus" : "",
+    },
+    {
+        "newMerchandiseRequestId" : 122341234123512351344,
+        "requestRecordMerchandise" : {
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        "requestStatus" : "",
+    },
+]
+```
+
+### 批准某一个新增商品请求，提交NewMerchandiseRequestId
+
+### 修改商品, 提交 MerchandiseId, Merchandise
+
+```json
+    {
+        "merchandiseId" : 122341234123512351344,
+        "merchandise" : {
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        }
+    }
+```
+
+### get所有的修改商品请求，返回ModifyMerchandiseRequest的数组
+
+```json
+[
+    {
+        "modifyMerchandiseRequestId" : 122341234123512351344,
+        "requestRecordMerchandise" : {
+            "requestRecordMerchandiseId" : 122341234123512351344,
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        "merchandise" : {
+            "requestRecordMerchandiseId" : 122341234123512351344,
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        "requestStatus" : "",
+    },
+    {
+        "modifyMerchandiseRequestId" : 122341234123512351344,
+        "requestRecordMerchandise" : {
+            "requestRecordMerchandiseId" : 122341234123512351344,
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        "merchandise" : {
+            "merchandiseId" : 122341234123512351344,
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        "requestStatus" : "",
+    }
+]
+```
+
+### 批准某一个修改商品请求，提交ModifyMerchandiseRequestId
+
+### get某一商店的商品，提交shopId返回Merchandise的数组
+
+```json
+[
+    {
+        "merchandiseId" : 122341234123512351344,
+        "merchandiseName" : "aaaa", //string
+        "images" : [{"a"},{"a"},{"a"}], //string array
+        "description" : "sdfasda",
+        "price" : 2142.324
+    },
+    {
+        "merchandiseId" : 122341234123512351344,
+        "merchandiseName" : "aaaa", //string
+        "images" : [{"a"},{"a"},{"a"}], //string array
+        "description" : "sdfasda",
+        "price" : 2142.324
+    }
+]
+
+```
+
+### 下架商品，提交merchandiseId
+
+### 添加商品到购物车,提交userId和merchandiseId
+
+### 删除购物车商品,提交userId和merchandiseId
+
+### get某个用户的购物车，返回ShoppingCart
+
+```json
+{
+    "shoppingCartId" : 122341234123512351344,
+    "merchandises" [
+        {
+            "merchandiseId" : 122341234123512351344,
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        },
+        {
+            "merchandiseId" : 122341234123512351344,
+            "merchandiseName" : "aaaa", //string
+            "images" : [{"a"},{"a"},{"a"}], //string array
+            "description" : "sdfasda",
+            "price" : 2142.324
+        }
+    ]: 
+} 
+```

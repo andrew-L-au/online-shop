@@ -8,13 +8,15 @@ import com.example.userservice.model.user.User;
 import com.example.userservice.model.user.info.auth.UserAuthentication;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
 import com.example.userservice.repository.*;
-import com.example.userservice.repository.mapper.UserAuthenticationMapper;
-import com.example.userservice.repository.mapper.UserBasicInfoMapper;
+import com.example.userservice.repository.mapper.user.UserAuthenticationMapper;
+import com.example.userservice.repository.mapper.user.UserBasicInfoMapper;
+import com.example.userservice.repository.mapper.connect.UserToUserAuthenticationMapper;
 import com.example.userservice.repository.mapper.user.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -30,6 +32,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserToUserAuthenticationMapper userToUserAuthenticationMapper;
 
     @Autowired
     private UserBasicInfoRepository userBasicInfoRepository;
@@ -93,6 +98,7 @@ public class UserService {
         return userRepository.selectUserByUserBasicInfo(userBasicInfo.getUserBasicInfoId());
     }
 
+    @Transactional
     public boolean changePhoneNumber(Long userId,String phoneNumber){
         UserBasicInfo userBasicInfo = userBasicInfoRepository.selectUserBasicInfo(userId);
         if (userBasicInfo != null && phoneNumber != null){
@@ -105,6 +111,7 @@ public class UserService {
         return false;
     }
 
+    @Transactional
     public boolean changeUsername(Long userId,String username){
         UserBasicInfo userBasicInfo = userBasicInfoRepository.selectUserBasicInfo(userId);
         if (userBasicInfo != null && username != null){
@@ -117,6 +124,7 @@ public class UserService {
         return false;
     }
 
+    @Transactional
     public boolean changeEmail(Long userId,String email){
         UserBasicInfo userBasicInfo = userBasicInfoRepository.selectUserBasicInfo(userId);
         if (userBasicInfo != null && email != null){
@@ -127,5 +135,29 @@ public class UserService {
             }
         }
         return false;
+    }
+
+    @Transactional
+    public boolean changePassword(Long userId,String password){
+        if (userId == null || password == null){
+            return false;
+        }
+        Long userAuthenticationId = userToUserAuthenticationMapper.findUserAuthenticationByUser(userId);
+        if (userAuthenticationId == null){
+            return false;
+        }
+        UserAuthentication userAuthentication = userAuthenticationMapper.selectById(userAuthenticationId);
+        if (userAuthentication == null || userAuthentication.getPrincipal() == null || userAuthentication.getCredential() == null){
+            return false;
+        }
+        userAuthentication.setCredential(password);
+        if (userAuthentication.getUserAuthenticationId() == null){
+            return false;
+        }
+        int rowNum = userAuthenticationMapper.updateById(userAuthentication);
+        if (rowNum <= 0){
+            throw new RuntimeException();
+        }
+        return true;
     }
 }

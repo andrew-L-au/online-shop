@@ -1,0 +1,16 @@
+package com.example.userservice.repository.mapper.merchandise;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.userservice.model.merchandise.ModifyMerchandiseRequest;
+import com.example.userservice.model.merchandise.NewMerchandiseRequest;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface ModifyMerchandiseRequestMapper extends BaseMapper<ModifyMerchandiseRequest> {
+    default List<ModifyMerchandiseRequest> allModifyMerchandiseRequests(){
+        return this.selectList(new QueryWrapper<>());
+    }
+}

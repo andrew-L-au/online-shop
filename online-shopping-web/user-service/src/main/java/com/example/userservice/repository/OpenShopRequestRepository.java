@@ -1,12 +1,12 @@
 package com.example.userservice.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.userservice.model.OpenShopRequest;
-import com.example.userservice.model.RequestStatus;
-import com.example.userservice.model.connect.OpenShopRequestToShop;
+import com.example.userservice.model.shop.OpenShopRequest;
+import com.example.userservice.model.shop.RequestStatus;
+import com.example.userservice.model.shop.connect.OpenShopRequestToShop;
 import com.example.userservice.model.shop.Shop;
-import com.example.userservice.repository.mapper.OpenShopRequestMapper;
-import com.example.userservice.repository.mapper.OpenShopRequestToShopMapper;
+import com.example.userservice.repository.mapper.shop.OpenShopRequestMapper;
+import com.example.userservice.repository.mapper.shop.connect.OpenShopRequestToShopMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -91,5 +91,4 @@ public class OpenShopRequestRepository {
         openShopRequestIds.forEach( e -> openShopRequests.add(selectOpenShopRequestWithAllInfo(e)) );
         return openShopRequests;
     }
-
 }
