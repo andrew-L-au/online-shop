@@ -1,7 +1,7 @@
-package com.example.userservice.repository.mapper;
+package com.example.userservice.repository.mapper.shop;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.userservice.model.OpenShopRequest;
+import com.example.userservice.model.shop.OpenShopRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

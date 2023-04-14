@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.example.userservice.model.merchandise.Merchandise;
 import com.example.userservice.model.user.ShopOwner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class Shop {
     private ShopOwner shopOwner;
     @TableField(exist = false)
     private List<CommodityType> commodityTypes;
+    @TableField(exist = false)
     private ShopStatus shopStatus;
 }

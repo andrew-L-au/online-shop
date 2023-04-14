@@ -2,7 +2,7 @@ package com.example.userservice.repository.mapper.connect;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.userservice.model.connect.ShopToCommodityType;
+import com.example.userservice.model.shop.connect.ShopToCommodityType;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;

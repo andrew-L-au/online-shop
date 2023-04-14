@@ -1,12 +1,12 @@
-package com.example.userservice.model.Account;
+package com.example.userservice.model.account;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
-public abstract class Account {
+public class Account {
+    @TableId(value = "account_id" ,type = IdType.ASSIGN_ID)
     private Long accountId;
     private Double balance;
-    public void charge(Double amount){
-        balance += amount;
-    }
 }

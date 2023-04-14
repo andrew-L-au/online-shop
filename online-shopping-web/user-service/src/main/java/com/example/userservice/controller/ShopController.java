@@ -2,7 +2,7 @@ package com.example.userservice.controller;
 
 import com.example.userservice.model.DTO.ApproveOpenShopRequestDTO;
 import com.example.userservice.model.DTO.RequestOpenShopDTO;
-import com.example.userservice.model.OpenShopRequest;
+import com.example.userservice.model.shop.OpenShopRequest;
 import com.example.userservice.model.shop.CommodityType;
 import com.example.userservice.model.shop.Shop;
 import com.example.userservice.model.shop.ShopBasicInfo;

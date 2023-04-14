@@ -1,8 +1,6 @@
 package com.example.userservice.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.example.userservice.model.Account.PersonalAccount;
+import com.example.userservice.model.account.PersonalAccount;
 import com.example.userservice.model.DTO.LoginResponse;
 import com.example.userservice.model.DTO.RegistrationRequest;
 import com.example.userservice.model.user.Customer;
@@ -13,12 +11,8 @@ import com.example.userservice.model.user.info.auth.UserRole;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
 import com.example.userservice.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/user")

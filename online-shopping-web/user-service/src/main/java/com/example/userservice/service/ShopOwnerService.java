@@ -1,13 +1,9 @@
 package com.example.userservice.service;
 
-import com.example.userservice.model.Account.PersonalAccount;
-import com.example.userservice.model.connect.CustomerToUser;
-import com.example.userservice.model.connect.ShopOwnerToUser;
-import com.example.userservice.model.user.Customer;
+import com.example.userservice.model.account.PersonalAccount;
 import com.example.userservice.model.user.ShopOwner;
 import com.example.userservice.model.user.User;
 import com.example.userservice.model.user.info.auth.UserAuthentication;
-import com.example.userservice.model.user.info.auth.UserRole;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
 import com.example.userservice.repository.ShopOwnerRepository;
 import com.example.userservice.repository.mapper.user.ShopOwnerMapper;

@@ -1,2 +1,10 @@
-package com.example.userservice.model.user.connect;public class UserToShoppingCart {
+package com.example.userservice.model.user.connect;
+
+import lombok.Data;
+
+@Data
+public class UserToShoppingCart {
+    private Long id;
+    private Long userId;
+    private Long shoppingCartId;
 }

@@ -1,4 +1,4 @@
-package com.example.userservice.repository.mapper;
+package com.example.userservice.repository.mapper.user;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;

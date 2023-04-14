@@ -1,2 +1,8 @@
-package com.example.userservice.service;public class CloseShopRequestService {
+package com.example.userservice.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class CloseShopRequestService {
+
 }

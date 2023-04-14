@@ -1,4 +1,4 @@
-package com.example.userservice.repository.mapper.shop;
+package com.example.userservice.repository.mapper.shop.connect;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

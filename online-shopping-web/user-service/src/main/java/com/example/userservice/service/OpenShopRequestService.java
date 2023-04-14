@@ -1,9 +1,9 @@
 package com.example.userservice.service;
 
-import com.example.userservice.model.OpenShopRequest;
+import com.example.userservice.model.shop.OpenShopRequest;
 import com.example.userservice.repository.OpenShopRequestRepository;
 import com.example.userservice.repository.ShopRepository;
-import com.example.userservice.repository.mapper.OpenShopRequestToShopMapper;
+import com.example.userservice.repository.mapper.shop.connect.OpenShopRequestToShopMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

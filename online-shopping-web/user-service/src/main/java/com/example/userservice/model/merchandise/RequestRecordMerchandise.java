@@ -7,9 +7,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class NewMerchandise {
-    @TableId(value = "new_merchandise_id")
-    private Long newMerchandiseId;
+public class RequestRecordMerchandise {
+    @TableId(value = "request_record_merchandise_id")
+    private Long requestRecordMerchandiseId;
     private String merchandiseName;
     @TableField(exist = false)
     private List<String> images;

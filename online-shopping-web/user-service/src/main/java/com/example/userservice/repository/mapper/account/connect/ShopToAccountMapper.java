@@ -2,21 +2,19 @@ package com.example.userservice.repository.mapper.account.connect;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.userservice.model.account.connect.ShopToShopAccount;
-import com.example.userservice.model.account.connect.UserToPersonalAccount;
+import com.example.userservice.model.account.connect.ShopToAccount;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 @Mapper
-public interface ShopToShopAccountMapper extends BaseMapper<ShopToShopAccount> {
-    default Long selectShopAccountByShop(Long shopId){
+public interface ShopToAccountMapper extends BaseMapper<ShopToAccount> {
+    default Long selectAccountByShop(Long shopId){
         if (shopId == null){
             return null;
         }
-        ShopToShopAccount shopToShopAccount = this.selectOne(new QueryWrapper<ShopToShopAccount>().eq("shop_id",shopId));
-        if (shopToShopAccount == null){
+        ShopToAccount shopToAccount = this.selectOne(new QueryWrapper<ShopToAccount>().eq("shop_id",shopId));
+        if (shopToAccount == null){
             return null;
         }
-        return shopToShopAccount.getShopAccountId();
+        return shopToAccount.getAccountId();
     }
 }

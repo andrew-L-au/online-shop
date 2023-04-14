@@ -1,4 +1,4 @@
-package com.example.userservice.model.connect;
+package com.example.userservice.model.shop.connect;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

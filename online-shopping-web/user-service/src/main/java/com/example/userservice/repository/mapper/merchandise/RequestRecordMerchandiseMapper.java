@@ -5,5 +5,5 @@ import com.example.userservice.model.merchandise.RequestRecordMerchandise;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface NewMerchandiseMapper extends BaseMapper<RequestRecordMerchandise> {
+public interface RequestRecordMerchandiseMapper extends BaseMapper<RequestRecordMerchandise> {
 }

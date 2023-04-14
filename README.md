@@ -1,7 +1,7 @@
 
-##### Lab2实现
+# Lab2实现
 
-### api
+## api
 
 服务器ip地址 ip-address : 101.200.57.208
 
@@ -371,3 +371,44 @@ public class ARepository{
 
 insert 等操作也是同理的，通过中间表来实现嵌套对象的insert
 
+## Lab3
+
+### 个人信息修改
+
+#### 修改普通信息，提交Long userId 和 UserBasicInfo
+
+```json
+    {
+        "userId" : 122341234123512351344,
+        "userBasicInfo" : {
+            "username" : "abc",
+            "phoneNumber" : "123456",
+            "idCardNumber" : "3235321234",
+            "email" : "3425@dfsads.com"
+        }
+    }       
+```
+
+#### 修改密码,提交Long userId 和 UserAuthentication
+
+```json
+    {
+        "userId" : 122341234123512351344,
+        "userAuthentication" : {
+            "principal" : "abc",
+            "credential" : "32908423"
+        }
+    }    
+```
+
+### 账户充值，提交Long accountId 和 Double amount(充值金额)
+
+```json
+    {
+        "userId" : 122341234123512351344,
+        "userAuthentication" : {
+            "principal" : "abc",
+            "credential" : "32908423"
+        }
+    }    
+```

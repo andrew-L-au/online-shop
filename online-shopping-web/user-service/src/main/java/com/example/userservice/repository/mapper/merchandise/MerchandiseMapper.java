@@ -1,2 +1,9 @@
-package com.example.userservice.repository.mapper.merchandise;public class MerchandiseMapper {
+package com.example.userservice.repository.mapper.merchandise;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.userservice.model.merchandise.Merchandise;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface MerchandiseMapper extends BaseMapper<Merchandise> {
 }

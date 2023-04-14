@@ -1,9 +1,7 @@
 package com.example.userservice.repository;
 
-import com.example.userservice.model.Account.PersonalAccount;
-import com.example.userservice.model.connect.CustomerToUser;
+import com.example.userservice.model.account.PersonalAccount;
 import com.example.userservice.model.connect.ShopOwnerToUser;
-import com.example.userservice.model.user.Customer;
 import com.example.userservice.model.user.ShopOwner;
 import com.example.userservice.model.user.User;
 import com.example.userservice.model.user.info.auth.UserAuthentication;

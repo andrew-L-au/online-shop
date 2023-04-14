@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.userservice.repository.mapper.UserBasicInfoMapper">
+<mapper namespace="com.example.userservice.repository.mapper.user.UserBasicInfoMapper">
     <resultMap id="UserBasicInfoResultMap" type="com.example.userservice.model.user.info.basic.UserBasicInfo">
         <id property="userBasicInfoId" column="user_basic_info_id" jdbcType="BIGINT"></id>
         <result property="username" column="username" jdbcType="VARCHAR"></result>

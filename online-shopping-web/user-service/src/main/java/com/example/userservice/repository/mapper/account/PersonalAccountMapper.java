@@ -1,2 +1,10 @@
-package com.example.userservice.repository.mapper.account;public class PersonalAccountMapper {
+package com.example.userservice.repository.mapper.account;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.userservice.model.account.PersonalAccount;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface PersonalAccountMapper extends BaseMapper<PersonalAccount> {
+
 }

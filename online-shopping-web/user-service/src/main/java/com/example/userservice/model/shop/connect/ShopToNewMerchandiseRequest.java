@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShopToNewMerchandise {
+public class ShopToNewMerchandiseRequest {
     private Long id;
     private Long shopId;
-    private Long newMerchandiseId;
+    private Long newMerchandiseRequestId;
 }
