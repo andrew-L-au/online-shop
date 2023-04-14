@@ -57,28 +57,12 @@ export default {
 
     editItem(index) {
       // TODO: 打开修改界面
-      router.replace('/vendor/modifyItem');
-      localStorage.setItem("commodityId",this.commodityList[index].merchandiseId)
+      router.push({name:"modifyItem",params:{commodityId:this.commodityList[index].merchandiseId}})
       console.log(`正在修改第 ${index + 1} 个商品`);
     },
     deleteItem(index) {
       // TODO: 发送删除请求
-      this.$axios({
-        method: 'post',
-        url: 'http://192.168.31.196:50000/vendor/removeItem',
-        data: {
-          merchandiseId: this.commodityList[index].merchandiseId
-        }
-      })
-          .then((resp) => {
-            if (resp.data === "success") {
-              alert('删除成功！')
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      this.commodityList.splice(index, 1);
+      this.items.splice(index, 1);
     }
   }
 }

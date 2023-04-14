@@ -1,8 +1,11 @@
 <template>
   <section>
-    <el-table :data="shopRequest" height="500" id="shopRequest">
+    <el-table :data="commodityRequest" height="500" width="1000" id="commodityRequest">
       <el-table-column type="index"/>
-      <el-table-column prop="storeName" label="商品名称" width="180"></el-table-column>
+      <el-table-column prop="productName" label="商品名称" width="180"></el-table-column>
+      <el-table-column prop="productImage" label="商品图片" width="180"></el-table-column>
+      <el-table-column prop="productDescription" label="商品描述" width="180"></el-table-column>
+      <el-table-column prop="productPrice" label="商品价格" width="180"></el-table-column>
       <el-table-column fixed="right" prop="requestStatus" label="申请状态" width="120"></el-table-column>
       <el-table-column fixed="right" label="操作" width="240">
         <template #default="{ row }">
@@ -22,20 +25,14 @@ export default {
   data() {
     return {
       index: '',
-      shopRequest: [
-        {storeName: ''},
-        {commodityTypes: ' '},
-        {profile: ''},
-        {address: ''},
-        {totalCapital: ''},
-        {registrationDate: ''},
+      commodityRequest: [
+        {newMerchandiseRequestId: ''},
+        {productName: ''},
+        {productImage: []},
+        {productDescription: ''},
+        {productPrice: ''},
         {requestStatus: ''},
       ],
-      isApprove: 0,
-      // openShopRequestId: '',
-      // shop: {
-      //   shopId: '',
-      // }
     }
   },
   methods: {
@@ -43,49 +40,34 @@ export default {
       console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://192.168.31.196:50000/shop/open-shop-requests',
+        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
       })
           .then(resp => {
-            this.shopRequest.pop()
+            this.commodityRequest.pop()
             console.log(resp.data)
             for (let i = 0; i < resp.data.length; i++) {
               let tmp = resp.data[i];
-              let string = ' ';
-              for (let j = 0; j < tmp.shop.commodityTypes.length; j++) {
-                string += tmp.shop.commodityTypes[j].commodityType;
-                string += ' ';
-              }
-              console.log(string)
-              this.shopRequest[i].index = i
-              this.shopRequest[i].storeName = tmp.shop.shopBasicInfo.name
-              this.shopRequest[i].commodityTypes = string
-              this.shopRequest[i].profile = tmp.shop.shopBasicInfo.profile
-              this.shopRequest[i].address = tmp.shop.shopBasicInfo.address
-              this.shopRequest[i].totalCapital = tmp.shop.shopBasicInfo.totalCapital
-              this.shopRequest[i].registrationDate = tmp.shop.shopBasicInfo.registrationDate
-              this.shopRequest[i].requestStatus = tmp.requestStatus
-
-              console.log(this.shopRequest[i])
-
+              this.commodityRequest[i].index = i
+              this.commodityRequest[i].newMerchandiseRequestId = tmp.newMerchandiseRequestId
+              this.commodityRequest[i].productName = tmp.requestRecordMerchandise.merchandiseName
+              this.commodityRequest[i].productImage = tmp.requestRecordMerchandise.images
+              this.commodityRequest[i].productDescription = tmp.requestRecordMerchandise.description
+              this.commodityRequest[i].productPrice = tmp.requestRecordMerchandise.price
+              this.commodityRequest[i].requestStatus = tmp.requestStatus
             }
-            // this.openShopRequestId = this.shopRequest.openShopRequestId
-            // this.shop.shopId = this.shopRequest.shop.shopId
-            // console.log(this.shopRequest[0].shop.profile);
-            // console.log(this.shopRequest[0].shop.shopId);
           })
           .catch(err => {
             console.log(err);
           })
-      console.log(this.shopRequest)
     },
     rejectShop: function (row) {
-      this.isApprove = -1;
+      this.requestStatus = -1;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.31.196:50000/shop/approve-open-shop-request',
+        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
         data: {
-          name: row.storeName,
-          isApprove: this.isApprove,
+          newMerchandiseRequestId: row.newMerchandiseRequestId,
+          requestStatus: row.requestStatus,
         }
       })
           .then(resp => {
@@ -101,17 +83,14 @@ export default {
     approveShop: async function (row) {
       console.log(row)
       console.log(row.storeName)
-      this.isApprove = 1;
+      this.requestStatus = 1;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.31.196:50000/shop/approve-open-shop-request',
-        data:{
-          name: row.storeName,
-          isApprove: this.isApprove,
+        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
+        data: {
+          newMerchandiseRequestId: row.newMerchandiseRequestId,
+          requestStatus: row.requestStatus,
         }
-        //   isApprove: this.isApprove,
-        //   name: row.storeName
-        // }
       })
           .then(resp => {
             // console.log(this.shopRequest[0].openShopRequestId)
@@ -133,10 +112,10 @@ export default {
 </script>
 
 <style scoped>
-#shopRequest {
+#commodityRequest {
   table-layout: auto;
-  width: 50%;
-  margin-left: 30rem;
+  width: 1200px;
+  /*margin-left: 30rem;*/
   border: 2px solid red;
 }
 </style>

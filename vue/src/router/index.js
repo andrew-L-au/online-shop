@@ -105,7 +105,8 @@ const router = createRouter({
         },
         {
             path:'/vendor/modifyItem',
-            component:modifyItem
+            name:modifyItem,
+            component:modifyItem,
         },
 
     ]

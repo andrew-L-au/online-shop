@@ -1,9 +1,9 @@
 <template>
   <body>
   <section>
-    <el-table :data="shopRequest" height="500" id="shopRequest">
+    <el-table :data="commodityRequest" height="500" id="commodityRequest">
       <el-table-column type="index"/>
-      <el-table-column prop="storeName" label="商店名称" width="180"></el-table-column>
+      <el-table-column prop="productName" label="商品名称" width="180"></el-table-column>
       <el-table-column fixed="right" prop="requestStatus" label="申请状态" width="120"></el-table-column>
     </el-table>
   </section>
@@ -18,20 +18,14 @@ export default {
   data() {
     return {
       index: '',
-      shopRequest: [
-        {storeName: ''},
-        {commodityTypes: ' '},
-        {profile: ''},
-        {address: ''},
-        {totalCapital: ''},
-        {registrationDate: ''},
+      commodityRequest: [
+        {newMerchandiseRequestId: ''},
+        {productName: ''},
+        {productImage: []},
+        {productDescription: ''},
+        {productPrice: ''},
         {requestStatus: ''},
       ],
-      isApprove: 0,
-      // openShopRequestId: '',
-      // shop: {
-      //   shopId: '',
-      // }
     }
   },
   methods: {
@@ -39,36 +33,25 @@ export default {
       console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://192.168.31.196:50000/shop/open-shop-requests',
+        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
       })
           .then(resp => {
-            this.shopRequest.pop()
+            this.commodityRequest.pop()
             console.log(resp.data)
             for (let i = 0; i < resp.data.length; i++) {
               let tmp = resp.data[i];
-              let string = ' ';
-              for (let j = 0; j < tmp.shop.commodityTypes.length; j++) {
-                string += tmp.shop.commodityTypes[j].commodityType;
-                string += ' ';
-              }
-              console.log(string)
-              this.shopRequest[i].index = i
-              this.shopRequest[i].storeName = tmp.shop.shopBasicInfo.name
-              this.shopRequest[i].commodityTypes = string
-              this.shopRequest[i].profile = tmp.shop.shopBasicInfo.profile
-              this.shopRequest[i].address = tmp.shop.shopBasicInfo.address
-              this.shopRequest[i].totalCapital = tmp.shop.shopBasicInfo.totalCapital
-              this.shopRequest[i].registrationDate = tmp.shop.shopBasicInfo.registrationDate
-              this.shopRequest[i].requestStatus = tmp.requestStatus
-
-              console.log(this.shopRequest[i])
-
+              this.commodityRequest[i].index = i
+              this.commodityRequest[i].newMerchandiseRequestId = tmp.newMerchandiseRequestId
+              this.commodityRequest[i].productName = tmp.requestRecordMerchandise.merchandiseName
+              this.commodityRequest[i].productImage = tmp.requestRecordMerchandise.images
+              this.commodityRequest[i].productDescription = tmp.requestRecordMerchandise.description
+              this.commodityRequest[i].productPrice = tmp.requestRecordMerchandise.price
+              this.commodityRequest[i].requestStatus = tmp.requestStatus
             }
           })
           .catch(err => {
             console.log(err);
           })
-      console.log(this.shopRequest)
     },
 
   },
@@ -81,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-#shopRequest {
+#commodityRequest {
   table-layout: auto;
   width: 50%;
   margin-left: 30rem;
