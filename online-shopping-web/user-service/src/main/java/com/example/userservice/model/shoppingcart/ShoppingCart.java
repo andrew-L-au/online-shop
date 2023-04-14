@@ -13,7 +13,5 @@ public class ShoppingCart {
     @TableId("shopping_cart_id")
     private Long shoppingCartId;
     @TableField(exist = false)
-    private User user;
-    @TableField(exist = false)
     private List<Merchandise> merchandises;
 }
