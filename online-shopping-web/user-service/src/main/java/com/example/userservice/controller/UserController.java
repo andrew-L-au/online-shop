@@ -28,7 +28,7 @@ public class UserController {
     ShopOwnerService shopOwnerService;
 
     @PostMapping(path = "/shop-owner/registration")
-     String shopOwnerRegistration(@RequestBody RegistrationRequest registrationRequest) {
+    public String shopOwnerRegistration(@RequestBody RegistrationRequest registrationRequest) {
         UserBasicInfo userBasicInfo = registrationRequest.getUserBasicInfo();
         UserAuthentication userAuthentication = registrationRequest.getUserAuthentication();
         if (userBasicInfo == null || userAuthentication == null){
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/customer/registration")
-    String customerRegistration(RegistrationRequest registrationRequest) {
+    public String customerRegistration(RegistrationRequest registrationRequest) {
         if (registrationRequest == null){
             return "format error";
         }
@@ -105,7 +105,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    LoginResponse login(@RequestBody UserAuthentication userAuthentication) throws JsonProcessingException {
+    public LoginResponse login(@RequestBody UserAuthentication userAuthentication) throws JsonProcessingException {
         if (userAuthentication == null){
             return new LoginResponse(null,false);
         }
@@ -114,5 +114,33 @@ public class UserController {
         }catch (RuntimeException e){
             return new LoginResponse(null,false);
         }
+    }
+
+    @PostMapping(path = "/change-user-basic-info")
+    public Boolean changeUserBasicInfo(Long userId, UserBasicInfo userBasicInfo){
+        if (userId == null || userBasicInfo == null){
+            return false;
+        }
+        Boolean ret = true;
+        try {
+            ret = userService.changeUserBasicInfo(userId, userBasicInfo);
+        }catch (RuntimeException e){
+            return false;
+        }
+        return ret;
+    }
+
+    @PostMapping(path = "/change-password")
+    public Boolean changePassword(Long userId, String password){
+        if (userId == null || password == null){
+            return false;
+        }
+        Boolean ret = true;
+        try {
+            ret = userService.changePassword(userId, password);
+        }catch (RuntimeException e){
+            return false;
+        }
+        return ret;
     }
 }

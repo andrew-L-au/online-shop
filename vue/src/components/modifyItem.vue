@@ -37,30 +37,44 @@ export default {
     }
   },
   methods: {
-    mounted: function () {
-      this.getItemInfo();
-    },
 
-    getItemInfo(){
-      //TODO: 获取商品原信息
-    },
+// {
+//   "merchandiseId" : 122341234123512351344,
+//     "merchandise" : {
+//   "merchandiseName" : "aaaa", //string
+//       "images" : [{"a"},{"a"},{"a"}], //string array
+//       "description" : "sdfasda",
+//       "price" : 2142.324
+// }
+// }
+
+
 
     onSubmit() {
-      // 发送请求将商品信息保存到服务器
-      const formData = new FormData();
-      formData.append('name', this.productName);
-      formData.append('description', this.productDescription);
-      formData.append('price', this.productPrice);
-      this.productImages.forEach((file, index) => {
-        formData.append(`image${index}`, file);
-      });
-      // TODO: 发送请求将 formData 提交到服务器
+      let id = localStorage.getItem("commodityId")
+      this.$axios({
+        method: 'post',
+        url: 'http://192.168.31.196:50000/vendor/modifyItem',
+        data: {
+          merchandiseId : id,
+          merchandise: {
+            merchandiseName : this.productName,
+            images : this.productImages,
+            description : this.productDescription,
+            price : this.productPrice,
+          },
 
-      // 清空表单
-      this.productName = '';
-      this.productDescription = '';
-      this.productPrice = 0;
-      this.productImages = [];
+
+        }
+      })
+          .then((resp) => {
+            if (resp.data === "success") {
+              alert('申请成功！')
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
     },
     onFileChange(event, index) {
       const file = event.target.files[0];

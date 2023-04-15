@@ -1,9 +1,10 @@
 <template>
   <div>
     <h2>商品列表</h2>
-    <div v-for="(item, index) in items" :key="index" class="item">
-      <img :src="item.imageUrl" alt="商品图片">
-      <div class="name">{{ item.name }}</div>
+    <div v-for="(commodity, index) in commodityList" :key="index" class="item">
+      <!--      bug here-->
+      <img :src="commodityList[index].images" alt="商品图片">
+      <div class="name">{{ commodityList[index].merchandiseName }}</div>
       <div class="buttons">
         <button @click="editItem(index)">修改</button>
         <button @click="deleteItem(index)">删除</button>
@@ -13,16 +14,18 @@
 </template>
 
 <script>
-import * as url from "url";
+import router from "@/router";
 
 export default {
   data() {
     return {
-      items: [
-        { imageUrl: 'https://example.com/image1.jpg', name: '商品1' },
-        { imageUrl: 'https://example.com/image2.jpg', name: '商品2' },
-        { imageUrl: 'https://example.com/image3.jpg', name: '商品3' }
-      ]
+      commodityList:[
+        {merchandiseId:''},
+        {merchandiseName:''},
+        {images:''},
+        {description:''},
+        {price:''},
+      ],
     }
   },
   methods: {
@@ -31,16 +34,51 @@ export default {
     },
 
     getItems(){
-
+      this.$axios({
+        method: 'get',
+        url: 'http://192.168.31.196:50000/vendor/itemDisplay',
+      })
+          .then(resp => {
+            this.commodityList.pop()
+            console.log(resp.data)
+            for (let i = 0; i < resp.data.length; i++) {
+              let tmp = resp.data[i];
+              this.commodityList[i].merchandiseId = tmp.merchandiseId
+              this.commodityList[i].merchandiseName = tmp.merchandiseName
+              this.commodityList[i].images = tmp.images
+              this.commodityList[i].description = tmp.description
+              this.commodityList[i].price = tmp.price
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
     },
 
     editItem(index) {
       // TODO: 打开修改界面
+      router.replace('/vendor/modifyItem');
+      localStorage.setItem("commodityId",this.commodityList[index].merchandiseId)
       console.log(`正在修改第 ${index + 1} 个商品`);
     },
     deleteItem(index) {
       // TODO: 发送删除请求
-      this.items.splice(index, 1);
+      this.$axios({
+        method: 'post',
+        url: 'http://192.168.31.196:50000/vendor/removeItem',
+        data: {
+          merchandiseId: this.commodityList[index].merchandiseId
+        }
+      })
+          .then((resp) => {
+            if (resp.data === "success") {
+              alert('删除成功！')
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      this.commodityList.splice(index, 1);
     }
   }
 }

@@ -311,8 +311,63 @@ public class MerchandiseService {
     }
 
     @Transactional
+    public List<NewMerchandiseRequest> findNewMerchandiseRequestWithRequestRecordMerchandiseOfShop(Long shopId){
+        if (shopId == null){
+            return null;
+        }
+        List<Long> newMerchandiseRequestIds = shopToNewMerchandiseRequestMapper.selectNewMerchandiseRequestsByShop(shopId);
+        if (newMerchandiseRequestIds == null){
+            return null;
+        }
+        List<NewMerchandiseRequest> newMerchandiseRequests = newMerchandiseRequestMapper.selectBatchIds(newMerchandiseRequestIds);
+        if (newMerchandiseRequests == null){
+            return null;
+        }
+        for (NewMerchandiseRequest newMerchandiseRequest : newMerchandiseRequests){
+            Long newMerchandiseRequestId = newMerchandiseRequest.getNewMerchandiseRequestId();
+            Long requestRecordMerchandiseId = requestRecordMerchandiseToNewMerchandiseRequestMapper.selectRequestRecordMerchandiseByNewMerchandiseRequest(newMerchandiseRequestId);
+            RequestRecordMerchandise requestRecordMerchandise = requestRecordMerchandiseMapper.selectById(requestRecordMerchandiseId);
+            newMerchandiseRequest.setRequestRecordMerchandise(requestRecordMerchandise);
+        }
+        return newMerchandiseRequests;
+    }
+
+    @Transactional
     public List<ModifyMerchandiseRequest> findModifyMerchandiseRequestWithRequestRecordMerchandise(){
         List<ModifyMerchandiseRequest> modifyMerchandiseRequests = modifyMerchandiseRequestMapper.allModifyMerchandiseRequests();
+        if (modifyMerchandiseRequests == null){
+            return null;
+        }
+        for (ModifyMerchandiseRequest modifyMerchandiseRequest : modifyMerchandiseRequests){
+            Long modifyMerchandiseRequestId = modifyMerchandiseRequest.getModifyMerchandiseRequestId();
+            Long requestRecordMerchandiseId = requestRecordMerchandiseToModifyMerchandiseRequestMapper.selectRequestRecordMerchandiseByModifyMerchandiseRequest(modifyMerchandiseRequestId);
+            if (requestRecordMerchandiseId == null){
+                continue;
+            }
+            RequestRecordMerchandise requestRecordMerchandise = requestRecordMerchandiseMapper.selectById(requestRecordMerchandiseId);
+            modifyMerchandiseRequest.setRequestRecordMerchandise(requestRecordMerchandise);
+            if (modifyMerchandiseRequest.getRequestStatus().equals(RequestStatus.IN_REVIEW)){
+                Long merchandiseId = modifyMerchandiseRequestToMerchandiseMapper.selectMerchandiseByModifyMerchandiseRequest(modifyMerchandiseRequestId);
+                if (merchandiseId == null){
+                    continue;
+                }
+                Merchandise merchandise = merchandiseMapper.selectById(merchandiseId);
+                if (merchandise == null){
+                    continue;
+                }
+                modifyMerchandiseRequest.setMerchandise(merchandise);
+            }
+        }
+        return modifyMerchandiseRequests;
+    }
+
+    @Transactional
+    public List<ModifyMerchandiseRequest> findModifyMerchandiseRequestWithRequestRecordMerchandiseOfShop(Long shopId){
+        if (shopId == null){
+            return null;
+        }
+        List<Long> modifyMerchandiseRequestIds = shopToModifyMerchandiseRequestMapper.selectModifyMerchandiseRequestsByShop(shopId);
+        List<ModifyMerchandiseRequest> modifyMerchandiseRequests = modifyMerchandiseRequestMapper.selectBatchIds(modifyMerchandiseRequestIds);
         if (modifyMerchandiseRequests == null){
             return null;
         }

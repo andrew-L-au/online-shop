@@ -15,12 +15,12 @@ import userPersonalAccount from "@/components/userPersonalAccount.vue"
 import userShopAccount from "@/components/userShopAccount.vue"
 import userShoppingCarts from "@/components/userShoppingCarts.vue"
 import addNewItem from "@/components/addNewItem.vue";
-import itemRecord from "@/components/itemRecord.vue";
+import addItemRecord from "@/components/addItemRecord.vue";
 import itemDisplay from "@/components/itemDisplay.vue";
 import modifyItem from "@/components/modifyItem.vue";
+import modifyItemRecord from "@/components/modifyItemRecord.vue";
 import totalProfit from "@/components/totalProfit.vue"
 import transferCapital from "@/components/transferCapital.vue"
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -106,8 +106,12 @@ const router = createRouter({
             component: addNewItem
         },
         {
-            path:'/vendor/itemRecord',
-            component: itemRecord
+            path:'/vendor/addItemRecord',
+            component: addItemRecord
+        },
+        {
+            path:'/vendor/modifyItemRecord',
+            component: modifyItemRecord
         },
         {
             path:'/vendor/itemDisplay',
@@ -115,7 +119,8 @@ const router = createRouter({
         },
         {
             path:'/vendor/modifyItem',
-            component:modifyItem
+            name:modifyItem,
+            component:modifyItem,
         },
 
     ]

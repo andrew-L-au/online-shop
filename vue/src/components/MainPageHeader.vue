@@ -29,49 +29,15 @@
       </el-menu-item>
     </el-menu>
   </header>
-  <div class="items">
-    <h2>商品列表</h2>
-    <div v-for="(item, index) in items" :key="index" class="item">
-      <img :src="item.imageUrl" alt="商品图片">
-      <div class="name">{{ item.name }}</div>
-      <div class="buttons">
-        <button @click="addToCart(index)">添加入购物车</button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      items: [
-        { imageUrl: 'https://example.com/image1.jpg', name: '商品1' },
-        { imageUrl: 'https://example.com/image2.jpg', name: '商品2' },
-        { imageUrl: 'https://example.com/image3.jpg', name: '商品3' }
-      ]
-    }
-  },
-
-  methods: {
-    mounted() {
-      this.getItems()
-    },
-
-    getItems(){
-
-    },
-
-    addToCart(index) {
-      // TODO: 打开修改界面
-      console.log(`正在修改第 ${index + 1} 个商品`);
-    },
-
 
     exit() {
       localStorage.removeItem('token')
     },
-  }
+
 }
 </script>
 
