@@ -1,7 +1,13 @@
-<script setup lang='ts'>
+<template>
+    
+</template>
+
+<script>
 
 </script>
+export default {
+    
+}
+<style scoped>
 
-<template>
-    approveCloseStore
-</template>
+</style>

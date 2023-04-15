@@ -57,8 +57,10 @@ export default {
                 let strings = this.userToken.split("."); //截取token，获取载体
                 var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
                 var info = JSON.parse(userinfo.user)
-                localStorage.setItem("userinfo", userinfo);
-                console.log(userinfo)
+                console.log(info.userId)
+                localStorage.setItem('userId', info.userId);
+                // console.log(userinfo)
+                // localStorage.setItem("userinfo", userinfo);
                 console.log(info.userRole)
                 let role = info.userRole
                 console.log(role)
@@ -78,7 +80,6 @@ export default {
       } else {
         alert("填写不能为空！");
       }
-      //axios.post('/api/user/login',this.form.account,this.form.key);
 
     },
   },

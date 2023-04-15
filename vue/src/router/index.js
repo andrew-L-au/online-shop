@@ -18,6 +18,8 @@ import addNewItem from "@/components/addNewItem.vue";
 import itemRecord from "@/components/itemRecord.vue";
 import itemDisplay from "@/components/itemDisplay.vue";
 import modifyItem from "@/components/modifyItem.vue";
+import totalProfit from "@/components/totalProfit.vue"
+import transferCapital from "@/components/transferCapital.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +75,14 @@ const router = createRouter({
         {
             path: '/admin',
             component: AdminPage
+        },
+        {
+            path: '/admin/totalProfit',
+            component: totalProfit,
+        },
+        {
+            path: '/admin/transferCapital',
+            component: transferCapital,
         },
         {
             path: '/admin/approveOpenStore',

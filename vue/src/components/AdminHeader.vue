@@ -20,8 +20,12 @@
       <div class="flex-grow" />
       <el-sub-menu index="2">
         <template #title>admin账户</template>
-        <el-menu-item index="2-1">利润</el-menu-item>
-        <el-menu-item index="2-2">中间资金</el-menu-item>
+        <el-menu-item index="2-1">
+          <RouterLink to="/admin/totalProfit">利润</RouterLink>
+        </el-menu-item>
+        <el-menu-item index="2-2">
+          <RouterLink to="/admin/transferCapital">中间资金</RouterLink>
+        </el-menu-item>
       </el-sub-menu>
     </el-menu>
   </nav>

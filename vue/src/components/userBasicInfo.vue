@@ -1,57 +1,55 @@
 <template>
-    <div>
+    <body>
         <ul>
             <li class="username">
                 用户名：{{ userBasicInfo.username }}
-                <el-button @click="showHideModifyNameBlock()">修改用户名</el-button>
-                <div style="display: none;" class="modifyName">
+                <el-button @click="showHideModifyBlock('username')">修改用户名</el-button>
+                <div style="display: none;" class="modify modifyName">
                     原用户名<el-input disabled :value="userBasicInfo.username"></el-input>
-                    新用户名<el-input v-model="newInfo.username" minlength="3" maxlength="10"
+                    新用户名<el-input v-model="newBasicInfo.username" minlength="3" maxlength="10"
                         placeholder="请输入3到10位字符"></el-input>
-                    <el-button @click="modifyUserName">提交修改</el-button>
-                    <el-button @click="showHideModifyNameBlock">取消</el-button>
+                    <el-button @click="modifyBasicInfo('username')">提交修改</el-button>
+                    <el-button @click="showHideModifyBlock('username')">取消</el-button>
                 </div>
-
             </li>
             <li class="idCardNumber">
                 身份证号：{{ userBasicInfo.idCardNumber }}
                 <el-button disabled>身份证号不可更改</el-button>
             </li>
-            <li class="phone">
-                手机号：{{ userBasicInfo.phone }}
-                <el-button @click="showHideModifyPhoneBlock">修改手机号</el-button>
-                <div style="display: none;" class="modifyPhone">
-                    原手机号<el-input disabled :value="userBasicInfo.phone"></el-input>
-                    新手机号<el-input v-model="newInfo.phone" placeholder="请输入新手机号"></el-input>
-                    <el-button @click="modifyPhone">提交修改</el-button>
-                    <el-button @click="showHideModifyPhoneBlock">取消</el-button>
+            <li class="phoneNumber">
+                手机号：{{ userBasicInfo.phoneNumber }}
+                <el-button @click="showHideModifyBlock('phone')">修改手机号</el-button>
+                <div style="display: none;" class="modify modifyPhone">
+                    原手机号<el-input disabled :value="userBasicInfo.phoneNumber"></el-input>
+                    新手机号<el-input v-model="newBasicInfo.phoneNumber" placeholder="请输入新手机号"></el-input>
+                    <el-button @click="modifyBasicInfo('phone')">提交修改</el-button>
+                    <el-button @click="showHideModifyBlock('phone')">取消</el-button>
                 </div>
             </li>
             <li class="mail">
                 邮箱：{{ userBasicInfo.email }}
-                <el-button @click="showHideModifyEmailBlock">修改邮箱</el-button>
-                <div style="display: none;" class="modifyEmail">
+                <el-button @click="showHideModifyBlock('mail')">修改邮箱</el-button>
+                <div style="display: none;" class="modify modifyEmail">
                     原邮箱<el-input disabled :value="userBasicInfo.email"></el-input>
-                    新邮箱<el-input v-model="newInfo.email" placeholder="请输入新邮箱"></el-input>
-                    <el-button @click="modifyEmail">提交修改</el-button>
-                    <el-button @click="showHideModifyEmailBlock">取消</el-button>
+                    新邮箱<el-input v-model="newBasicInfo.email" placeholder="请输入新邮箱"></el-input>
+                    <el-button @click="modifyBasicInfo('mail')">提交修改</el-button>
+                    <el-button @click="showHideModifyBlock('mail')">取消</el-button>
                 </div>
             </li>
             <li class="password">
-                密码：{{ userBasicInfo.password }}
-                <el-button @click="showHideModifyPasswordBlock">修改密码</el-button>
-                <div style="display: none;" class="modifyPassword">
-                    原密码<el-input disabled :value="userBasicInfo.password"></el-input>
-                    新密码<el-input v-model="newInfo.password" placeholder="请输入新密码"></el-input>
+                <el-button @click="showHideModifyBlock('password')">修改密码</el-button>
+                <div style="display: none;" class="modify modifyPassword">
+                    新密码<el-input v-model="userAuthentication.credential" placeholder="请输入新密码"></el-input>
                     <el-button @click="modifyPassword">提交修改</el-button>
-                    <el-button @click="showHideModifyPasswordBlock">取消</el-button>
+                    <el-button @click="showHideModifyBlock('password')">取消</el-button>
                 </div>
             </li>
         </ul>
-    </div>
+    </body>
 </template>
 
 <script>
+import { ElMessage } from 'element-plus';
 function isValidName(str) {
     const regex = /^[\w]{3,10}$/;
     return regex.test(str);
@@ -85,187 +83,156 @@ export default {
         return {
             userBasicInfo: {
                 username: '',
+                phoneNumber: '',
                 idCardNumber: '',
-                phone: '',
                 email: '',
-                password: '',
             },
-            newInfo: {
+            newBasicInfo: {
                 username: '',
+                phoneNumber: '',
                 idCardNumber: '',
-                phone: '',
                 email: '',
-                password: '',
-            }
+            },
+            userId: localStorage.getItem('userId'),
+            userAuthentication: {
+                principal: '',
+                credential: '',
+            },
+
         }
 
     },
 
     methods: {
         getUserBasicInfo() {
-            console.log('getInfo');
             this.$axios({
                 method: 'get',
-                url: 'https://run.mocky.io/v3/751bbd3c-ca3c-4df3-bc37-7da2799b3989',
+                url: 'https://run.mocky.io/v3/a2e7b03d-d9cb-4ad9-a6ff-bbab4ce5825d',
             })
                 .then(resp => {
-                    console.log(resp.data)
-                    this.userBasicInfo = resp.data.userBasicInfo
+                    this.userBasicInfo = resp.data
                     console.log(this.userBasicInfo)
                 })
                 .catch(err => {
                     console.log(err);
                 })
         },
-        showHideModifyNameBlock() {
-            // 动态显示和隐蔽
-            var block = document.querySelector('.modifyName');
-            if (block.style.display === "none") {
-                block.style.display = "block";
+        modifyBasicInfo(item) {
+            //检查提交信息
+            var msg = '', flag = 1;
+            if(item === 'username'){
+                if(!isValidName(this.newBasicInfo.username)){
+                    msg = '不符合格式的用户名，请重新输入';
+                    flag = 0;
+                }
+            } else if(item === 'phone'){
+                if(!isValidPhone(this.newBasicInfo.phoneNumber)){ msg = '不正确的手机号，请重新输入'; flag = 0;}
+            } else if(item === 'mail'){
+                if(!(isValidEmail(this.newBasicInfo.email))){ msg = '不正确的邮箱，请重新输入'; flag = 0;}
             }
-            else {
-                block.style.display = "none";
-            }
-        },
-        modifyUserName() {
-            if (!isValidName(this.newInfo.username)) alert("不符合格式的用户名！")
-            else {
+            if(flag){
                 this.$axios({
                     method: 'post',
-                    url: 'https://run.mocky.io/v3/271f4013-cbae-49dc-bcc9-029bbbbccf3e',
+                    url: 'https://run.mocky.io/v3/cf42c64f-d066-4658-98fe-a04e399eee2b',
                     data: {
-                        oldName: this.userBasicInfo.username,
-                        newName: this.newInfo.username,
+                        userId: this.userId,
+                        userBasicInfo: this.newBasicInfo,
                     }
                 })
                     .then(response => {
-                        //TODO 检查是否更改成功
-
                         console.log(response.data)
-                        this.userBasicInfo.username = this.newInfo.username;
-                        console.log(this.userBasicInfo.username);
-                        alert('修改成功！');
-                        this.showHideModifyNameBlock();
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            }
-        },
-        showHideModifyPhoneBlock() {
-            var block = document.querySelector('.modifyPhone');
-            if (block.style.display === "none") {
-                block.style.display = "block";
-            }
-            else {
-                block.style.display = "none";
-            }
-        },
-        modifyPhone() {
-            if (isValidPhone(this.newInfo.phone)) {
-                this.$axios({
-                    method: 'post',
-                    url: 'https://run.mocky.io/v3/271f4013-cbae-49dc-bcc9-029bbbbccf3e',
-                    data: {
-                        oldPhone: this.userBasicInfo.phone,
-                        newPhone: this.newInfo.phone,
-                    }
-                })
-                    .then(response => {
-                        //TODO 检查是否更改成功
-
-                        console.log(response.data)
-                        this.userBasicInfo.phone = this.newInfo.phone;
-                        console.log(this.userBasicInfo.phone);
-                        alert('修改成功！');
-                        this.showHideModifyPhoneBlock();
+                        if(response.data === "success"){
+                            this.userBasicInfo = this.newBasicInfo
+                            console.log(this.userBasicInfo);
+                            ElMessage({
+                                type: 'success',
+                                message: '修改成功',
+                            })
+                            this.hideAllModifyBlock();
+                            this.getUserBasicInfo();
+                        }
                     })
                     .catch(err => {
                         console.log(err);
                     })
             } else {
-                alert('不符合格式的手机号！');
-            }
-        },
-        showHideModifyEmailBlock() {
-            var block = document.querySelector('.modifyEmail');
-            if (block.style.display === "none") {
-                block.style.display = "block";
-            }
-            else {
-                block.style.display = "none";
-            }
-        },
-        modifyEmail() {
-            if (isValidEmail(this.newInfo.email)) {
-                this.$axios({
-                    method: 'post',
-                    url: 'https://run.mocky.io/v3/271f4013-cbae-49dc-bcc9-029bbbbccf3e',
-                    data: {
-                        oldEmail: this.userBasicInfo.email,
-                        newEmail: this.newInfo.email,
-                    }
+                ElMessage({
+                    type: 'error',
+                    message: msg,
                 })
-                    .then(response => {
-                        //TODO 检查是否更改成功
-
-                        console.log(response.data)
-                        this.userBasicInfo.email = this.newInfo.email;
-                        console.log(this.userBasicInfo.email);
-                        alert('修改成功！');
-                        this.showHideModifyEmailBlock();
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            } else {
-                alert('不符合格式的邮箱！');
-            }
-        },
-        showHideModifyPasswordBlock() {
-            var block = document.querySelector('.modifyPassword');
-            if (block.style.display === "none") {
-                block.style.display = "block";
-            }
-            else {
-                block.style.display = "none";
             }
         },
         modifyPassword() {
-            if (isValidPassword(this.newInfo.password)) {
+            if (isValidPassword(this.userAuthentication.credential)) {
+                this.userAuthentication.principal = this.userBasicInfo.username
                 this.$axios({
                     method: 'post',
-                    url: 'https://run.mocky.io/v3/271f4013-cbae-49dc-bcc9-029bbbbccf3e',
+                    url: 'https://run.mocky.io/v3/cf42c64f-d066-4658-98fe-a04e399eee2b',
                     data: {
-                        oldPassword: this.userBasicInfo.password,
-                        newPassword: this.newInfo.password,
+                        userId: this.userId,
+                        userAuthentication: this.userAuthentication,
                     }
                 })
                     .then(response => {
-                        //TODO 检查是否更改成功
-
                         console.log(response.data)
-                        this.userBasicInfo.password = this.newInfo.password;
-                        console.log(this.userBasicInfo.password);
-                        alert('修改成功！');
-                        this.showHideModifyPasswordBlock();
+                        if(response.data === 'success'){
+                            ElMessage({
+                                type: 'success',
+                                message: '修改成功',
+                            })
+                            this.hideAllModifyBlock();
+                            this.getUserBasicInfo();
+                        }
                     })
                     .catch(err => {
                         console.log(err);
                     })
             } else {
-                alert('不符合格式的密码！');
+                ElMessage({
+                    type: 'error',
+                    message: '密码不符合格式',
+                })
             }
         },
+        showHideModifyBlock(item) {
+            //判断显示那个块
+            var block;
+            if(item === 'username'){
+                block = document.querySelector('.modifyName');
+            } else if(item === 'phone'){
+                block = document.querySelector('.modifyPhone');
+            } else if(item === 'mail'){
+                block = document.querySelector('.modifyEmail');
+            } else if(item === 'password'){
+                block = document.querySelector('.modifyPassword');
+            }
+
+            if (block.style.display === "none") {
+                block.style.display = "block";
+            }
+            else {
+                block.style.display = "none";
+            }
+        },
+        hideAllModifyBlock() {
+            var blocks = document.querySelectorAll('.modify')
+            for(let i = 0; i < blocks.length; i++){
+                blocks[i].style.display = "none";
+            }
+        }
     }
 }
 
 </script>
-
-//TODO 布局 右端对齐
+//TODO 布局调整
 <style scoped>
+body{
+    background: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 ul li {
     list-style: none;
 }
-
 </style>

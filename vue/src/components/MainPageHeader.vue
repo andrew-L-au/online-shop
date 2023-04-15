@@ -25,7 +25,7 @@
         </el-menu-item>
       </el-sub-menu>
       <el-menu-item index="3" onclick="exit()">
-        <RouterLink to=" /">登出</RouterLink>
+        <RouterLink to="/">登出</RouterLink>
       </el-menu-item>
     </el-menu>
   </header>
