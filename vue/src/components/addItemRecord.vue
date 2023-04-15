@@ -33,7 +33,7 @@ export default {
       console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
+        url: 'http://192.168.31.196:50000/merchandise/findNew',
       })
           .then(resp => {
             this.commodityRequest.pop()
