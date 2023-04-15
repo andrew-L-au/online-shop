@@ -4,13 +4,16 @@ package com.example.userservice.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.userservice.model.DTO.LoginResponse;
+import com.example.userservice.model.connect.UserToUserAuthentication;
+import com.example.userservice.model.connect.UserToUserBasicInfo;
 import com.example.userservice.model.user.User;
 import com.example.userservice.model.user.info.auth.UserAuthentication;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
 import com.example.userservice.repository.*;
+import com.example.userservice.repository.mapper.user.connect.UserToUserBasicInfoMapper;
 import com.example.userservice.repository.mapper.user.UserAuthenticationMapper;
 import com.example.userservice.repository.mapper.user.UserBasicInfoMapper;
-import com.example.userservice.repository.mapper.connect.UserToUserAuthenticationMapper;
+import com.example.userservice.repository.mapper.user.connect.UserToUserAuthenticationMapper;
 import com.example.userservice.repository.mapper.user.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +40,9 @@ public class UserService {
     UserToUserAuthenticationMapper userToUserAuthenticationMapper;
 
     @Autowired
+    UserToUserBasicInfoMapper userToUserBasicInfoMapper;
+
+    @Autowired
     private UserBasicInfoRepository userBasicInfoRepository;
 
     public boolean existOneInfoWithSameUsername(String username){
@@ -53,6 +59,30 @@ public class UserService {
 
     public boolean existOneInfoWithSameEmail(String email){
         return userBasicInfoRepository.selectUserBasicInfoByEmail(email) != null;
+    }
+
+    public Boolean userBasicInfoConflicts(UserBasicInfo userBasicInfo){
+        if (userBasicInfo == null || userBasicInfo.getUsername() == null || userBasicInfo.getIdCardNumber() == null || userBasicInfo.getPhoneNumber() == null || userBasicInfo.getEmail() == null){
+            return false;
+        }
+        String username = userBasicInfo.getUsername();
+        String idCardNumber = userBasicInfo.getIdCardNumber();
+        String phoneNumber = userBasicInfo.getPhoneNumber();
+        String email = userBasicInfo.getEmail();
+        Boolean exists = false;
+        if (userBasicInfoRepository.selectUserBasicInfoByUsername(username) != null){
+            exists = true;
+        }
+        if (userBasicInfoRepository.selectUserBasicInfoByPhoneNumber(phoneNumber) != null){
+            exists = true;
+        }
+        if (userBasicInfoRepository.selectUserBasicInfoByIdCardNumber(idCardNumber) != null){
+            exists = true;
+        }
+        if (userBasicInfoRepository.selectUserBasicInfoByEmail(email) != null){
+            exists = true;
+        }
+        return exists;
     }
 
     public LoginResponse login(UserAuthentication userAuthentication) throws JsonProcessingException{
@@ -73,6 +103,32 @@ public class UserService {
         String userJson = objectMapper.writeValueAsString(user);
         String token = JWT.create().withClaim("user",userJson).sign(Algorithm.HMAC256("1"));
         return new LoginResponse(token,true);
+    }
+
+    public Boolean registerNewUser(User user, UserBasicInfo userBasicInfo, UserAuthentication userAuthentication){
+        userBasicInfoMapper.insert(userBasicInfo);
+        if (userBasicInfo.getUserBasicInfoId() == null){
+            return false;
+        }
+        userAuthenticationMapper.insert(userAuthentication);
+        if (userAuthentication.getUserAuthenticationId() == null){
+            return false;
+        }
+        userMapper.insert(user);
+        if (user.getUserId() == null){
+            return false;
+        }
+        UserToUserBasicInfo userToUserBasicInfo = new UserToUserBasicInfo(null ,user.getUserId(),userBasicInfo.getUserBasicInfoId());
+        userToUserBasicInfoMapper.insert(userToUserBasicInfo);
+        if (userToUserBasicInfo.getId() == null){
+            return false;
+        }
+        UserToUserAuthentication userToUserAuthentication = new UserToUserAuthentication(null, user.getUserId(),userAuthentication.getUserAuthenticationId());
+        userToUserAuthenticationMapper.insert(userToUserAuthentication);
+        if (userToUserAuthentication.getId() == null){
+            return false;
+        }
+        return true;
     }
 
     public User findUser(UserAuthentication userAuthentication){
@@ -99,42 +155,23 @@ public class UserService {
     }
 
     @Transactional
-    public boolean changePhoneNumber(Long userId,String phoneNumber){
-        UserBasicInfo userBasicInfo = userBasicInfoRepository.selectUserBasicInfo(userId);
-        if (userBasicInfo != null && phoneNumber != null){
-            userBasicInfo.setPhoneNumber(phoneNumber);
-            if (existOneInfoWithSamePhoneNumber(phoneNumber)){
-                userBasicInfoRepository.getUserBasicInfoMapper().updateById(userBasicInfo);
-                return true;
-            }
+    public Boolean changeUserBasicInfo(Long userId, UserBasicInfo newUserBasicInfo){
+        if (userId == null || newUserBasicInfo == null){
+            return false;
         }
-        return false;
-    }
-
-    @Transactional
-    public boolean changeUsername(Long userId,String username){
-        UserBasicInfo userBasicInfo = userBasicInfoRepository.selectUserBasicInfo(userId);
-        if (userBasicInfo != null && username != null){
-            userBasicInfo.setUsername(username);
-            if (existOneInfoWithSameUsername(username)){
-                userBasicInfoRepository.getUserBasicInfoMapper().updateById(userBasicInfo);
-                return true;
-            }
+        if (userBasicInfoConflicts(newUserBasicInfo)){
+            return false;
         }
-        return false;
-    }
-
-    @Transactional
-    public boolean changeEmail(Long userId,String email){
-        UserBasicInfo userBasicInfo = userBasicInfoRepository.selectUserBasicInfo(userId);
-        if (userBasicInfo != null && email != null){
-            userBasicInfo.setEmail(email);
-            if (existOneInfoWithSameEmail(email)){
-                userBasicInfoRepository.getUserBasicInfoMapper().updateById(userBasicInfo);
-                return true;
-            }
+        Long originalUserBasicInfoId = userToUserBasicInfoMapper.selectUserBasicInfoByUser(userId);
+        if (originalUserBasicInfoId == null){
+            return false;
         }
-        return false;
+        UserBasicInfo originalUserBasicInfo = userBasicInfoMapper.selectById(originalUserBasicInfoId);
+        if (originalUserBasicInfo != null){
+            newUserBasicInfo.setUserBasicInfoId(originalUserBasicInfo.getUserBasicInfoId());
+            userBasicInfoMapper.updateById(newUserBasicInfo);
+        }
+        return true;
     }
 
     @Transactional

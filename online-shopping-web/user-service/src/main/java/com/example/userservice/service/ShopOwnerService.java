@@ -7,7 +7,7 @@ import com.example.userservice.model.user.info.auth.UserAuthentication;
 import com.example.userservice.model.user.info.basic.UserBasicInfo;
 import com.example.userservice.repository.ShopOwnerRepository;
 import com.example.userservice.repository.mapper.user.ShopOwnerMapper;
-import com.example.userservice.repository.mapper.connect.ShopOwnerToUserMapper;
+import com.example.userservice.repository.mapper.user.connect.ShopOwnerToUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

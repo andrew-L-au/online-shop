@@ -1,4 +1,4 @@
-package com.example.userservice.repository.mapper.connect;
+package com.example.userservice.repository.mapper.user.connect;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -18,5 +18,16 @@ public interface UserToUserBasicInfoMapper extends BaseMapper<UserToUserBasicInf
 
     default UserToUserBasicInfo selectUserByUserBasicInfo(Long userBasicInfoId){
         return this.selectOne(new QueryWrapper<UserToUserBasicInfo>().eq("user_basic_info_id", userBasicInfoId));
+    }
+
+    default Long selectUserBasicInfoByUser(Long userId){
+        if (userId == null){
+            return null;
+        }
+        UserToUserBasicInfo userToUserBasicInfo = this.selectOne(new QueryWrapper<UserToUserBasicInfo>().eq("user_id", userId));
+        if (userToUserBasicInfo == null){
+            return null;
+        }
+        return userToUserBasicInfo.getUserBasicInfoId();
     }
 }

@@ -400,7 +400,7 @@ insert 等操作也是同理的，通过中间表来实现嵌套对象的insert
     }       
 ```
 
-#### 修改密码,提交Long userId 和 UserAuthentication
+#### 修改密码,提交Long userId 和 String类型的password
 
 ```json
     {
@@ -497,7 +497,7 @@ insert 等操作也是同理的，通过中间表来实现嵌套对象的insert
 
 ### 批准某一个新增商品请求，提交NewMerchandiseRequestId
 
-### 修改商品, 提交 MerchandiseId, Merchandise
+### 修改商品, 提交 MerchandiseId, modifyMerchandise
 
 ```json
     {

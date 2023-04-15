@@ -1,4 +1,4 @@
-package com.example.userservice.repository.mapper.connect;
+package com.example.userservice.repository.mapper.user.connect;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.userservice.model.connect.CustomerToUser;

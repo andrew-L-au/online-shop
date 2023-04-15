@@ -1,6 +1,9 @@
 package com.example.userservice.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.userservice.model.account.Account;
+import com.example.userservice.model.account.MiddleAccount;
+import com.example.userservice.model.account.ProfitAccount;
 import com.example.userservice.model.shop.CloseShopRequest;
 import com.example.userservice.model.shop.OpenShopRequest;
 import com.example.userservice.model.shop.RequestStatus;
@@ -10,12 +13,16 @@ import com.example.userservice.model.shop.ShopBasicInfo;
 import com.example.userservice.model.shop.ShopStatus;
 import com.example.userservice.model.shop.connect.CloseShopRequestToShop;
 import com.example.userservice.model.user.ShopOwner;
+import com.example.userservice.model.user.User;
 import com.example.userservice.repository.OpenShopRequestRepository;
 import com.example.userservice.repository.ShopRepository;
+import com.example.userservice.repository.mapper.connect.ShopOwnerToShopMapper;
 import com.example.userservice.repository.mapper.shop.CloseShopRequestMapper;
 import com.example.userservice.repository.mapper.shop.ShopBasicInfoMapper;
 import com.example.userservice.repository.mapper.shop.ShopMapper;
 import com.example.userservice.repository.mapper.shop.connect.CloseShopRequestToShopMapper;
+import com.example.userservice.repository.mapper.user.UserMapper;
+import com.example.userservice.repository.mapper.user.connect.ShopOwnerToUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +53,18 @@ public class ShopService {
     @Autowired
     private ShopMapper shopMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private ShopOwnerToShopMapper shopOwnerToShopMapper;
+
+    @Autowired
+    private ShopOwnerToUserMapper shopOwnerToUserMapper;
+
+    @Autowired
+    private AccountService accountService;
+
     @Transactional
     public void requestOpenShop(Shop shop, ShopBasicInfo shopBasicInfo, String idCardNumber, List<CommodityType> commodityTypes) throws RuntimeException{
         if (shop == null || shopBasicInfo == null || idCardNumber == null || commodityTypes == null){
@@ -53,12 +72,24 @@ public class ShopService {
         }
         ShopOwner shopOwner = shopOwnerService.findShopOwner(idCardNumber);
         if (shopOwner == null){
-            throw new RuntimeException();
+            return;
         }
         if (shopBasicInfo.getName() == null){
             return;
         }
         if (shopBasicInfoMapper.selectShopBasicInfo(shopBasicInfo.getName()) != null){
+            return;
+        }
+        Long userId = shopOwnerToUserMapper.selectUserByShopOwner(shopOwner.getShopOwnerId());
+        if (userId == null){
+            return;
+        }
+        Account account = accountService.accountOfUser(userId);
+        if (account == null){
+            return;
+        }
+        Boolean success = accountService.transferFromTo(account.getAccountId(),MiddleAccount.MIDDLE_ACCOUNT_ID,shopBasicInfo.getTotalCapital());
+        if (!success){
             throw new RuntimeException();
         }
         shop.setShopStatus(ShopStatus.IN_REVIEW);
@@ -143,6 +174,7 @@ public class ShopService {
         if (shop == null){
             return null;
         }
+        accountService.transferFromTo(MiddleAccount.MIDDLE_ACCOUNT_ID, ProfitAccount.PROFIT_ACCOUNT_ID,shop.getShopBasicInfo().getTotalCapital());
         OpenShopRequest openShopRequest = openShopRequestRepository.selectOpenShopRequestWithAllInfoByShop(shop.getShopId());
         if (openShopRequest == null){
             throw new RuntimeException();
@@ -160,5 +192,28 @@ public class ShopService {
 
     public List<Shop> findAllValidShops(){
         return shopRepository.selectAllShopsOfStatusWithAllInfo(ShopStatus.NORMAL);
+    }
+
+    public Shop shopOfUser(Long userId){
+        if (userId == null){
+            return null;
+        }
+        User user = userMapper.selectById(userId);
+        if (user == null){
+            return null;
+        }
+        Long shopOwnerId = shopOwnerToUserMapper.selectShopOwnerByUser(user.getUserId());
+        if (shopOwnerId == null){
+            return null;
+        }
+        Long shopId = shopOwnerToShopMapper.selectShopByShopOwner(shopOwnerId);
+        if (shopId == null){
+            return null;
+        }
+        Shop shop = shopMapper.selectById(shopId);
+        if (shop == null){
+            return null;
+        }
+        return shop;
     }
 }

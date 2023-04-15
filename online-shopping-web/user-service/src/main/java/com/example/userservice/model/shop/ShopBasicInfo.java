@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +20,6 @@ public class ShopBasicInfo {
     private String name;
     private String profile;
     private String address;
-    private BigDecimal totalCapital;
+    private Double totalCapital;
     private String registrationDate;
 }

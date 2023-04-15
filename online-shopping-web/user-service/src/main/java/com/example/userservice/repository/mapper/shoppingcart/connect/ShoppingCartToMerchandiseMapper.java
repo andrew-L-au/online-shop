@@ -28,4 +28,15 @@ public interface ShoppingCartToMerchandiseMapper extends BaseMapper<ShoppingCart
         }
         return merchandiseIds;
     }
+
+    default Long selectOneByShoppingCartAndMerchandises(Long shoppingCartId, Long merchandiseId){
+        if (shoppingCartId == null || merchandiseId == null){
+            return null;
+        }
+        ShoppingCartToMerchandise shoppingCartToMerchandise = this.selectOne(new QueryWrapper<ShoppingCartToMerchandise>().eq("shopping_cart_id", shoppingCartId).eq("merchandise_id",merchandiseId));
+        if (shoppingCartToMerchandise == null){
+            return null;
+        }
+        return shoppingCartToMerchandise.getId();
+    }
 }

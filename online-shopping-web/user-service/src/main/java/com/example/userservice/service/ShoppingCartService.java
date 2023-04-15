@@ -75,6 +75,26 @@ public class ShoppingCartService {
         return true;
     }
 
+    @Transactional
+    public Boolean removeMerchandiseFromShoppingCart(Long userId, Long merchandiseId){
+        if (userMapper.selectById(userId) == null){
+            return false;
+        }
+        Long shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
+        if(shoppingCartMapper.selectById(shoppingCartId) == null){
+            return false;
+        }
+        if (merchandiseMapper.selectById(merchandiseId) == null){
+            return false;
+        }
+        Long id = shoppingCartToMerchandiseMapper.selectOneByShoppingCartAndMerchandises(shoppingCartId, merchandiseId);
+        Integer num = shoppingCartToMerchandiseMapper.deleteById(id);
+        if (num <= 0){
+            throw new RuntimeException();
+        }
+        return true;
+    }
+
     public ShoppingCart getShoppingCart(Long userId){
         if (userMapper.selectById(userId) == null){
             return null;

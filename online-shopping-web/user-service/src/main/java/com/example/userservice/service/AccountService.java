@@ -25,12 +25,6 @@ public class AccountService {
     private ShopAccountMapper shopAccountMapper;
 
     @Autowired
-    private MiddleAccountMapper middleAccountMapper;
-
-    @Autowired
-    private ProfitAccountMapper profitAccountMapper;
-
-    @Autowired
     private AccountToPersonalAccountMapper accountToPersonalAccountMapper;
 
     @Autowired
@@ -142,5 +136,30 @@ public class AccountService {
             return false;
         }
         return true;
+    }
+
+    @Transactional
+    public Account accountOfUser(Long userId){
+        if (userId == null){
+            return null;
+        }
+        Long accountId = userToAccountMapper.selectAccountByUser(userId);
+        if (accountId == null){
+            return null;
+        }
+        Account account = accountMapper.selectById(accountId);
+        return account;
+    }
+
+    public Account accountOfShop(Long shopId) {
+        if (shopId == null){
+            return null;
+        }
+        Long accountId = shopToAccountMapper.selectAccountByShop(shopId);
+        if (accountId == null){
+            return null;
+        }
+        Account account = accountMapper.selectById(accountId);
+        return account;
     }
 }
