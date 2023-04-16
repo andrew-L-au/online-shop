@@ -33,20 +33,11 @@ export default {
       productName: '',
       productDescription: '',
       productPrice: 0,
-      productImages: []
+      productImages: [],
+      base64Images: [],
     }
   },
   methods: {
-
-// {
-//   "merchandiseId" : 122341234123512351344,
-//     "merchandise" : {
-//   "merchandiseName" : "aaaa", //string
-//       "images" : [{"a"},{"a"},{"a"}], //string array
-//       "description" : "sdfasda",
-//       "price" : 2142.324
-// }
-// }
 
 
 
@@ -59,7 +50,7 @@ export default {
           merchandiseId : id,
           merchandise: {
             merchandiseName : this.productName,
-            images : this.productImages,
+            images : this.base64Images,
             description : this.productDescription,
             price : this.productPrice,
           },
@@ -79,6 +70,16 @@ export default {
     onFileChange(event, index) {
       const file = event.target.files[0];
       this.$set(this.productImages, index, file);
+      this.imagesToBase64();
+    },
+    imagesToBase64() {
+      for (let i = 0; i < this.productImages.length; i++) {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.productImages[i]); // 转为base64编码
+        reader.onload = () => {
+          this.base64Images.push(reader.result); // 将转换后的base64编码保存到数组中
+        };
+      }
     },
     addImageUploader() {
       this.productImages.push(null);
