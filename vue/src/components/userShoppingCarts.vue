@@ -2,8 +2,8 @@
   <div class="cart">
     <h2>购物车</h2>
     <div class="cart-items">
-      <div v-for="(item, index) in cartItems" :key="index" class="cart-item">
-        <img :src="item.images" alt="商品图片"/>
+      <div v-for="(item, index) in commodityList" :key="index" class="cart-item">
+        <img :src="`data:image/png;base64, ${item.images}`" alt="商品图片"/>
         <div class="item-name">{{ item.merchandiseName }}</div>
         <button @click="removeItem(index)">删除</button>
         <input type="checkbox" v-model="item.checked"/>
