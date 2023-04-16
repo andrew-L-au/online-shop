@@ -37,10 +37,10 @@ export default {
       if (this.form.account !== "" && this.form.key !== "") {
         this.$axios({
           method: 'post',
-          // url: 'http://192.168.31.196:50000/user/login',
+          url: 'http://192.168.31.196:50000/user/login',
           //test
           // url: 'https://run.mocky.io/v3/a343ccf3-1d6f-417f-a9da-e852595acf7b', //admin
-          url: 'https://run.mocky.io/v3/4a1c4b75-7616-4305-84df-ef7108dc3aca', //shop_owner
+          // url: 'https://run.mocky.io/v3/4a1c4b75-7616-4305-84df-ef7108dc3aca', //shop_owner
           data: {
             // principal: "desfweffew",
             // credential: "Zz1234567"
@@ -49,7 +49,6 @@ export default {
           }
         })
             .then(resp => {
-              console.log(resp)
               if (resp.data.token) {
                 alert("登录成功！");
                 this.userToken = resp.data.token;
@@ -59,11 +58,11 @@ export default {
                 // var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlcklkXCI6MTYzNjk3Njg4MDU5NjgxNTg3MyxcInVzZXJCYXNpY0luZm9cIjp7XCJ1c2VyQmFzaWNJbmZvSWRcIjoxNjM2OTc2ODgwNTY3NDU1NzQ1LFwidXNlclwiOm51bGwsXCJ1c2VybmFtZVwiOlwiYWJjXCIsXCJwaG9uZU51bWJlclwiOlwiMTIzNDU2XCIsXCJpZENhcmROdW1iZXJcIjpcIjMyMzUzMjEyMzRcIixcImVtYWlsXCI6XCIzNDI1QGRmc2Fkcy5jb21cIn0sXCJ1c2VyQXV0aGVudGljYXRpb25cIjp7XCJ1c2VyQXV0aGVudGljYXRpb25JZFwiOm51bGwsXCJ1c2VyXCI6bnVsbCxcInByaW5jaXBhbFwiOlwiYWJjXCIsXCJjcmVkZW50aWFsXCI6XCIzMjkwODQyM1wifSxcInVzZXJSb2xlXCI6XCJTSE9QX09XTkVSXCJ9In0.4tgrJAyQ_K92YxtxV-Kdk1IclkKC2Oa6POxgRYOsEyc'
                 let strings = this.userToken.split("."); //截取token，获取载体
                 var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
-                var info = JSON.parse(userinfo.user)
-                console.log(info.userId)
-                localStorage.setItem('userId', info.userId);
-                console.log(info.userRole)
-                let role = info.userRole
+                var user = JSON.parse(userinfo.user)
+                console.log(user)
+                localStorage.setItem('userId', user.userId);
+                console.log(user.userRole)
+                let role = user.userRole
                 console.log(role)
                 if(role === "CUSTOMER" || role === 'SHOP_OWNER') router.replace('/user')
                 else if (role === "ADMINISTRATOR") router.replace('/admin')

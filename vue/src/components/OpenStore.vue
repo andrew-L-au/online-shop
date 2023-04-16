@@ -86,16 +86,21 @@ const rules = reactive<FormRules>({
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   //  mainForm.commodityTypes = mainForm.commodityCategory.split(/\s+/);
+  console.log(mainForm.commodityCategory)
   var stringArray = mainForm.commodityCategory.split(/\s+/);
+  console.log(stringArray)
   //var commodityTypeArray = new Array;
+  mainForm.commodityTypeArray = []
   for (let index = 0; index < stringArray.length; index++) {
     mainForm.commodityTypeArray.push(
         {
           commodityType : stringArray[index]
         })
   }
+  console.log(mainForm.commodityTypeArray.length)
     console.log(mainForm.commodityTypeArray[0])
     console.log(mainForm.commodityTypeArray[1])
+  console.log(mainForm.commodityTypeArray[2])
     // console.log(mainForm.commodityTypes[0])
     if (!formEl) return
     await formEl.validate((valid, fields) => {

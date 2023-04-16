@@ -8,7 +8,6 @@
 export default {
     data() {
         return {
-            userId: localStorage.getItem('userId'),
             totalProfit: '',
             account : {
                 accountId: '',
@@ -20,10 +19,7 @@ export default {
         getTotalProfit() {
             this.$axios({
                 method: 'get',
-                url: 'https://run.mocky.io/v3/198447c2-1cca-4b3b-8ef4-7f2b25ede756',
-                data: {
-                    userId: this.userId,
-                }
+                url: 'http://192.168.31.196:50000/account/profit-account',
             })
                 .then(resp => {
                     console.log(resp.data)

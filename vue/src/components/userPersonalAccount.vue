@@ -26,16 +26,17 @@ import { ElMessage } from 'element-plus'
             }
         },
         methods:{
-            getAccoutInfo() {
+            getAccountInfo() {
                 this.$axios({
-                    method: 'get',
+                    method: 'post',
                     //TODO 核对后端接口
-                    url: 'https://run.mocky.io/v3/198447c2-1cca-4b3b-8ef4-7f2b25ede756',
+                    url: 'http://192.168.31.196:50000/account/account-of-user',
                     data: {
                         userId: this.userId,
                     }
                 })
                 .then(resp => {
+                    console.log(resp)
                     console.log(resp.data)
                     this.account = resp.data
                     localStorage.setItem('userAccountId', this.account.accountId)
@@ -54,13 +55,14 @@ import { ElMessage } from 'element-plus'
                 } else{
                     this.$axios({
                         method: 'post',
-                        url: 'https://run.mocky.io/v3/cf42c64f-d066-4658-98fe-a04e399eee2b',
+                        url: 'http://192.168.31.196:50000/account/redeem-account',
                         data: {
                             accountId: this.account.accountId,
-                            amount: 0,
+                            amount: this.amount,
                         }
                     })
                     .then(resp => {
+                      console.log(resp)
                         if(resp.data === "success"){
                             ElMessage({
                                 type: 'success',
@@ -71,7 +73,7 @@ import { ElMessage } from 'element-plus'
                         this.amount = 0
                         this.showHideBlock()
                         //重新加载显示余额
-                        this.getAccoutInfo()
+                        this.getAccountInfo()
                     })
                     .catch(err => {
                         console.log(err)
@@ -94,7 +96,7 @@ import { ElMessage } from 'element-plus'
             },
         },
         mounted: function () {
-            this.getAccoutInfo();
+            this.getAccountInfo();
         },
     }
 </script>

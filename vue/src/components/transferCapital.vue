@@ -23,7 +23,7 @@ export default {
         getTransferCapital() {
             this.$axios({
                 method: 'get',
-                url: 'https://run.mocky.io/v3/15da6574-a440-4dce-aa97-2fbbe2252751',
+                url: 'http://192.168.31.196:50000/account/middle-account',
             })
                 .then(resp => {
                     console.log(resp.data)
@@ -42,7 +42,7 @@ export default {
             } else {
                 this.$axios({
                     method: 'post',
-                    url: 'https://run.mocky.io/v3/cf42c64f-d066-4658-98fe-a04e399eee2b',
+                    url: 'http://192.168.31.196:50000/account/redeem-account',
                     data: {
                         amount: 0,
                     }

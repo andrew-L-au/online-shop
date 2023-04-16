@@ -2,10 +2,11 @@
   <section>
     <el-table :data="commodityRequest" height="500" width="1000" id="commodityRequest">
       <el-table-column type="index"/>
-      <el-table-column prop="productName" label="商品名称" width="180"></el-table-column>
-      <el-table-column prop="productImage" label="商品图片" width="180"></el-table-column>
-      <el-table-column prop="productDescription" label="商品描述" width="180"></el-table-column>
-      <el-table-column prop="productPrice" label="商品价格" width="180"></el-table-column>
+<!--      <el-table-column prop="productName" label="商品名称" width="180"></el-table-column>-->
+      <el-table-column prop="requestRecordMerchandise.productName" label="商品名称" width="180"></el-table-column>
+      <el-table-column prop="requestRecordMerchandise.productDescription" label="商品描述" width="180"></el-table-column>
+<!--      <el-table-column prop="requestRecordMerchandise.productImage.base64" label="商品图片" width="180"></el-table-column>-->
+      <el-table-column prop="requestRecordMerchandise.productPrice" label="商品价格" width="180"></el-table-column>
       <el-table-column fixed="right" prop="requestStatus" label="申请状态" width="120"></el-table-column>
       <el-table-column fixed="right" label="操作" width="240">
         <template #default="{ row }">
@@ -24,14 +25,24 @@ export default {
 //TODO:修改data&method
   data() {
     return {
-      index: '',
+
       commodityRequest: [
-        {newMerchandiseRequestId: ''},
-        {productName: ''},
-        {productImage: []},
-        {productDescription: ''},
-        {productPrice: ''},
-        {requestStatus: ''},
+        {
+          index :'',
+          newMerchandiseRequestId: '',
+          requestRecordMerchandise: {
+            productDescription: '',
+            productImage: [
+              {
+                base64:''
+              }
+            ],
+            productName: '',
+            productPrice: '',
+            requestRecordMerchandiseId: ''
+          },
+          requestStatus: ''
+        },
       ],
     }
   },
@@ -40,21 +51,34 @@ export default {
       console.log("update!")
       this.$axios({
         method: 'get',
-        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
+        url: 'http://192.168.31.196:50000/merchandise/all-new-merchandise-requests',
       })
           .then(resp => {
-            this.commodityRequest.pop()
+            this.commodityRequest = []
             console.log(resp.data)
             for (let i = 0; i < resp.data.length; i++) {
               let tmp = resp.data[i];
-              this.commodityRequest[i].index = i
-              this.commodityRequest[i].newMerchandiseRequestId = tmp.newMerchandiseRequestId
-              this.commodityRequest[i].productName = tmp.requestRecordMerchandise.merchandiseName
-              this.commodityRequest[i].productImage = tmp.requestRecordMerchandise.images
-              this.commodityRequest[i].productDescription = tmp.requestRecordMerchandise.description
-              this.commodityRequest[i].productPrice = tmp.requestRecordMerchandise.price
-              this.commodityRequest[i].requestStatus = tmp.requestStatus
+              this.commodityRequest.push({
+                index: i,
+                newMerchandiseRequestId: tmp.newMerchandiseRequestId,
+                requestRecordMerchandise: {
+                  productDescription: tmp.requestRecordMerchandise.description,
+                  productImage: tmp.requestRecordMerchandise.images,
+                  productName: tmp.requestRecordMerchandise.merchandiseName,
+                  productPrice: tmp.requestRecordMerchandise.price,
+                  requestRecordMerchandiseId: tmp.requestRecordMerchandise.requestRecordMerchandiseId
+                },
+                requestStatus: tmp.requestStatus
+
+              })
+              // this.commodityRequest[i].newMerchandiseRequestId = tmp.newMerchandiseRequestId
+              // this.commodityRequest[i].productName = tmp.requestRecordMerchandise.merchandiseName
+              // this.commodityRequest[i].productImage = tmp.requestRecordMerchandise.images
+              // this.commodityRequest[i].productDescription = tmp.requestRecordMerchandise.description
+              // this.commodityRequest[i].productPrice = tmp.requestRecordMerchandise.price
+              // this.commodityRequest[i].requestStatus = tmp.requestStatus
             }
+            console.log(this.commodityRequest)
           })
           .catch(err => {
             console.log(err);
@@ -64,7 +88,7 @@ export default {
       this.requestStatus = -1;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
+        url: 'http://192.168.31.196:50000/merchandise/reject-new-merchandise-request',
         data: {
           newMerchandiseRequestId: row.newMerchandiseRequestId,
           requestStatus: row.requestStatus,
@@ -86,7 +110,7 @@ export default {
       this.requestStatus = 1;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.31.196:50000/admin/approveAddCommodity',
+        url: 'http://192.168.31.196:50000/merchandise/approve-new-merchandise-request',
         data: {
           newMerchandiseRequestId: row.newMerchandiseRequestId,
           requestStatus: row.requestStatus,

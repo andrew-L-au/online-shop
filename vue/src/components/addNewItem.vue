@@ -17,7 +17,7 @@
       <div>
         <label for="images">商品图片：</label>
         <div v-for="(image, index) in productImages" :key="index">
-          <input type="file" accept="image/*" @change="onFileChange($event, index)">
+          <input type="file" accept="image/*" multiple="multiple" @change="onFileChange($event)">
         </div>
         <button type="button" @click="addImageUploader">添加图片</button>
       </div>
@@ -39,13 +39,14 @@ export default {
   },
   methods: {
     onSubmit() {
+      console.log(this.base64Images)
       // 发送请求将商品信息保存到服务器
       this.$axios({
         method: 'post',
-        url: 'http://192.168.31.196:50000/vendor/addNewItem',
+        url: 'http://192.168.31.196:50000/merchandise/request-new-merchandise',
         data: {
-          shopId: "",
-          merchandise: {
+          shopId: localStorage.getItem("shopId"),
+          requestRecordMerchandise: {
             merchandiseName : this.productName,
             images : this.base64Images,
             description : this.productDescription,
@@ -55,6 +56,7 @@ export default {
         }
       })
           .then((resp) => {
+            alert('申请成功！')
             if (resp.data === "success") {
               alert('申请成功！')
             }
@@ -63,17 +65,20 @@ export default {
             console.log(err)
           })
     },
-    onFileChange(event, index) {
-      const file = event.target.files[0];
-      this.$set(this.productImages, index, file);
+    onFileChange(event) {
+      this.productImages = event.target.files
+
       this.imagesToBase64();
     },
     imagesToBase64() {
+      this.base64Images = []
       for (let i = 0; i < this.productImages.length; i++) {
         const reader = new FileReader();
         reader.readAsDataURL(this.productImages[i]); // 转为base64编码
         reader.onload = () => {
-          this.base64Images.push(reader.result); // 将转换后的base64编码保存到数组中
+          this.base64Images.push({
+            base64 : reader.result
+          }); // 将转换后的base64编码保存到数组中
         };
       }
     },

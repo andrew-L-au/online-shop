@@ -2,11 +2,11 @@
   <div class="cart">
     <h2>购物车</h2>
     <div class="cart-items">
-      <div v-for="(item, index) in commodityList" :key="index" class="cart-item">
-        <img :src="`data:image/png;base64, ${item.images}`" alt="商品图片"/>
-        <div class="item-name">{{ item.merchandiseName }}</div>
+      <div v-for="(commodity, index) in shoppingCart.commodityList" :key="index" class="cart-item">
+        <img :src="commodity.images[0].base64" alt="Product Image">
+        <div class="item-name">{{ commodity.merchandiseName }}</div>
         <button @click="removeItem(index)">删除</button>
-        <input type="checkbox" v-model="item.checked"/>
+        <input type="checkbox" v-model="commodity.checked"/>
       </div>
     </div>
     <button @click="removeSelectedItems">删除选中商品</button>
@@ -17,71 +17,47 @@
 export default {
   data() {
     return {
-      shoppingCartId: '',
-      commodityList: [
-        {merchandiseId: ''},
-        {merchandiseName: ''},
-        {images: ''},
-        {description: ''},
-        {price: ''},
-        {checked: ''}
-      ],
-      //
-      // cartItems: [
-      //   {
-      //     name: '商品1',
-      //     image: 'https://via.placeholder.com/150',
-      //     checked: false,
-      //   },
-      //   {
-      //     name: '商品2',
-      //     image: 'https://via.placeholder.com/150',
-      //     checked: false,
-      //   },
-      //   {
-      //     name: '商品3',
-      //     image: 'https://via.placeholder.com/150',
-      //     checked: false,
-      //   },
-      //   {
-      //     name: '商品4',
-      //     image: 'https://via.placeholder.com/150',
-      //     checked: false,
-      //   },
-      //   {
-      //     name: '商品5',
-      //     image: 'https://via.placeholder.com/150',
-      //     checked: false,
-      //   },
-      //   {
-      //     name: '商品6',
-      //     image: 'https://via.placeholder.com/150',
-      //     checked: false,
-      //   },
-      // ],
+      shoppingCart:{
+        shoppingCartId: '',
+        commodityList:[
+          {
+            merchandiseId:'',
+            merchandiseName:'',
+            images:[
+              {
+                base64 : ''
+              }
+            ],
+            description:'',
+            price:''
+          }
+        ],
+      }
     };
   },
+  mounted() {
+    this.getCartInfo();
+  },
+
   methods: {
-    mounted() {
-      this.getCartInfo();
-    },
+
 
     getCartInfo() {
       this.$axios({
-        method: 'get',
-        url: 'http://192.168.31.196:50000/user/userCenter/shoppingCarts',
+        method: 'post',
+        url: 'http://192.168.31.196:50000/shopping-cart/get-shopping-cart',
+        data: {
+          userId: localStorage.getItem("userId"),
+        }
       })
           .then(resp => {
-            this.commodityList.pop()
+            this.shoppingCart.commodityList = []
             console.log(resp.data)
-            for (let i = 0; i < resp.data.length; i++) {
-              let tmp = resp.data[i];
-              this.commodityList[i].merchandiseId = tmp.merchandiseId
-              this.commodityList[i].merchandiseName = tmp.merchandiseName
-              this.commodityList[i].images = tmp.images
-              this.commodityList[i].description = tmp.description
-              this.commodityList[i].price = tmp.price
-            }
+            let tmp = resp.data
+            this.shoppingCart.shoppingCartId = tmp.shoppingCartId
+            this.shoppingCart.commodityList = tmp.merchandises
+
+            console.log(this.shoppingCart.commodityList)
           })
           .catch(err => {
             console.log(err);
@@ -89,12 +65,14 @@ export default {
     },
 
     removeItem(index) {
+      console.log(this.shoppingCart.commodityList[index].merchandiseId)
+      console.log(localStorage.getItem("userId"))
       this.$axios({
         method: 'post',
-        url: 'http://192.168.31.196:50000/user/userCenter/shoppingCarts',
+        url: 'http://192.168.31.196:50000/shopping-cart/remove-merchandise-from-shopping-cart',
         data: {
           userId : localStorage.getItem("userId"),
-          merchandiseId : this.commodityList[index].merchandiseId
+          merchandiseId : this.shoppingCart.commodityList[index].merchandiseId
           // merchandiseId :
         }
       })
@@ -106,10 +84,10 @@ export default {
           .catch((err) => {
             console.log(err)
           })
-      this.cartItems.splice(index, 1);
+      this.shoppingCart.commodityList.splice(index, 1);
     },
     removeSelectedItems() {
-      this.cartItems = this.cartItems.filter((item) => !item.checked);
+      this.shoppingCart.commodityList = this.shoppingCart.commodityList.filter((item) => !item.checked);
     },
   },
 };

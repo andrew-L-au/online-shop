@@ -33,6 +33,7 @@ export default {
     return {
       index: '',
       shopRequest: [
+        {shopId : ''},
         {storeName: ''},
         {commodityTypes: ' '},
         {profile: ''},
@@ -58,9 +59,19 @@ export default {
           .then(resp => {
             this.shopRequest.pop()
             console.log(resp.data)
+            var array = resp.data;
+            resp.data = [];
+            for (let i = 0; i < array.length; i++){
+              if (array[i] == null){
+                continue;
+              }
+              resp.data.push(array[i]);
+            }
             for (let i = 0; i < resp.data.length; i++) {
               let tmp = resp.data[i];
+              console.log(resp.data)
               let string = ' ';
+              console.log(tmp.shop.commodityTypes.length)
               for (let j = 0; j < tmp.shop.commodityTypes.length; j++) {
                 string += tmp.shop.commodityTypes[j].commodityType;
                 string += ' ';
@@ -74,6 +85,7 @@ export default {
               this.shopRequest[i].totalCapital = tmp.shop.shopBasicInfo.totalCapital
               this.shopRequest[i].registrationDate = tmp.shop.shopBasicInfo.registrationDate
               this.shopRequest[i].requestStatus = tmp.requestStatus
+              this.shopRequest[i].shopId = tmp.shop.shopId
 
               console.log(this.shopRequest[i])
 
@@ -94,7 +106,7 @@ export default {
         method: 'post',
         url: 'http://192.168.31.196:50000/shop/approve-open-shop-request',
         data: {
-          name: row.storeName,
+          shopId: row.shopId,
           isApprove: this.isApprove,
         }
       })
@@ -116,7 +128,7 @@ export default {
         method: 'post',
         url: 'http://192.168.31.196:50000/shop/approve-open-shop-request',
         data:{
-          name: row.storeName,
+          shopId: row.shopId,
           isApprove: this.isApprove,
         }
         //   isApprove: this.isApprove,
