@@ -93,6 +93,7 @@ export default {
                 idCardNumber: '',
                 email: '',
             },
+            token: localStorage.getItem('token'),
             userId: localStorage.getItem('userId'),
             userAuthentication: {
                 principal: '',
@@ -105,17 +106,22 @@ export default {
 
     methods: {
         getUserBasicInfo() {
-            this.$axios({
-                method: 'get',
-                url: 'https://run.mocky.io/v3/a2e7b03d-d9cb-4ad9-a6ff-bbab4ce5825d',
-            })
-                .then(resp => {
-                    this.userBasicInfo = resp.data
-                    console.log(this.userBasicInfo)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            // this.$axios({
+            //     method: 'get',
+            //     url: 'https://run.mocky.io/v3/a2e7b03d-d9cb-4ad9-a6ff-bbab4ce5825d',
+            // })
+            //     .then(resp => {
+            //         this.userBasicInfo = resp.data
+            //         console.log(this.userBasicInfo)
+            //     })
+            //     .catch(err => {
+            //         console.log(err);
+            //     })
+            let strings = this.token.split("."); //截取token，获取载体
+            var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
+            var info = JSON.parse(userinfo.user)
+            this.userBasicInfo = info.userBasicInfo
+            console.log(this.userBasicInfo)
         },
         modifyBasicInfo(item) {
             //检查提交信息
