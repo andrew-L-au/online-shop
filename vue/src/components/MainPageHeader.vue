@@ -23,8 +23,8 @@
           <RouterLink to="/user/userCenter/shoppingCarts">购物车</RouterLink>
         </el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="3" onclick="exit()">
-        <RouterLink to="/">登出</RouterLink>
+      <el-menu-item index="3">
+        <RouterLink to="/" @click="exit()">登出</RouterLink>
       </el-menu-item>
     </el-menu>
   </header>
@@ -32,11 +32,12 @@
 
 <script>
 export default {
-
-  exit() {
-    localStorage.removeItem('token')
-  },
-
+  methods: {
+    exit() {
+      console.log('exit!')
+      localStorage.removeItem('token')
+    },
+  }
 }
 </script>
 

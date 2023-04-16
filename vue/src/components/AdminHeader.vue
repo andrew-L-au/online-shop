@@ -17,7 +17,6 @@
           <RouterLink to="/admin/approveModifyCommodity">商品信息修改申请</RouterLink>
         </el-menu-item>
       </el-sub-menu>
-      <div class="flex-grow" />
       <el-sub-menu index="2">
         <template #title>admin账户</template>
         <el-menu-item index="2-1">
@@ -27,12 +26,22 @@
           <RouterLink to="/admin/transferCapital">中间资金</RouterLink>
         </el-menu-item>
       </el-sub-menu>
+      <el-menu-item index="3">
+        <RouterLink to="/" @click="exit()">登出</RouterLink>
+      </el-menu-item>
     </el-menu>
   </nav>
 </template>
 
 <script>
-
+export default {
+  methods: {
+    exit() {
+      console.log('exit!')
+      localStorage.removeItem('token')
+    },
+  }
+}
 </script>
 
 <style scoped>

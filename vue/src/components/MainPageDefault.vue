@@ -144,6 +144,7 @@ export default {
 
 
     exit() {
+      console.log('exit!')
       localStorage.removeItem('token')
     },
   }

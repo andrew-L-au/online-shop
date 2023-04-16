@@ -37,7 +37,10 @@ export default {
       if (this.form.account !== "" && this.form.key !== "") {
         this.$axios({
           method: 'post',
-          url: 'http://192.168.31.196:50000/user/login',
+          // url: 'http://192.168.31.196:50000/user/login',
+          //test
+          // url: 'https://run.mocky.io/v3/a343ccf3-1d6f-417f-a9da-e852595acf7b', //admin
+          url: 'https://run.mocky.io/v3/4a1c4b75-7616-4305-84df-ef7108dc3aca', //shop_owner
           data: {
             // principal: "desfweffew",
             // credential: "Zz1234567"
@@ -51,7 +54,7 @@ export default {
                 alert("登录成功！");
                 this.userToken = resp.data.token;
 
-                // localStorage.setItem("token", this.userToken);
+                localStorage.setItem("token", this.userToken);
                 //判断为商户和用户
                 // var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlcklkXCI6MTYzNjk3Njg4MDU5NjgxNTg3MyxcInVzZXJCYXNpY0luZm9cIjp7XCJ1c2VyQmFzaWNJbmZvSWRcIjoxNjM2OTc2ODgwNTY3NDU1NzQ1LFwidXNlclwiOm51bGwsXCJ1c2VybmFtZVwiOlwiYWJjXCIsXCJwaG9uZU51bWJlclwiOlwiMTIzNDU2XCIsXCJpZENhcmROdW1iZXJcIjpcIjMyMzUzMjEyMzRcIixcImVtYWlsXCI6XCIzNDI1QGRmc2Fkcy5jb21cIn0sXCJ1c2VyQXV0aGVudGljYXRpb25cIjp7XCJ1c2VyQXV0aGVudGljYXRpb25JZFwiOm51bGwsXCJ1c2VyXCI6bnVsbCxcInByaW5jaXBhbFwiOlwiYWJjXCIsXCJjcmVkZW50aWFsXCI6XCIzMjkwODQyM1wifSxcInVzZXJSb2xlXCI6XCJTSE9QX09XTkVSXCJ9In0.4tgrJAyQ_K92YxtxV-Kdk1IclkKC2Oa6POxgRYOsEyc'
                 let strings = this.userToken.split("."); //截取token，获取载体
@@ -59,13 +62,10 @@ export default {
                 var info = JSON.parse(userinfo.user)
                 console.log(info.userId)
                 localStorage.setItem('userId', info.userId);
-                // console.log(userinfo)
-                // localStorage.setItem("userinfo", userinfo);
                 console.log(info.userRole)
                 let role = info.userRole
                 console.log(role)
-                if(role === "CUSTOMER") router.replace('/user')
-                else if (role === "SHOP_OWNER") router.replace('/vendor/openStore')
+                if(role === "CUSTOMER" || role === 'SHOP_OWNER') router.replace('/user')
                 else if (role === "ADMINISTRATOR") router.replace('/admin')
                 //跳转
               }
