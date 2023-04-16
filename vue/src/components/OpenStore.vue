@@ -2,6 +2,7 @@
 import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import axios from 'axios';
+import { ElMessage } from 'element-plus'
 const formSize = ref('default');
 const mainFormRef = ref<FormInstance>();
 const mainForm = reactive({
@@ -125,7 +126,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             })
                 .then((resp) => {
                     if (resp.data === "success") {
-                        alert('申请成功！')
+                        ElMessage({
+                            type: 'success',
+                            message: '申请成功！',
+                        })
                     }
                 })
                 .catch((err) => {

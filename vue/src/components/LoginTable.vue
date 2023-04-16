@@ -20,7 +20,7 @@
 
 <script>
 import router from "@/router";
-
+import { ElMessage } from "element-plus";
 export default {
   data() {
     return {
@@ -51,7 +51,10 @@ export default {
             .then(resp => {
               console.log(resp)
               if (resp.data.token) {
-                alert("登录成功！");
+                ElMessage({
+                  type: 'success',
+                  message: '登录成功！',
+                })
                 this.userToken = resp.data.token;
 
                 localStorage.setItem("token", this.userToken);
@@ -70,7 +73,10 @@ export default {
                 //跳转
               }
               else{
-                alert("登录失败！");
+                ElMessage({
+                  type: 'error',
+                  message: '登录失败',
+                })
               }
               // console.log("2")
             })
@@ -78,7 +84,10 @@ export default {
               console.log(err);
             })
       } else {
-        alert("填写不能为空！");
+        ElMessage({
+            type: 'warning',
+            message: '填写不能为空!',
+        })
       }
 
     },
