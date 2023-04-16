@@ -1,11 +1,10 @@
 <template>
   <header>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" background-color="#545c64" text-color="#fff"
-             active-text-color="#ffd04b">
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#545c64"
+      text-color="#fff" active-text-color="#ffd04b">
       <el-menu-item index="1">
         <RouterLink to="/user/display">首页</RouterLink>
       </el-menu-item>
-      <div class="flex-grow"/>
       <el-sub-menu index="2">
         <template #title>个人中心</template>
         <el-menu-item index="2-1">
@@ -34,34 +33,21 @@
 <script>
 export default {
 
-    exit() {
-      localStorage.removeItem('token')
-    },
+  exit() {
+    localStorage.removeItem('token')
+  },
 
 }
 </script>
 
 <style scoped>
-.flex-grow {
-  flex-grow: 1;
-}  header{
-  width: 200px;
-  float: left;
-}
 
 
 .el-menu-demo {
-  display: inline-block;
-  margin-left: 0;
-  margin-top: 5rem;
-  margin-bottom: 3rem;
-  width: 10rem;
-  height: 35rem;
-  padding: 0;
-  float: left;
+  width: 1200px;
 }
 
-.items{
+.items {
   margin-left: 200px;
   margin-top: 0;
 }

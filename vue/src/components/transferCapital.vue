@@ -1,11 +1,13 @@
 <template>
-    <p>中间资金：{{ transferCapital }}</p>
-    <el-button id="addBalance" @click="showHideBlock" round type="success">账户充值</el-button>
-    <div style="display: none;" class="hidden">
-        <el-input type="number" v-model="amount" placeholder="请输入充值金额" />
-        <el-button style="primary" @click="addBalance">充值</el-button>
-        <el-button @click="showHideBlock">取消</el-button>
-    </div>
+    <main class="layout">
+        <p>中间资金：{{ transferCapital }}</p>
+        <el-button id="addBalance" @click="showHideBlock" round type="success">账户充值</el-button>
+        <div style="display: none;" class="hidden">
+            <el-input type="number" v-model="amount" placeholder="请输入充值金额" style="width: 300px;" />
+            <el-button style="primary" @click="addBalance">充值</el-button>
+            <el-button @click="showHideBlock">取消</el-button>
+        </div>
+    </main>
 </template>
 
 <script>
@@ -71,7 +73,7 @@ export default {
             // 动态显示和隐蔽
             var block = document.querySelector('.hidden');
             if (block.style.display === "none") {
-                block.style.display = "block";
+                block.style.display = "";
             }
             else {
                 block.style.display = "none";
@@ -85,13 +87,21 @@ export default {
 </script>
 
 <style scoped>
+.layout {
+    text-align: center;
+    margin-top: 15%;
+}
 p {
     font-size: 25px;
 }
+
 #addBalance {
     font-size: 25px;
     font-weight: bold;
     padding: 1em;
     margin-top: 3em;
+}
+.hidden {
+    margin-top: 5em;
 }
 </style>

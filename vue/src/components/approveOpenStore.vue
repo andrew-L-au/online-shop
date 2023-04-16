@@ -145,8 +145,7 @@ export default {
 <style scoped>
 #shopRequest {
   table-layout: auto;
-  width: 50%;
-  margin-left: 30rem;
+  width: 1200px;
   border: 2px solid red;
 }
 </style>

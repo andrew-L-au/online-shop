@@ -1,5 +1,7 @@
 <template>
-    <p>商店总利润: {{ totalProfit }}</p>
+    <div class="layout">
+        <p>商店总利润: {{ totalProfit }}</p>
+    </div>
 </template>
 
 <script>
@@ -44,5 +46,9 @@ export default {
 <style scoped>
 p {
     font-size: 25px;
+    text-align: center;
+    margin-top: 20%;
+    padding: 3em 0;
 }
+
 </style>

@@ -36,5 +36,8 @@
 </script>
 
 <style scoped>
-  
+  .el-menu-demo {
+    width: 1200px;
+    margin-top: -10%;
+  }
 </style>

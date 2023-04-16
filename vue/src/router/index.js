@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import LoginTable from "@/components/LoginTable.vue";
 import WelcomePage from "@/components/WelcomePage.vue";
 import SignupTable from "@/components/SignupTable.vue";
@@ -39,88 +39,94 @@ const router = createRouter({
             path: '/signup',
             component: SignupTable
         },
-        
-        {
-            path: '/user/display',
-            component: MainPageDefault
-        },
         {
             path: '/user',
             component: MainPage,
             // redirect: to => {
             //     return { path: '/user/display'}
             // },
+            children: [
+                {
+                    path: '/user/display',
+                    component: MainPageDefault
+                },
+                {
+                    path: '/user/userCenter/basicInfo',
+                    component: userBasicInfo
+                },
+                {
+                    path: '/user/userCenter/accounts/personal',
+                    component: userPersonalAccount
+                },
+                {
+                    path: '/user/userCenter/accounts/shop',
+                    component: userShopAccount
+                },
+                {
+                    path: '/user/userCenter/shoppingCarts',
+                    component: userShoppingCarts
+                },
+
+                // 商户部分
+                {
+                    path: '/vendor/openStore',
+                    name: 'openStore',
+                    component: OpenStoreView
+                },
+                {
+                    path: '/vendor/addNewItem',
+                    component: addNewItem
+                },
+                {
+                    path: '/vendor/addItemRecord',
+                    component: addItemRecord
+                },
+                {
+                    path: '/vendor/modifyItemRecord',
+                    component: modifyItemRecord
+                },
+                {
+                    path: '/vendor/itemDisplay',
+                    component: itemDisplay
+                },
+                {
+                    path: '/vendor/modifyItem',
+                    name: modifyItem,
+                    component: modifyItem,
+                },
+            ]
         },
-        {
-            path: '/user/userCenter/basicInfo',
-            component: userBasicInfo
-        },
-        {
-            path: '/user/userCenter/accounts/personal',
-            component: userPersonalAccount
-        },
-        {
-            path: '/user/userCenter/accounts/shop',
-            component: userShopAccount
-        },
-        {
-            path: '/user/userCenter/shoppingCarts',
-            component: userShoppingCarts
-        },
-        {
-            path: '/openStore',
-            name: 'openStore',
-            component: OpenStoreView
-        },
+        
+        
         {
             path: '/admin',
-            component: AdminPage
-        },
-        {
-            path: '/admin/totalProfit',
-            component: totalProfit,
-        },
-        {
-            path: '/admin/transferCapital',
-            component: transferCapital,
-        },
-        {
-            path: '/admin/approveOpenStore',
-            component: approveOpenStore
-        },
-        {
-            path: '/admin/approveCloseStore',
-            component: approveCloseStore
-        },
-        {
-            path: '/admin/approveAddCommodity',
-            component: approveAddCommodity
-        },
-        {
-            path: '/admin/approveModifyCommodity',
-            component: approveModifyCommodity
-        },
-        // 商户部分
-        {
-            path:'/vendor/addNewItem',
-            component: addNewItem
-        },
-        {
-            path:'/vendor/addItemRecord',
-            component: addItemRecord
-        },
-        {
-            path:'/vendor/modifyItemRecord',
-            component: modifyItemRecord
-        },
-        {
-            path:'/vendor/itemDisplay',
-            component: itemDisplay
-        },
-        {
-            path:'/vendor/modifyItem',
-            name:modifyItem,
-            component:modifyItem,
+            component: AdminPage,
+            children: [
+                {
+                    path: '/admin/totalProfit',
+                    component: totalProfit,
+                },
+                {
+                    path: '/admin/transferCapital',
+                    component: transferCapital,
+                },
+                {
+                    path: '/admin/approveOpenStore',
+                    component: approveOpenStore
+                },
+                {
+                    path: '/admin/approveCloseStore',
+                    component: approveCloseStore
+                },
+                {
+                    path: '/admin/approveAddCommodity',
+                    component: approveAddCommodity
+                },
+                {
+                    path: '/admin/approveModifyCommodity',
+                    component: approveModifyCommodity
+                },
+            ]
         },
 
     ]
@@ -131,7 +137,7 @@ const router = createRouter({
 //     if (to.path === '/' || to.path === '/login' || to.path === '/signup') next()
 //     if (to.path ==="/admin" && token.user.userRole === "ADMINISTRATOR") next("/AdminPage");
 //     // else if (token.user.userRole === "CUSTOMER") next("/MainPage");
-//     if (to.path ==="/openStore" && token.user.userRole === "SHOP_OWNER") next("/OpenStore");
+//     if (to.path ==="/vendor/openStore" && token.user.userRole === "SHOP_OWNER") next("/OpenStore");
 //     else next("/");
 // })
 

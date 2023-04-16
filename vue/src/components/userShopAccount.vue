@@ -7,7 +7,7 @@
         <div class="noShopOwned" style="display: none;">
             <p style="font-size: 24px;">当前没有商店</p>
             <el-button id="openStore">
-                <RouterLink to="/openStore">创建商店</RouterLink>
+                <RouterLink to="/vendor/openStore">创建商店</RouterLink>
             </el-button>
         </div>
         <div class="hasShopOpened" style="display: none;">

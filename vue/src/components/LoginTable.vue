@@ -65,7 +65,7 @@ export default {
                 let role = info.userRole
                 console.log(role)
                 if(role === "CUSTOMER") router.replace('/user')
-                else if (role === "SHOP_OWNER") router.replace('/openStore')
+                else if (role === "SHOP_OWNER") router.replace('/vendor/openStore')
                 else if (role === "ADMINISTRATOR") router.replace('/admin')
                 //跳转
               }
