@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus'
 export default {
   data() {
     return {
@@ -62,7 +63,10 @@ export default {
           .then((resp) => {
             console.log("success")
             if (resp.data === "success") {
-              alert('申请成功！')
+              ElMessage({
+                type: 'success',
+                message: '申请成功！',
+              })
             }
           })
           .catch((err) => {

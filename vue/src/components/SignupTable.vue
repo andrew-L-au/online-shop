@@ -35,7 +35,7 @@
 
 <script>
 import router from "@/router";
-
+import { ElMessage } from "element-plus";
 function isValidName(str){
   const regex = /^[\w]{3,10}$/;
   return regex.test(str);
@@ -85,11 +85,36 @@ export default {
       var commitUrl = this.form.userRole === "CUSTOMER" ? 'http://192.168.31.196:50000/user/customer/registration':'http://192.168.31.196:50000/user/shop-owner/registration';
       console.log('submit!')
       let flag = 0;
-      if(!isValidName(this.form.username)) alert("不符合格式的用户名！")
-      else if(!isValidPhone(this.form.phoneNumber)) alert("不符合格式的手机号！")
-      else if(!isValidId(this.form.idCardNumber)) alert("不符合格式的身份证号！")
-      else if(!isValidEmail(this.form.email)) alert("不符合格式的邮箱！")
-      else if(!isValidPassword(this.form.credential)) alert("不符合格式的密码！")
+      if(!isValidName(this.form.username)){
+        ElMessage({
+            type: 'warning',
+            message: '不符合格式的用户名！',
+        })
+      } 
+      else if(!isValidPhone(this.form.phoneNumber)) {
+        ElMessage({
+          type: 'warning',
+          message: '不符合格式的手机号！',
+        })
+      } 
+      else if(!isValidId(this.form.idCardNumber)){
+        ElMessage({
+          type: 'warning',
+          message: '不符合格式的身份证号！',
+        })
+      } 
+      else if(!isValidEmail(this.form.email)){
+        ElMessage({
+          type: 'warning',
+          message: '不符合格式的邮箱！',
+        })
+      } 
+      else if(!isValidPassword(this.form.credential)){
+        ElMessage({
+          type: 'warning',
+          message: '不符合格式的密码！',
+        })
+      } 
       else flag = 1;
       if (this.form.userRole !== "" && this.form.username !== "" && this.form.phoneNumber !== "" && this.form.idCardNumber !== "" && this.form.email !== "" && this.form.credential !== "" &&flag === 1) {
         this.$axios({
@@ -114,19 +139,31 @@ export default {
               console.log("succeed")
               console.log(resp)
               if (resp.data === "success") {
-                alert("注册成功！");
+                ElMessage({
+                  type: 'success',
+                  message: '注册成功！',
+                })
                 router.replace('/login')
                 //跳转
               }
               else{
-                alert(resp.data)
+                console.log(resp.data)
+                ElMessage({
+                    type: 'error',
+                    message: '注册失败',
+                })
               }
             })
             .catch(err => {
               console.log(err);
             })
       } else {
-        if(flag !== 0) alert("填写不能为空！");
+        if(flag !== 0) {
+          ElMessage({
+            type: 'warning',
+            message: '填写不能为空!',
+          })
+        }
       }
       // const resp = axios.post(this.form.character, this.form.name, this.form.phone, this.form.id, this.form.mail, this.form.key);
       // console.log(resp)

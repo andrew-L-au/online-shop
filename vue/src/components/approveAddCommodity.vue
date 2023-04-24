@@ -20,7 +20,7 @@
 </template>
 
 <script>
-
+import { ElMessage } from 'element-plus'
 export default {
 //TODO:修改data&method
   data() {
@@ -97,7 +97,10 @@ export default {
           .then(resp => {
             // console.log(this.shopRequest[0].openShopRequestId)
             // console.log(this.shopRequest[0].shop.shopId)
-            alert("驳回成功！");
+            ElMessage({
+                type: 'success',
+                message: '驳回成功！',
+            })
           })
           .catch(err => {
             console.log(err);
@@ -119,7 +122,11 @@ export default {
           .then(resp => {
             // console.log(this.shopRequest[0].openShopRequestId)
             // console.log(this.shopRequest[0].shop.shopId)
-            alert("批准成功！");
+            ElMessage({
+                type: 'success',
+                message: '批准成功！',
+            })
+
             console.log(resp)
           })
           .catch(err => {

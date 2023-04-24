@@ -14,7 +14,7 @@
 
 <script>
 import router from "@/router";
-
+import { ElMessage } from "element-plus";
 export default {
   data() {
     return {
@@ -86,7 +86,10 @@ export default {
           .then((resp) => {
             console.log(1)
             if (resp.data === "success") {
-              alert('删除成功！')
+              ElMessage({
+                type: 'success',
+                message: '删除成功！',
+              })
             }
           })
           .catch((err) => {

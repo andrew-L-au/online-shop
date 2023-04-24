@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus';
 export default {
   data() {
     return {
@@ -78,7 +79,10 @@ export default {
       })
           .then((resp) => {
             if (resp.data === "success") {
-              alert('删除成功！')
+              ElMessage({
+                type: 'success',
+                message: '删除成功！',
+              })
             }
           })
           .catch((err) => {
