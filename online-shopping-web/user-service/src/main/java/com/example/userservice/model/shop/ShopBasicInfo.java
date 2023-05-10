@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @TableName("shop_basic_info")
 public class ShopBasicInfo {
     @TableId(value = "shop_basic_info_id",type = IdType.ASSIGN_ID)
-    private Long shopBasicInfoId;
+    private String shopBasicInfoId;
     @TableField(exist = false)
     private Shop shop;
     private String name;

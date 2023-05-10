@@ -10,9 +10,9 @@ import java.util.List;
 
 @Mapper
 public interface ShopToCommodityTypeMapper extends BaseMapper<ShopToCommodityType> {
-    default List<Long> selectCommodityTypeByShop(Long shopId){
+    default List<String> selectCommodityTypeByShop(String shopId){
         List<ShopToCommodityType> shopToCommodityTypes = this.selectList(new QueryWrapper<ShopToCommodityType>().eq("shop_id" , shopId));
-        List<Long> commodityTypeIds = new ArrayList<>();
+        List<String> commodityTypeIds = new ArrayList<>();
         shopToCommodityTypes.forEach(e -> {commodityTypeIds.add(e.getCommodityTypeId());});
         return commodityTypeIds;
     }

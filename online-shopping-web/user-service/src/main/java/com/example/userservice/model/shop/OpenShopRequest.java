@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OpenShopRequest {
-    @TableId(value = "shop_request_id",type = IdType.ASSIGN_ID)
-    private Long openShopRequestId;
+    @TableId(value = "open_shop_request_id",type = IdType.ASSIGN_ID)
+    private String openShopRequestId;
     @TableField(exist = false)
     private Shop shop;
     private RequestStatus requestStatus;

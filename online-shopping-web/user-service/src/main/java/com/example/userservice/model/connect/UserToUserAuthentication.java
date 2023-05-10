@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @TableName("user_to_user_authentication")
 public class UserToUserAuthentication{
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
-    private Long userId;
-    private Long userAuthenticationId;
+    private String id;
+    private String userId;
+    private String userAuthenticationId;
 }

@@ -1,5 +1,7 @@
 package com.example.userservice.model.account.connect;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserToAccount {
-    private Long id;
-    private Long userId;
-    private Long accountId;
+    @TableId(type = IdType.ASSIGN_ID)
+    private String id;
+    private String userId;
+    private String accountId;
 }

@@ -1,10 +1,13 @@
 package com.example.userservice.service;
 
+import com.example.userservice.model.merchandise.Image;
 import com.example.userservice.model.merchandise.Merchandise;
 import com.example.userservice.model.shoppingcart.ShoppingCart;
 import com.example.userservice.model.shoppingcart.connect.ShoppingCartToMerchandise;
 import com.example.userservice.model.user.connect.UserToShoppingCart;
-import com.example.userservice.repository.mapper.MerchandiseMapper;
+import com.example.userservice.repository.mapper.merchandise.ImageMapper;
+import com.example.userservice.repository.mapper.merchandise.MerchandiseMapper;
+import com.example.userservice.repository.mapper.merchandise.connect.MerchandiseToImageMapper;
 import com.example.userservice.repository.mapper.shoppingcart.ShoppingCartMapper;
 import com.example.userservice.repository.mapper.shoppingcart.connect.ShoppingCartToMerchandiseMapper;
 import com.example.userservice.repository.mapper.user.UserMapper;
@@ -33,8 +36,14 @@ public class ShoppingCartService {
     @Autowired
     ShoppingCartToMerchandiseMapper shoppingCartToMerchandiseMapper;
 
+    @Autowired
+    private MerchandiseToImageMapper merchandiseToImageMapper;
+
+    @Autowired
+    private ImageMapper imageMapper;
+
     @Transactional
-    public Boolean creatShoppingCart(Long userId){
+    public Boolean creatShoppingCart(String userId){
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCartMapper.insert(shoppingCart);
         if (shoppingCart.getShoppingCartId() == null){
@@ -54,11 +63,11 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public Boolean addMerchandiseToShoppingCart(Long userId, Long merchandiseId){
+    public Boolean addMerchandiseToShoppingCart(String userId, String merchandiseId){
         if (userMapper.selectById(userId) == null){
             return false;
         }
-        Long shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
+        String shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
         if(shoppingCartMapper.selectById(shoppingCartId) == null){
             return false;
         }
@@ -68,7 +77,9 @@ public class ShoppingCartService {
         ShoppingCartToMerchandise shoppingCartToMerchandise = new ShoppingCartToMerchandise();
         shoppingCartToMerchandise.setShoppingCartId(shoppingCartId);
         shoppingCartToMerchandise.setMerchandiseId(merchandiseId);
-        shoppingCartToMerchandiseMapper.insert(shoppingCartToMerchandise);
+        if (shoppingCartToMerchandiseMapper.selectOneByShoppingCartAndMerchandises(shoppingCartId,merchandiseId) == null){
+            shoppingCartToMerchandiseMapper.insert(shoppingCartToMerchandise);
+        }
         if (shoppingCartToMerchandise.getId() == null){
             throw new RuntimeException();
         }
@@ -76,39 +87,41 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public Boolean removeMerchandiseFromShoppingCart(Long userId, Long merchandiseId){
+    public Boolean removeMerchandiseFromShoppingCart(String userId, String merchandiseId){
         if (userMapper.selectById(userId) == null){
             return false;
         }
-        Long shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
+        String shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
         if(shoppingCartMapper.selectById(shoppingCartId) == null){
             return false;
         }
         if (merchandiseMapper.selectById(merchandiseId) == null){
             return false;
         }
-        Long id = shoppingCartToMerchandiseMapper.selectOneByShoppingCartAndMerchandises(shoppingCartId, merchandiseId);
+        String id = shoppingCartToMerchandiseMapper.selectOneByShoppingCartAndMerchandises(shoppingCartId, merchandiseId);
         Integer num = shoppingCartToMerchandiseMapper.deleteById(id);
-        if (num <= 0){
-            throw new RuntimeException();
-        }
         return true;
     }
 
-    public ShoppingCart getShoppingCart(Long userId){
+    public ShoppingCart getShoppingCart(String userId){
         if (userMapper.selectById(userId) == null){
             return null;
         }
-        Long shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
+        String shoppingCartId = userToShoppingCartMapper.selectShoppingCartByUser(userId);
         ShoppingCart shoppingCart = shoppingCartMapper.selectById(shoppingCartId);
         if(shoppingCart == null){
             return null;
         }
-        List<Long> merchandiseIds = shoppingCartToMerchandiseMapper.selectMerchandisesByShoppingCart(shoppingCartId);
+        List<String> merchandiseIds = shoppingCartToMerchandiseMapper.selectMerchandisesByShoppingCart(shoppingCartId);
         if (merchandiseIds == null){
             return null;
         }
         List<Merchandise> merchandises = merchandiseMapper.selectBatchIds(merchandiseIds);
+        for (Merchandise merchandise : merchandises){
+            List<String> imageIds = merchandiseToImageMapper.selectImagesByMerchandise(merchandise.getMerchandiseId());
+            List<Image> images = imageMapper.selectBatchIds(imageIds);
+            merchandise.setImages(images);
+        }
         shoppingCart.setMerchandises(merchandises);
         return shoppingCart;
     }

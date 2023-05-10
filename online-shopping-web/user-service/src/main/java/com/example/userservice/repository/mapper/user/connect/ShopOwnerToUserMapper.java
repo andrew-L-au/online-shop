@@ -15,7 +15,7 @@ public interface ShopOwnerToUserMapper extends BaseMapper<ShopOwnerToUser> {
         return this.selectOne(new QueryWrapper<ShopOwnerToUser>().eq("user_id" , user.getUserId()));
     }
 
-    default Long selectShopOwnerByUser(Long userId){
+    default String selectShopOwnerByUser(String userId){
         if (userId == null){
             return null;
         }
@@ -26,7 +26,7 @@ public interface ShopOwnerToUserMapper extends BaseMapper<ShopOwnerToUser> {
         return shopOwnerToUser.getShopOwnerId();
     }
 
-    default Long selectUserByShopOwner(Long shopOwnerId){
+    default String selectUserByShopOwner(String shopOwnerId){
         if (shopOwnerId == null){
             return null;
         }

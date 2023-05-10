@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class PersonalAccount{
     @TableId(value = "personal_account_id" ,type = IdType.ASSIGN_ID)
-    private Long personalAccountId;
+    private String personalAccountId;
     @TableField(exist = false)
     private Account account;
     @TableField(exist = false)

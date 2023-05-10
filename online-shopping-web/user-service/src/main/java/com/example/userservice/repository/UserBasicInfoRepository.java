@@ -37,7 +37,7 @@ public class UserBasicInfoRepository {
         return userBasicInfoMapper.selectOne(new QueryWrapper<UserBasicInfo>().eq("email", email));
     }
 
-    public UserBasicInfo selectUserBasicInfo(Long userId){
+    public UserBasicInfo selectUserBasicInfo(String userId){
         UserToUserBasicInfo userToUserBasicInfo = userToUserBasicInfoMapper.findOneByUser(userId);
         if (userToUserBasicInfo != null){
             return userBasicInfoMapper.selectById(userToUserBasicInfo.getUserBasicInfoId());

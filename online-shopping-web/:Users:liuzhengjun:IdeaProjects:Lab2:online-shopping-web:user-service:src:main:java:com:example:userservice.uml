@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/Users/liuzhengjun/IdeaProjects/Lab2/online-shopping-web/user-service/src/main/java/com/example/userservice</OriginalElement>
+  <nodes>
+    <node x="709.5" y="-334.0">com.example.userservice.repository.mapper.user.UserAuthenticationMapper</node>
+    <node x="-109.0" y="-654.0">com.example.userservice.repository.mapper.user.UserBasicInfoMapper</node>
+    <node x="459.5" y="-814.0">com.example.userservice.repository.mapper.user.ShopOwnerMapper</node>
+    <node x="112.5" y="-894.0">com.example.userservice.model.shop.CommodityType</node>
+    <node x="451.0" y="-654.0">com.example.userservice.service.CloseShopRequestService</node>
+    <node x="395.0" y="-574.0">com.example.userservice.model.merchandise.NewMerchandiseRequest</node>
+    <node x="522.0" y="-414.0">com.example.userservice.model.user.Administrator</node>
+    <node x="-84.5" y="-94.0">com.example.userservice.model.DTO.RegistrationRequest</node>
+    <node x="597.5" y="-894.0">com.example.userservice.model.shop.RequestStatus</node>
+    <node x="901.5" y="-174.0">com.example.userservice.model.shop.OpenShopRequest</node>
+    <node x="195.0" y="-174.0">com.example.userservice.repository.mapper.merchandise.RequestRecordMerchandiseMapper</node>
+    <node x="6.5" y="-1054.0">com.example.userservice.repository.mapper.user.UserMapper</node>
+    <node x="1002.5" y="-734.0">com.example.userservice.model.account.Account</node>
+    <node x="162.5" y="-734.0">com.example.userservice.repository.mapper.shop.CommodityTypeMapper</node>
+    <node x="725.5" y="-414.0">com.example.userservice.model.merchandise.ModifyMerchandiseRequest</node>
+    <node x="347.5" y="-894.0">com.example.userservice.service.CustomerService</node>
+    <node x="1014.5" y="-814.0">com.example.userservice.model.shop.Shop</node>
+    <node x="729.0" y="-734.0">com.example.userservice.repository.mapper.shop.ShopBasicInfoMapper</node>
+    <node x="446.5" y="-734.0">com.example.userservice.repository.mapper.account.MiddleAccountMapper</node>
+    <node x="2.5" y="-1134.0">com.example.userservice.model.account.ShopAccount</node>
+    <node x="196.0" y="-94.0">com.example.userservice.repository.mapper.merchandise.ModifyMerchandiseRequestMapper</node>
+    <node x="800.5" y="-1054.0">com.example.userservice.model.user.info.basic.UserBasicInfo</node>
+    <node x="201.0" y="-1054.0">com.example.userservice.repository.mapper.merchandise.ImageMapper</node>
+    <node x="600.5" y="-1054.0">com.example.userservice.model.shoppingcart.ShoppingCart</node>
+    <node x="-87.5" y="-174.0">com.example.userservice.repository.mapper.account.ShopAccountMapper</node>
+    <node x="219.0" y="-334.0">com.example.userservice.repository.OpenShopRequestRepository</node>
+    <node x="416.5" y="-1054.0">com.example.userservice.model.user.Customer</node>
+    <node x="-79.5" y="-14.0">com.example.userservice.model.shop.CloseShopRequest</node>
+    <node x="115.0" y="-574.0">com.example.userservice.service.MerchandiseService</node>
+    <node x="175.0" y="-654.0">com.example.userservice.repository.mapper.merchandise.MerchandiseMapper</node>
+    <node x="925.0" y="-14.0">com.example.userservice.repository.mapper.shop.ShopMapper</node>
+    <node x="618.5" y="-14.0">com.example.userservice.repository.UserBasicInfoRepository</node>
+    <node x="894.0" y="-254.0">com.example.userservice.repository.UserRepository</node>
+    <node x="614.0" y="-494.0">com.example.userservice.controller.userDTO.ChangeUserBasicInfoDTO</node>
+    <node x="-69.5" y="-254.0">com.example.userservice.controller.ShopOwnerController</node>
+    <node x="767.0" y="-654.0">com.example.userservice.repository.ShopOwnerRepository</node>
+    <node x="-74.5" y="-334.0">com.example.userservice.controller.MerchandiseController</node>
+    <node x="590.5" y="-94.0">com.example.userservice.repository.mapper.shop.CloseShopRequestMapper</node>
+    <node x="205.5" y="-254.0">com.example.userservice.repository.mapper.merchandise.NewMerchandiseRequestMapper</node>
+    <node x="594.5" y="-174.0">com.example.userservice.interceptor.AuthenticationInterceptor</node>
+    <node x="-149.0" y="-494.0">com.example.userservice.model.merchandise.Image</node>
+    <node x="924.5" y="-494.0">com.example.userservice.model.merchandise.Merchandise</node>
+    <node x="801.0" y="-1134.0">com.example.userservice.model.account.ProfitAccount</node>
+    <node x="209.0" y="-1134.0">com.example.userservice.model.user.ShopOwner</node>
+    <node x="836.0" y="-974.0">com.example.userservice.model.account.MiddleAccount</node>
+    <node x="619.5" y="-1134.0">com.example.userservice.model.user.info.auth.UserRole</node>
+    <node x="-133.0" y="-974.0">com.example.userservice.repository.mapper.user.CustomerMapper</node>
+    <node x="564.5" y="-254.0">com.example.userservice.model.merchandise.RequestRecordMerchandise</node>
+    <node x="-117.0" y="-734.0">com.example.userservice.UserServiceApplication</node>
+    <node x="405.5" y="-1134.0">com.example.userservice.service.ShopService</node>
+    <node x="-69.0" y="-414.0">com.example.userservice.repository.mapper.shoppingcart.ShoppingCartMapper</node>
+    <node x="19.5" y="-494.0">com.example.userservice.model.user.info.auth.UserAuthentication</node>
+    <node x="562.0" y="-346.0">com.example.userservice.model.user.User</node>
+    <node x="113.0" y="-974.0">com.example.userservice.service.AccountService</node>
+    <node x="907.0" y="-94.0">com.example.userservice.service.UserService</node>
+    <node x="592.5" y="-974.0">com.example.userservice.repository.ShopRepository</node>
+    <node x="177.0" y="-14.0">com.example.userservice.repository.mapper.shop.connect.ShopToNewMerchandiseRequestMapper</node>
+    <node x="719.0" y="-574.0">com.example.userservice.repository.mapper.account.PersonalAccountMapper</node>
+    <node x="352.5" y="-974.0">com.example.userservice.repository.mapper.account.AccountMapper</node>
+    <node x="171.5" y="-814.0">com.example.userservice.repository.mapper.account.ProfitAccountMapper</node>
+    <node x="828.5" y="-894.0">com.example.userservice.model.account.PersonalAccount</node>
+    <node x="-125.0" y="-894.0">com.example.userservice.model.DTO.LoginResponse</node>
+    <node x="-100.0" y="-814.0">com.example.userservice.service.ShopOwnerService</node>
+    <node x="731.5" y="-814.0">com.example.userservice.service.ShoppingCartService</node>
+    <node x="-121.0" y="-574.0">com.example.userservice.model.shop.ShopBasicInfo</node>
+    <node x="212.0" y="-414.0">com.example.userservice.service.OpenShopRequestService</node>
+    <node x="291.5" y="-494.0">com.example.userservice.repository.mapper.shop.OpenShopRequestMapper</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.userservice.model.user.Administrator" target="com.example.userservice.model.user.User" relationship="GENERALIZATION">
+      <point x="5.5" y="14.0" />
+      <point x="0.0" y="-14.0" />
+    </edge>
+  </edges>
+  <settings layout="Compact" zoom="0.538527397260274" showDependencies="false" x="484.5" y="-560.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

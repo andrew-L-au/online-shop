@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserToShoppingCartMapper extends BaseMapper<UserToShoppingCart> {
-    default Long selectShoppingCartByUser(Long userId){
+    default String selectShoppingCartByUser(String userId){
         if (userId == null){
             return null;
         }

@@ -9,7 +9,7 @@ import lombok.Data;
 @TableName("shop_owner_to_user")
 public class ShopOwnerToUser {
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
-    private Long shopOwnerId;
-    private Long userId;
+    private String id;
+    private String shopOwnerId;
+    private String userId;
 }

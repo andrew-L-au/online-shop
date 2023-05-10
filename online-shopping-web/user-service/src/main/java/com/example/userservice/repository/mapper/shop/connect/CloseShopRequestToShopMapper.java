@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface CloseShopRequestToShopMapper extends BaseMapper<CloseShopRequestToShop> {
-    default Long selectShopByCloseShopRequest(Long closeShopRequestId){
+    default String selectShopByCloseShopRequest(String closeShopRequestId){
         if (closeShopRequestId == null){
             return null;
         }
@@ -16,5 +16,16 @@ public interface CloseShopRequestToShopMapper extends BaseMapper<CloseShopReques
             return null;
         }
         return closeShopRequestToShop.getShopId();
+    }
+
+    default String selectCloseShopRequestByShop(String shopId){
+        if (shopId == null){
+            return null;
+        }
+        CloseShopRequestToShop closeShopRequestToShop = this.selectOne(new QueryWrapper<CloseShopRequestToShop>().eq("shop_id" ,shopId));
+        if (closeShopRequestToShop == null){
+            return null;
+        }
+        return closeShopRequestToShop.getCloseShopRequestId();
     }
 }

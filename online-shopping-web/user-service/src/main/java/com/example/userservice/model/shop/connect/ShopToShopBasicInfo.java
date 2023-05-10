@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopToShopBasicInfo {
-    @TableId(value = "id",type = IdType.ASSIGN_ID)
-    private Long shopToShopBasicInfoId;
-    private Long shopId;
-    private Long shopBasicInfoId;
+    @TableId(type = IdType.ASSIGN_ID)
+    private String id;
+    private String shopId;
+    private String shopBasicInfoId;
 }

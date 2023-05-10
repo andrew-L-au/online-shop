@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface RequestRecordMerchandiseToModifyMerchandiseRequestMapper extends BaseMapper<RequestRecordMerchandiseToModifyMerchandiseRequest> {
-    default Long selectRequestRecordMerchandiseByModifyMerchandiseRequest(Long modifyMerchandiseRequestId){
+    default String selectRequestRecordMerchandiseByModifyMerchandiseRequest(String modifyMerchandiseRequestId){
         if (modifyMerchandiseRequestId == null){
             return null;
         }

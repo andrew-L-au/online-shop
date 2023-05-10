@@ -9,5 +9,5 @@ import lombok.Data;
 @TableName(value = "administrator")
 public class Administrator extends User{
     @TableId(value = "administrator_id",type = IdType.ASSIGN_ID)
-    private Long administratorId;
+    private String administratorId;
 }

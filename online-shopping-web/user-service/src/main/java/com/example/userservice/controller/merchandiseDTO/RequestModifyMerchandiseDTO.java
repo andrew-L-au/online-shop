@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class RequestModifyMerchandiseDTO {
-    private Long merchandiseId;
+    private String merchandiseId;
     private RequestRecordMerchandise requestRecordMerchandise;
-    private Long shopId;
+    private String shopId;
 }

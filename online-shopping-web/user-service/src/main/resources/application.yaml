@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: A//4321abcd
-    url: jdbc:mysql://localhost:3306/online_shop_user_schema
+    url: jdbc:mysql://localhost:3306/online_shop
     hikari:
       auto-commit: true
   application:

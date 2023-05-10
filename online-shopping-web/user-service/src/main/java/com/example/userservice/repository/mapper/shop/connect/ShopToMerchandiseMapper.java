@@ -10,8 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface ShopToMerchandiseMapper extends BaseMapper<ShopToMerchandise> {
-    default List<Long> selectMerchandisesByShop(Long shopId){
-        List<Long> merchandisesIds = new ArrayList<>();
+    default List<String> selectMerchandisesByShop(String shopId){
+        List<String> merchandisesIds = new ArrayList<>();
         if (shopId == null){
             return null;
         }
@@ -25,7 +25,7 @@ public interface ShopToMerchandiseMapper extends BaseMapper<ShopToMerchandise> {
         return merchandisesIds;
     }
 
-    default Long selectIdByMerchandise(Long merchandiseId){
+    default String selectIdByMerchandise(String merchandiseId){
         if (merchandiseId == null){
             return null;
         }

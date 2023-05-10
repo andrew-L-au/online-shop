@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper
 public interface ModifyMerchandiseRequestToMerchandiseMapper extends BaseMapper<ModifyMerchandiseRequestToMerchandise> {
-    default Long selectMerchandiseByModifyMerchandiseRequest(Long modifyMerchandiseRequestId){
+    default String selectMerchandiseByModifyMerchandiseRequest(String modifyMerchandiseRequestId){
         if (modifyMerchandiseRequestId == null){
             return null;
         }
@@ -22,8 +22,8 @@ public interface ModifyMerchandiseRequestToMerchandiseMapper extends BaseMapper<
         return modifyMerchandiseRequestToMerchandise.getMerchandiseId();
     }
 
-    default List<Long> selectModifyMerchandiseRequestsByMerchandise(Long merchandiseId){
-        List<Long> modifyMerchandiseRequestIds = new ArrayList<>();
+    default List<String> selectModifyMerchandiseRequestsByMerchandise(String merchandiseId){
+        List<String> modifyMerchandiseRequestIds = new ArrayList<>();
         if (merchandiseId == null){
             return null;
         }
@@ -40,8 +40,8 @@ public interface ModifyMerchandiseRequestToMerchandiseMapper extends BaseMapper<
         return modifyMerchandiseRequestIds;
     }
 
-    default List<Long> selectIdsByMerchandise(Long merchandiseId){
-        List<Long> ids = new ArrayList<>();
+    default List<String> selectIdsByMerchandise(String merchandiseId){
+        List<String> ids = new ArrayList<>();
         if (merchandiseId == null){
             return null;
         }
@@ -55,6 +55,6 @@ public interface ModifyMerchandiseRequestToMerchandiseMapper extends BaseMapper<
             }
             ids.add(modifyMerchandiseRequestToMerchandise.getId());
         }
-        return ids;
+        return ids.size() == 0 ? null : ids;
     }
 }

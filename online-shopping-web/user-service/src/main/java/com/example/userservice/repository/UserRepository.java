@@ -57,7 +57,7 @@ public class UserRepository {
         return user;
     }
 
-    public User selectUserByUserAuthentication(Long userAuthenticationId){
+    public User selectUserByUserAuthentication(String userAuthenticationId){
         if (userAuthenticationId == null){
             return null;
         }
@@ -68,12 +68,12 @@ public class UserRepository {
         return userMapper.findOneByUserToUserAuthentication(userToUserAuthentication);
     }
 
-    public User selectUserByUserBasicInfo(Long userBasicInfoId){
+    public User selectUserByUserBasicInfo(String userBasicInfoId){
         UserToUserBasicInfo userToUserBasicInfo = userToUserBasicInfoMapper.selectUserByUserBasicInfo(userBasicInfoId);
         return userMapper.selectById(userToUserBasicInfo.getUserId());
     }
 
-    public UserBasicInfo selectUserBasicInfo(Long userId){
+    public UserBasicInfo selectUserBasicInfo(String userId){
         UserToUserBasicInfo userToUserBasicInfo = userToUserBasicInfoMapper.findOneByUser(userId);
         return userBasicInfoMapper.selectById(userToUserBasicInfo.getUserBasicInfoId());
     }

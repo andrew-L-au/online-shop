@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ShopToAccountMapper extends BaseMapper<ShopToAccount> {
-    default Long selectAccountByShop(Long shopId){
+    default String selectAccountByShop(String shopId){
         if (shopId == null){
             return null;
         }
@@ -16,5 +16,16 @@ public interface ShopToAccountMapper extends BaseMapper<ShopToAccount> {
             return null;
         }
         return shopToAccount.getAccountId();
+    }
+
+    default String selectIdByShopAndAccount(String shopId, String accountId){
+        if (shopId == null || accountId == null){
+            return null;
+        }
+        ShopToAccount shopToAccount = this.selectOne(new QueryWrapper<ShopToAccount>().eq("shop_id",shopId).eq("account_id",accountId));
+        if (shopToAccount == null){
+            return null;
+        }
+        return shopToAccount.getId();
     }
 }

@@ -12,15 +12,15 @@ public interface UserToUserBasicInfoMapper extends BaseMapper<UserToUserBasicInf
         return this.selectOne(new QueryWrapper<UserToUserBasicInfo>().eq("user_id", user.getUserId()));
     }
 
-    default UserToUserBasicInfo findOneByUser(Long userId){
+    default UserToUserBasicInfo findOneByUser(String userId){
         return this.selectOne(new QueryWrapper<UserToUserBasicInfo>().eq("user_id", userId));
     }
 
-    default UserToUserBasicInfo selectUserByUserBasicInfo(Long userBasicInfoId){
+    default UserToUserBasicInfo selectUserByUserBasicInfo(String userBasicInfoId){
         return this.selectOne(new QueryWrapper<UserToUserBasicInfo>().eq("user_basic_info_id", userBasicInfoId));
     }
 
-    default Long selectUserBasicInfoByUser(Long userId){
+    default String selectUserBasicInfoByUser(String userId){
         if (userId == null){
             return null;
         }

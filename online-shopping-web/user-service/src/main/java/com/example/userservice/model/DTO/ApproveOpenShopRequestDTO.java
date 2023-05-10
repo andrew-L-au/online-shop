@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ApproveOpenShopRequestDTO {
-    private String name;
+    private String shopId;
     private Boolean isApproved;
 }

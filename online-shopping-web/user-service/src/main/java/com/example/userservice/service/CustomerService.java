@@ -28,6 +28,9 @@ public class CustomerService {
     @Autowired
     private ShoppingCartService shoppingCartService;
 
+    @Autowired
+    private AccountService accountService;
+
     @Transactional
     public Boolean registerNewUser(Customer customer, User user, UserBasicInfo userBasicInfo, UserAuthentication userAuthentication, PersonalAccount personalAccount) throws RuntimeException{
         if (customer == null || user == null || userBasicInfo == null || userAuthentication == null || personalAccount == null){

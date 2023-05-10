@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class ShopAccount{
     @TableId(value = "shop_account_id" ,type = IdType.ASSIGN_ID)
-    private Long shopAccountId;
+    private String shopAccountId;
     @TableField(exist = false)
     private Account account;
     @TableField(exist = false)
