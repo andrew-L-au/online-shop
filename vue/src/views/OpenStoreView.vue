@@ -1,5 +1,5 @@
 <script setup>
-import OpenStore from '../components/OpenStore.vue';
+import OpenStore from '../components/vendor/OpenStore.vue';
 </script>
 
 <template>

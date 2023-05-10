@@ -3,25 +3,25 @@ import { ElMessage } from 'element-plus'
 import LoginTable from "@/components/LoginTable.vue";
 import WelcomePage from "@/components/WelcomePage.vue";
 import SignupTable from "@/components/SignupTable.vue";
-import MainPage from "@/components/MainPage.vue";
+import MainPage from "@/components/user/MainPage.vue";
 import OpenStoreView from '../views/OpenStoreView.vue'
-import AdminPage from "@/components/AdminPage.vue";
-import approveOpenStore from "@/components/approveOpenStore.vue"
-import approveCloseStore from "@/components/approveCloseStore.vue"
-import approveAddCommodity from "@/components/approveAddCommodity.vue"
-import approveModifyCommodity from "@/components/approveModifyCommodity.vue"
-import MainPageDefault from '@/components/MainPageDefault.vue'
-import userBasicInfo from "@/components/userBasicInfo.vue"
-import userPersonalAccount from "@/components/userPersonalAccount.vue"
-import userShopAccount from "@/components/userShopAccount.vue"
-import userShoppingCarts from "@/components/userShoppingCarts.vue"
-import addNewItem from "@/components/addNewItem.vue";
-import addItemRecord from "@/components/addItemRecord.vue";
-import itemDisplay from "@/components/itemDisplay.vue";
-import modifyItem from "@/components/modifyItem.vue";
-import modifyItemRecord from "@/components/modifyItemRecord.vue";
-import totalProfit from "@/components/totalProfit.vue"
-import transferCapital from "@/components/transferCapital.vue"
+import AdminPage from "@/components/admin/AdminPage.vue";
+import approveOpenStore from "@/components/admin/approveOpenStore.vue"
+import approveCloseStore from "@/components/admin/approveCloseStore.vue"
+import approveAddCommodity from "@/components/admin/approveAddCommodity.vue"
+import approveModifyCommodity from "@/components/admin/approveModifyCommodity.vue"
+import MainPageDefault from '@/components/user/MainPageDefault.vue'
+import userBasicInfo from "@/components/user/userBasicInfo.vue"
+import userPersonalAccount from "@/components/user/userPersonalAccount.vue"
+import userShopAccount from "@/components/vendor/userShopAccount.vue"
+import userShoppingCarts from "@/components/user/userShoppingCarts.vue"
+import addNewItem from "@/components/vendor/addNewItem.vue";
+import addItemRecord from "@/components/vendor/addItemRecord.vue";
+import itemDisplay from "@/components/vendor/itemDisplay.vue";
+import modifyItem from "@/components/vendor/modifyItem.vue";
+import modifyItemRecord from "@/components/vendor/modifyItemRecord.vue";
+import totalProfit from "@/components/vendor/totalProfit.vue"
+import transferCapital from "@/components/admin/transferCapital.vue"
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -142,10 +142,10 @@ const router = createRouter({
 //     else next("/");
 // })
 
-//拦截器
+// 拦截器
 router.beforeEach((to, from, next) => {
     var token = localStorage.getItem('token')
-    
+
     if(!token){
         if (to.path === '/' || to.path === '/login' || to.path === '/signup') next()
         else{
@@ -154,7 +154,7 @@ router.beforeEach((to, from, next) => {
                 message: '请先登录！'
             })
             next("/login");
-        } 
+        }
     }
     else {
         let strings = token.split("."); //截取token，获取载体
@@ -170,12 +170,12 @@ router.beforeEach((to, from, next) => {
             if (path[1] === "admin") {
                 next();
             } else { next("/admin") }
-        } 
+        }
         else if (role === 'SHOP_OWNER') {
             if (path[1] === "user" || path[1] === "vendor") {
                 next();
             } else { next("/user") }
-        } 
+        }
         else if (role === 'CUSTOMER') {
             if (path[1] === "user") {
                 if (path[4] === 'shop') { //普通用户不能查看商店账户

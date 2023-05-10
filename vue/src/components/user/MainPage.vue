@@ -1,5 +1,5 @@
 <script setup>
-import MainPageHeader from '@/components/MainPageHeader.vue'
+import MainPageHeader from '@/components/user/MainPageHeader.vue'
 </script>
 
 <template>
