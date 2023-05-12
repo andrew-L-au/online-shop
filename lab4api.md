@@ -1,5 +1,6 @@
 # Lab4
 
+/user/add-address
 添加收货地址，提交userId,和Address对象
 
 ```json
@@ -13,6 +14,7 @@
 }
 ```
 
+/user/get-addresses
 得到某个用户的收货地址，提交userId，返回address对象的数组
 
 提交
@@ -50,6 +52,7 @@
 }
 ```
 
+/user/delete-address
 删除某个收货地址，提交addressId
 
 提交
@@ -60,6 +63,21 @@
 }
 ```
 
+/user/modify-address
+修改收货地址，提交addressId和新的address对象
+
+```json
+{
+    "addressId" : "124235431451231341235",
+    "address" : {
+        "name" : "Twitch",
+        "phoneNumber" : "111334242",
+        "addressDetail" : "oma,fr,us"
+    }
+}
+```
+
+/shopping-cart/add-merchandise-number
 增加某个已经在购物车中的商品的数量(数量只能加一)，提交shoppingCartId,merchandiseId
 
 ```json
@@ -69,6 +87,7 @@
 }
 ```
 
+/shopping-cart/decrease-merchandise-number
 减少某个已经在购物车中的商品的数量(数量只能减一)，提交shoppingCartId,merchandiseId
 
 ```json
@@ -78,6 +97,7 @@
 }
 ```
 
+/order/submit
 购买商品（下订单），提交userId，merchandiseId，和商品数量, 返回订单对象
 
 ```json
@@ -91,6 +111,7 @@
 }
 ```
 
+/order/pay
 支付订单，提交userId,orderId
 
 ```json
@@ -100,6 +121,7 @@
 }
 ```
 
+/account/check-flow
 查看某一账户的所有流水，提交accountId
 
 ```json
@@ -108,6 +130,7 @@
 }
 ```
 
+/order/confirm
 确认收货，提交orderId
 
 ```json
@@ -116,6 +139,7 @@
 }
 ```
 
+/order/refund
 退货退款，提交orderId
 
 ```json
@@ -124,6 +148,7 @@
 }
 ```
 
+/order/get-orders
 查看用户的所有订单，提交userId，返回order对象的数组
 
 ```json
@@ -170,6 +195,7 @@
 ]
 ```
 
+/order/delete
 删除订单，提交orderId
 
 ```json
@@ -178,6 +204,7 @@
 }
 ```
 
+/order/order-of-shop
 取得某一个商店的订单，提交shopId，返回order对象的数组
 
 ```json
@@ -224,6 +251,7 @@
 ]
 ```
 
+/shop/delivery
 商户选择某一订单发货，提交orderId
 
 ```json
@@ -232,6 +260,7 @@
 }
 ```
 
+/refund-request/refund-requests-of-shop
 查看某一个商户的所有退款请求，提交shopId，返回RefundRequest对象数组
 
 ```json
@@ -287,7 +316,8 @@
 ]
 ```
 
-批准某一退款请求，提交refundRequestId,
+/refund-request/approve
+批准某一退款请求，提交refundRequestId
 
 ```json
 {
