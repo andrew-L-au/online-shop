@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserToAccountMapper extends BaseMapper<UserToAccount> {
-    default Long selectAccountByUser(Long userId){
+    default String selectAccountByUser(String userId){
         if (userId == null){
             return null;
         }

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @TableName(value = "shop_owner")
 public class ShopOwner {
     @TableId(value = "shop_owner_id",type = IdType.ASSIGN_ID)
-    private Long shopOwnerId;
+    private String shopOwnerId;
     @TableField(exist = false)
     private User user;
 }

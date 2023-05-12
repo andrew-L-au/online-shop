@@ -8,7 +8,18 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ShopOwnerToShopMapper extends BaseMapper<ShopOwnerToShop> {
-    default Long selectShopByShopOwner(Long shopOwnerId){
+    default ShopOwnerToShop selectOneByShopOwnerAndShop(String shopOwnerId, String shopId){
+        if (shopId == null || shopOwnerId == null){
+            return null;
+        }
+        ShopOwnerToShop shopOwnerToShop = this.selectOne(new QueryWrapper<ShopOwnerToShop>().eq("shop_owner_id" , shopOwnerId).eq("shop_id", shopId));
+        if (shopOwnerToShop == null){
+            return null;
+        }
+        return shopOwnerToShop;
+    }
+
+    default String selectShopByShopOwner(String shopOwnerId){
         if (shopOwnerId == null){
             return null;
         }
@@ -19,7 +30,7 @@ public interface ShopOwnerToShopMapper extends BaseMapper<ShopOwnerToShop> {
         return shopOwnerToShop.getShopId();
     }
 
-    default Long selectShopOwnerByShop(Long shopId){
+    default String selectShopOwnerByShop(String shopId){
         if (shopId == null){
             return null;
         }

@@ -1,10 +1,12 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.controller.shoppingcartDTO.AddMerchandiseToShoppingCartDTO;
+import com.example.userservice.controller.shoppingcartDTO.GetShoppingCartDTO;
 import com.example.userservice.controller.shoppingcartDTO.RemoveMerchandiseFromShoppingCartDTO;
 import com.example.userservice.model.shoppingcart.ShoppingCart;
 import com.example.userservice.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +20,11 @@ public class ShoppingCartController {
     private ShoppingCartService shoppingCartService;
 
     @PostMapping("/get-shopping-cart")
-    public ShoppingCart getShoppingCart(@RequestBody Long userId){
-        if (userId == null){
+    public ShoppingCart getShoppingCart(@RequestBody GetShoppingCartDTO getShoppingCartDTO){
+        if (getShoppingCartDTO == null || getShoppingCartDTO.getUserId() == null){
             return null;
         }
+        String userId = getShoppingCartDTO.getUserId();
         try {
             return shoppingCartService.getShoppingCart(userId);
         }catch (RuntimeException e){
@@ -31,12 +34,12 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/add-merchandise-to-shopping-cart")
-    public Boolean addMerchandiseToShoppingCart(AddMerchandiseToShoppingCartDTO addMerchandiseToShoppingCartDTO){
+    public Boolean addMerchandiseToShoppingCart(@RequestBody AddMerchandiseToShoppingCartDTO addMerchandiseToShoppingCartDTO){
         if (addMerchandiseToShoppingCartDTO == null){
             return false;
         }
-        Long userId = addMerchandiseToShoppingCartDTO.getUserId();
-        Long merchandiseId = addMerchandiseToShoppingCartDTO.getMerchandiseId();
+        String userId = addMerchandiseToShoppingCartDTO.getUserId();
+        String merchandiseId = addMerchandiseToShoppingCartDTO.getMerchandiseId();
         if (userId == null || merchandiseId == null){
             return false;
         }
@@ -48,12 +51,12 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/remove-merchandise-from-shopping-cart")
-    public Boolean removeMerchandiseFromShoppingCart(RemoveMerchandiseFromShoppingCartDTO removeMerchandiseFromShoppingCartDTO){
+    public Boolean removeMerchandiseFromShoppingCart(@RequestBody RemoveMerchandiseFromShoppingCartDTO removeMerchandiseFromShoppingCartDTO){
         if (removeMerchandiseFromShoppingCartDTO == null){
             return false;
         }
-        Long userId = removeMerchandiseFromShoppingCartDTO.getUserId();
-        Long merchandiseId = removeMerchandiseFromShoppingCartDTO.getMerchandiseId();
+        String userId = removeMerchandiseFromShoppingCartDTO.getUserId();
+        String merchandiseId = removeMerchandiseFromShoppingCartDTO.getMerchandiseId();
         if (userId == null || merchandiseId == null){
             return false;
         }

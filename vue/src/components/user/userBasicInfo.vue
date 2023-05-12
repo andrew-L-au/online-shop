@@ -52,6 +52,7 @@
       </div>
     </li>
   </ul>
+  <el-button @click="locationManagement()">收货地址管理</el-button>
   </body>
 </template>
 
@@ -123,6 +124,11 @@ export default {
       this.userAuthentication.credential = user.userAuthentication.credential
 
     },
+    locationManagement(){
+      router.replace('/user/userCenter/basicInfo/locationManagement')
+    },
+
+
     modifyBasicInfo(item) {
       //检查提交信息
       var msg = '', flag = 1;

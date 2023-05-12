@@ -78,7 +78,7 @@ public class ShopRepository {
         return commodityTypeSuccess.get();
     }
 
-    public Boolean updateShopStatus(Long shopId, ShopStatus shopStatus){
+    public Boolean updateShopStatus(String shopId, ShopStatus shopStatus){
         if (shopId == null){
             return false;
         }
@@ -91,7 +91,7 @@ public class ShopRepository {
         return updateNum > 0;
     }
 
-    public Shop selectShopWithAllInfo(Long shopId){
+    public Shop selectShopWithAllInfo(String shopId){
         if (shopId == null){
             return null;
         }
@@ -99,13 +99,13 @@ public class ShopRepository {
         if (shop == null){
             return null;
         }
-        List<Long> commodityTypeIds = shopToCommodityTypeMapper.selectCommodityTypeByShop(shopId);
+        List<String> commodityTypeIds = shopToCommodityTypeMapper.selectCommodityTypeByShop(shopId);
         if (commodityTypeIds == null){
             return null;
         }
         List<CommodityType> commodityTypes = commodityTypeMapper.selectBatchIds(commodityTypeIds);
         shop.setCommodityTypes(commodityTypes);
-        Long shopBasicInfoId = shopToShopBasicInfoMapper.selectShopBasicInfoByShop(shopId);
+        String shopBasicInfoId = shopToShopBasicInfoMapper.selectShopBasicInfoByShop(shopId);
         if (shopBasicInfoId == null){
             return null;
         }
@@ -114,41 +114,26 @@ public class ShopRepository {
         return shop;
     }
 
-    public List<Long> selectAllShopIds(){
+    public List<String> selectAllShopIds(){
         return selectAllShopOfStatusIds(null);
     }
 
-    public List<Long> selectAllShopOfStatusIds(ShopStatus shopStatus){
+    public List<String> selectAllShopOfStatusIds(ShopStatus shopStatus){
         List<Shop> shops;
         if (shopStatus == null){
             shops = this.shopMapper.selectList(new QueryWrapper<>());
         }else {
             shops = this.shopMapper.selectList(new QueryWrapper<Shop>().eq("shop_status", shopStatus));
         }
-        List<Long> shopIds = new ArrayList<>();
+        List<String> shopIds = new ArrayList<>();
         shops.forEach(e -> { shopIds.add(e.getShopId()); });
         return shopIds;
     }
 
     public List<Shop> selectAllShopsOfStatusWithAllInfo(ShopStatus shopStatus){
         List<Shop> shopsOfStatus = new ArrayList<>();
-        List<Long> shopOfStatusIds = selectAllShopOfStatusIds(shopStatus);
+        List<String> shopOfStatusIds = selectAllShopOfStatusIds(shopStatus);
         shopOfStatusIds.forEach( e -> shopsOfStatus.add(selectShopWithAllInfo(e)) );
         return shopsOfStatus;
-    }
-
-    public Shop selectShopWithAllInfo(String shopName){
-        if (shopName == null){
-            return null;
-        }
-        ShopBasicInfo shopBasicInfo = shopBasicInfoMapper.selectShopBasicInfo(shopName);
-        if (shopBasicInfo == null){
-            return null;
-        }
-        Long shopId = shopToShopBasicInfoMapper.selectShopByShopBasicInfo(shopBasicInfo.getShopBasicInfoId());
-        if (shopId == null){
-            return null;
-        }
-        return this.selectShopWithAllInfo(shopId);
     }
 }

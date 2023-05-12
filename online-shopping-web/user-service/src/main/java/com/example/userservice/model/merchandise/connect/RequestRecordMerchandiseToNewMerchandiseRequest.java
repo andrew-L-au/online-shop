@@ -1,10 +1,13 @@
 package com.example.userservice.model.merchandise.connect;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
 public class RequestRecordMerchandiseToNewMerchandiseRequest {
-    private Long id;
-    private Long requestRecordMerchandiseId;
-    private Long newMerchandiseRequestId;
+    @TableId(type = IdType.ASSIGN_ID)
+    private String id;
+    private String requestRecordMerchandiseId;
+    private String newMerchandiseRequestId;
 }

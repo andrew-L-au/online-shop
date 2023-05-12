@@ -22,6 +22,9 @@ import modifyItem from "@/components/vendor/modifyItem.vue";
 import modifyItemRecord from "@/components/vendor/modifyItemRecord.vue";
 import totalProfit from "@/components/vendor/totalProfit.vue"
 import transferCapital from "@/components/admin/transferCapital.vue"
+import temp from "@/components/temp.vue";
+import locationManagement from "@/components/user/locationManagement.vue";
+import locationEdition from "@/components/user/locationEdition.vue";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -30,6 +33,12 @@ const router = createRouter({
             name: 'home',
             component: WelcomePage
         },
+        {
+            path: '/test',
+            name: 'test',
+            component: temp
+        },
+
 
         {
             path: '/login',
@@ -66,6 +75,14 @@ const router = createRouter({
                 {
                     path: '/user/userCenter/shoppingCarts',
                     component: userShoppingCarts
+                },
+                {
+                    path: '/user/userCenter/basicInfo/locationManagement',
+                    component: locationManagement
+                },
+                {
+                    path: '/user/userCenter/basicInfo/locationEdition',
+                    component: locationEdition
                 },
 
                 // 商户部分
@@ -143,51 +160,51 @@ const router = createRouter({
 // })
 
 // 拦截器
-router.beforeEach((to, from, next) => {
-    var token = localStorage.getItem('token')
-
-    if(!token){
-        if (to.path === '/' || to.path === '/login' || to.path === '/signup') next()
-        else{
-            ElMessage({
-                type: 'error',
-                message: '请先登录！'
-            })
-            next("/login");
-        }
-    }
-    else {
-        let strings = token.split("."); //截取token，获取载体
-        var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
-        var info = JSON.parse(userinfo.user)
-        var role = info.userRole
-        console.log(role)
-
-        var path = to.path.split('/');
-        console.log(path)
-
-        if (role === 'ADMINISTRATOR') {
-            if (path[1] === "admin") {
-                next();
-            } else { next("/admin") }
-        }
-        else if (role === 'SHOP_OWNER') {
-            if (path[1] === "user" || path[1] === "vendor") {
-                next();
-            } else { next("/user") }
-        }
-        else if (role === 'CUSTOMER') {
-            if (path[1] === "user") {
-                if (path[4] === 'shop') { //普通用户不能查看商店账户
-                    ElMessage({
-                        type: 'error',
-                        message: '您当前为普通用户，无法查看'
-                    })
-                    next("/user")
-                } else { next() }
-            } else { next("/user") }
-        }
-    }
-})
+// router.beforeEach((to, from, next) => {
+//     var token = localStorage.getItem('token')
+//
+//     if(!token){
+//         if (to.path === '/' || to.path === '/login' || to.path === '/signup') next()
+//         else{
+//             ElMessage({
+//                 type: 'error',
+//                 message: '请先登录！'
+//             })
+//             next("/login");
+//         }
+//     }
+//     else {
+//         let strings = token.split("."); //截取token，获取载体
+//         var userinfo = JSON.parse(decodeURIComponent(escape(window.atob(strings[1].replace(/-/g, "+").replace(/_/g, "/"))))); //解析，需要吧‘_’,'-'进行转换否则会无法解析
+//         var info = JSON.parse(userinfo.user)
+//         var role = info.userRole
+//         console.log(role)
+//
+//         var path = to.path.split('/');
+//         console.log(path)
+//
+//         if (role === 'ADMINISTRATOR') {
+//             if (path[1] === "admin") {
+//                 next();
+//             } else { next("/admin") }
+//         }
+//         else if (role === 'SHOP_OWNER') {
+//             if (path[1] === "user" || path[1] === "vendor") {
+//                 next();
+//             } else { next("/user") }
+//         }
+//         else if (role === 'CUSTOMER') {
+//             if (path[1] === "user") {
+//                 if (path[4] === 'shop') { //普通用户不能查看商店账户
+//                     ElMessage({
+//                         type: 'error',
+//                         message: '您当前为普通用户，无法查看'
+//                     })
+//                     next("/user")
+//                 } else { next() }
+//             } else { next("/user") }
+//         }
+//     }
+// })
 
 export default router

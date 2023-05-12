@@ -8,6 +8,7 @@
         <div>{{ commodity.merchandiseName }}</div>
         <div>{{ commodity.price }}</div>
         <div class="buttons">
+          <input type="number" v-model="commodity.quantity" min="1" max="999">
           <button @click="addToCart(index,i)">添加入购物车</button>
         </div>
       </div>
@@ -35,23 +36,12 @@ export default {
                 }
               ],
               description: '1',
-              price: '1'
+              price: '1',
+              quantity: 0
             },
           ]
         }
       ]
-      // shopIds: [{shopId: ''}],
-      // commodityList: [
-      //   {shopId: ''},
-      //   [
-      //     {merchandiseId: ''},
-      //     {merchandiseName: ''},
-      //     {images: ''},
-      //     {description: ''},
-      //     {price: ''},
-      //   ]
-      // ],
-      //二维数组，index为店序号，i为商品序号
 
     }
   },
@@ -100,11 +90,6 @@ export default {
             for (let i = 0; i < resp.data.length; i++) {
               let tmp = resp.data[i];
               this.shops[index].commodities.push(tmp)
-              // this.shops[index].commodities[i].merchandiseId = tmp.merchandiseId
-              // this.shops[index].commodities[i].merchandiseName = tmp.merchandiseName
-              // this.shops[index].commodities[i].images = tmp.images
-              // this.shops[index].commodities[i].description = tmp.description
-              // this.shops[index].commodities[i].price = tmp.price
             }
             console.log(this.shops[index])
           })
@@ -121,7 +106,8 @@ export default {
         url: 'http://192.168.31.196:50000/shopping-cart/add-merchandise-to-shopping-cart',
         data: {
           userId: localStorage.getItem("userId"),
-          merchandiseId: this.shops[index].commodities[i].merchandiseId
+          merchandiseId: this.shops[index].commodities[i].merchandiseId,
+          quantity :this.shops[index].commodities[i].quantity
           // merchandiseId :
         }
       })

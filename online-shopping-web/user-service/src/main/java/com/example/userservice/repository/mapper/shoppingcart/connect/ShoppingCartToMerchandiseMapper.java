@@ -11,8 +11,8 @@ import java.util.List;
 
 @Mapper
 public interface ShoppingCartToMerchandiseMapper extends BaseMapper<ShoppingCartToMerchandise> {
-    default List<Long> selectMerchandisesByShoppingCart(Long shoppingCartId){
-        List<Long> merchandiseIds = new ArrayList<>();
+    default List<String> selectMerchandisesByShoppingCart(String shoppingCartId){
+        List<String> merchandiseIds = new ArrayList<>();
         if (shoppingCartId == null){
             return null;
         }
@@ -29,7 +29,25 @@ public interface ShoppingCartToMerchandiseMapper extends BaseMapper<ShoppingCart
         return merchandiseIds;
     }
 
-    default Long selectOneByShoppingCartAndMerchandises(Long shoppingCartId, Long merchandiseId){
+    default List<String> selectShoppingCartsByMerchandise(String merchandiseId){
+        List<String> shoppingCartIds = new ArrayList<>();
+        if (merchandiseId == null){
+            return null;
+        }
+        List<ShoppingCartToMerchandise> shoppingCartToMerchandises = this.selectList(new QueryWrapper<ShoppingCartToMerchandise>().eq("merchandise_id",merchandiseId));
+        if (shoppingCartToMerchandises == null){
+            return null;
+        }
+        for (ShoppingCartToMerchandise shoppingCartToMerchandise : shoppingCartToMerchandises){
+            if (shoppingCartToMerchandise.getShoppingCartId() == null){
+                continue;
+            }
+            shoppingCartIds.add(shoppingCartToMerchandise.getShoppingCartId());
+        }
+        return shoppingCartIds;
+    }
+
+    default String selectOneByShoppingCartAndMerchandises(String shoppingCartId, String merchandiseId){
         if (shoppingCartId == null || merchandiseId == null){
             return null;
         }

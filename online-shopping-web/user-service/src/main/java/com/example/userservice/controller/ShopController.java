@@ -1,5 +1,7 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.controller.shopDTO.RequestCloseShopDTO;
+import com.example.userservice.controller.shopDTO.ShopOfUserDTO;
 import com.example.userservice.model.DTO.ApproveOpenShopRequestDTO;
 import com.example.userservice.model.DTO.RequestOpenShopDTO;
 import com.example.userservice.model.shop.*;
@@ -59,7 +61,7 @@ public class ShopController {
     @PostMapping("/approve-open-shop-request")
     public String approveOpenShopRequest(@RequestBody ApproveOpenShopRequestDTO approveOpenShopRequestDTO){
         try {
-            shopService.approveOpenShopRequest(approveOpenShopRequestDTO.getName());
+            shopService.approveOpenShopRequest(approveOpenShopRequestDTO.getShopId());
         }catch (RuntimeException e){
             return "fail";
         }
@@ -77,10 +79,11 @@ public class ShopController {
     }
 
     @PostMapping("/request-close-shop")
-    public Boolean requestCloseShop(Long shopId){
-        if (shopId == null){
+    public Boolean requestCloseShop(@RequestBody RequestCloseShopDTO requestCloseShopDTO){
+        if (requestCloseShopDTO == null || requestCloseShopDTO.getShopId() == null){
             return false;
         }
+        String shopId = requestCloseShopDTO.getShopId();
         try {
             return shopService.requestCloseShop(shopId);
         }catch (RuntimeException e){
@@ -88,7 +91,7 @@ public class ShopController {
         }
     }
 
-    @PostMapping("/get-close-shop-requests")
+    @GetMapping("/get-close-shop-requests")
     public List<CloseShopRequest> getCloseShopRequests(){
         try {
             return shopService.getCloseShopRequests();
@@ -98,25 +101,26 @@ public class ShopController {
 
     }
 
-    @PostMapping()
-    public Boolean approveCloseShopRequest(@RequestBody Long closeShopRequestId){
-        if (closeShopRequestId == null){
+    @PostMapping("approve-close-shop-request")
+    public Boolean approveCloseShopRequest(@RequestBody CloseShopRequest closeShopRequest){
+        if (closeShopRequest == null ||closeShopRequest.getCloseShopRequestId() == null){
             return false;
         }
         try {
-            return shopService.approveCloseShopRequest(closeShopRequestId);
+            return shopService.approveCloseShopRequest(closeShopRequest.getCloseShopRequestId());
         }catch (RuntimeException e){
             return false;
         }
     }
 
     @PostMapping("/shop-of-user")
-    public Shop shopOfUser(@RequestBody Long userId){
+    public Shop shopOfUser(@RequestBody ShopOfUserDTO shopOfUserDTO){
+        String userId = shopOfUserDTO.getUserId();
         if (userId == null){
             return null;
         }
         try {
-            return shopService.shopOfUser(userId);
+            return shopService.shopWithBasicInfoAndCommodityTypesOfUser(userId);
         }catch (RuntimeException e){
             return null;
         }

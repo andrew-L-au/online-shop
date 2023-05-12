@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class ProfitAccount{
     @TableId(value = "profit_account_id" ,type = IdType.ASSIGN_ID)
-    private Long profitAccountId;
+    private String profitAccountId;
     @TableField(exist = false)
-    public static final Long PROFIT_ACCOUNT_ID = Long.valueOf(2);
+    public static final String PROFIT_ACCOUNT_ID = String.valueOf(2);
     @TableField(exist = false)
     private Account account;
     @TableField(exist = false)

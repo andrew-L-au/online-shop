@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @TableName(value = "customer")
 public class Customer{
     @TableId(value = "customer_id",type = IdType.ASSIGN_ID)
-    private Long customerId;
+    private String customerId;
     @TableField(exist = false)
     private User user;
 }

@@ -1,5 +1,7 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.controller.userDTO.ChangePasswordDTO;
+import com.example.userservice.controller.userDTO.ChangeUserBasicInfoDTO;
 import com.example.userservice.model.account.PersonalAccount;
 import com.example.userservice.model.DTO.LoginResponse;
 import com.example.userservice.model.DTO.RegistrationRequest;
@@ -64,8 +66,20 @@ public class UserController {
         return "success";
     }
 
+    @PostMapping(path = "/basic-info")
+    public UserBasicInfo getUserBasicInfo(@RequestBody String userId){
+        if (userId == null){
+            return null;
+        }
+        try {
+            return userService.findUserBasicInfo(userId);
+        }catch (RuntimeException e){
+            return null;
+        }
+    }
+
     @PostMapping(path = "/customer/registration")
-    public String customerRegistration(RegistrationRequest registrationRequest) {
+    public String customerRegistration(@RequestBody RegistrationRequest registrationRequest) {
         if (registrationRequest == null){
             return "format error";
         }
@@ -105,19 +119,21 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public LoginResponse login(@RequestBody UserAuthentication userAuthentication) throws JsonProcessingException {
+    public LoginResponse login(@RequestBody UserAuthentication userAuthentication){
         if (userAuthentication == null){
             return new LoginResponse(null,false);
         }
         try {
             return userService.login(userAuthentication);
-        }catch (RuntimeException e){
+        }catch (RuntimeException | JsonProcessingException e){
             return new LoginResponse(null,false);
         }
     }
 
     @PostMapping(path = "/change-user-basic-info")
-    public Boolean changeUserBasicInfo(Long userId, UserBasicInfo userBasicInfo){
+    public Boolean changeUserBasicInfo(@RequestBody ChangeUserBasicInfoDTO changeUserBasicInfoDTO){
+        String userId = changeUserBasicInfoDTO.getUserId();
+        UserBasicInfo userBasicInfo = changeUserBasicInfoDTO.getUserBasicInfo();
         if (userId == null || userBasicInfo == null){
             return false;
         }
@@ -131,7 +147,9 @@ public class UserController {
     }
 
     @PostMapping(path = "/change-password")
-    public Boolean changePassword(Long userId, String password){
+    public Boolean changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+        String userId = changePasswordDTO.getUserId();
+        String password = changePasswordDTO.getPassword();
         if (userId == null || password == null){
             return false;
         }

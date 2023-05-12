@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.userservice.model.account.Account;
 import com.example.userservice.model.account.MiddleAccount;
 import com.example.userservice.model.account.ProfitAccount;
+import com.example.userservice.model.connect.ShopOwnerToShop;
 import com.example.userservice.model.shop.CloseShopRequest;
 import com.example.userservice.model.shop.OpenShopRequest;
 import com.example.userservice.model.shop.RequestStatus;
@@ -17,10 +18,11 @@ import com.example.userservice.model.user.User;
 import com.example.userservice.repository.OpenShopRequestRepository;
 import com.example.userservice.repository.ShopRepository;
 import com.example.userservice.repository.mapper.connect.ShopOwnerToShopMapper;
-import com.example.userservice.repository.mapper.shop.CloseShopRequestMapper;
-import com.example.userservice.repository.mapper.shop.ShopBasicInfoMapper;
-import com.example.userservice.repository.mapper.shop.ShopMapper;
+import com.example.userservice.repository.mapper.connect.ShopToCommodityTypeMapper;
+import com.example.userservice.repository.mapper.connect.ShopToShopBasicInfoMapper;
+import com.example.userservice.repository.mapper.shop.*;
 import com.example.userservice.repository.mapper.shop.connect.CloseShopRequestToShopMapper;
+import com.example.userservice.repository.mapper.shop.connect.ShopToMerchandiseMapper;
 import com.example.userservice.repository.mapper.user.UserMapper;
 import com.example.userservice.repository.mapper.user.connect.ShopOwnerToUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ import java.util.List;
 public class ShopService {
     @Autowired
     ShopOwnerService shopOwnerService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     ShopRepository shopRepository;
@@ -57,13 +62,28 @@ public class ShopService {
     private UserMapper userMapper;
 
     @Autowired
+    private OpenShopRequestMapper openShopRequestMapper;
+
+    @Autowired
+    private CommodityTypeMapper commodityTypeMapper;
+
+    @Autowired
     private ShopOwnerToShopMapper shopOwnerToShopMapper;
 
     @Autowired
     private ShopOwnerToUserMapper shopOwnerToUserMapper;
 
     @Autowired
-    private AccountService accountService;
+    private ShopToShopBasicInfoMapper shopToShopBasicInfoMapper;
+
+    @Autowired
+    private ShopToCommodityTypeMapper shopToCommodityTypeMapper;
+
+    @Autowired
+    private ShopToMerchandiseMapper shopToMerchandiseMapper;
+
+    @Autowired
+    private MerchandiseService merchandiseService;
 
     @Transactional
     public void requestOpenShop(Shop shop, ShopBasicInfo shopBasicInfo, String idCardNumber, List<CommodityType> commodityTypes) throws RuntimeException{
@@ -74,13 +94,13 @@ public class ShopService {
         if (shopOwner == null){
             return;
         }
+        if (shopOwnerToShopMapper.selectShopByShopOwner(shopOwner.getShopOwnerId()) != null){
+            return;
+        }
         if (shopBasicInfo.getName() == null){
             return;
         }
-        if (shopBasicInfoMapper.selectShopBasicInfo(shopBasicInfo.getName()) != null){
-            return;
-        }
-        Long userId = shopOwnerToUserMapper.selectUserByShopOwner(shopOwner.getShopOwnerId());
+        String userId = shopOwnerToUserMapper.selectUserByShopOwner(shopOwner.getShopOwnerId());
         if (userId == null){
             return;
         }
@@ -108,13 +128,20 @@ public class ShopService {
     }
 
     @Transactional
-    public Boolean requestCloseShop(Long shopId){
+    public Boolean requestCloseShop(String shopId){
         if (shopId == null){
             return false;
         }
         Shop shop = shopRepository.selectShopWithAllInfo(shopId);
         if (shop == null){
             return false;
+        }
+        if (closeShopRequestToShopMapper.selectCloseShopRequestByShop(shopId) != null){
+            String closeShopRequestId = closeShopRequestToShopMapper.selectCloseShopRequestByShop(shopId);
+            CloseShopRequest closeShopRequest = closeShopRequestMapper.selectById(closeShopRequestId);
+            if (!closeShopRequest.getRequestStatus().equals(RequestStatus.IN_REVIEW)){
+                return false;
+            }
         }
         CloseShopRequest closeShopRequest = new CloseShopRequest();
         closeShopRequest.setRequestStatus(RequestStatus.IN_REVIEW);
@@ -136,18 +163,15 @@ public class ShopService {
             if (closeShopRequest.getCloseShopRequestId() == null){
                 return null;
             }
-            Long shopId = closeShopRequestToShopMapper.selectShopByCloseShopRequest(closeShopRequest.getCloseShopRequestId());
+            String shopId = closeShopRequestToShopMapper.selectShopByCloseShopRequest(closeShopRequest.getCloseShopRequestId());
             Shop shop = shopRepository.selectShopWithAllInfo(shopId);
-            if (shop == null){
-                return null;
-            }
             closeShopRequest.setShop(shop);
         }
         return closeShopRequests;
     }
 
     @Transactional
-    public Boolean approveCloseShopRequest(Long closeShopRequestId){
+    public Boolean approveCloseShopRequest(String closeShopRequestId){
         if (closeShopRequestId == null){
             return false;
         }
@@ -155,22 +179,39 @@ public class ShopService {
         if (closeShopRequest == null){
             return false;
         }
-        Long shopId = closeShopRequestToShopMapper.selectShopByCloseShopRequest(closeShopRequest.getCloseShopRequestId());
+        closeShopRequest.setRequestStatus(RequestStatus.APPROVE);
+        closeShopRequestMapper.updateById(closeShopRequest);
+        String shopId = closeShopRequestToShopMapper.selectShopByCloseShopRequest(closeShopRequest.getCloseShopRequestId());
         int num = shopMapper.deleteById(shopId);
         if (num <= 0){
             throw new RuntimeException();
         }
+        String shopOwnerId = shopOwnerToShopMapper.selectShopOwnerByShop(shopId);
+        ShopOwnerToShop shopOwnerToShop = shopOwnerToShopMapper.selectOneByShopOwnerAndShop(shopOwnerId,shopId);
+        num = shopOwnerToShopMapper.deleteById(shopOwnerToShop.getId());
+        if (num <= 0){
+            throw new RuntimeException();
+        }
+        String shopBasicInfoId = shopToShopBasicInfoMapper.selectShopBasicInfoByShop(shopId);
+        if (shopBasicInfoMapper.deleteById(shopBasicInfoId) <= 0){
+            throw new RuntimeException();
+        }
+        List<String> merchandiseIds =  shopToMerchandiseMapper.selectMerchandisesByShop(shopId);
+        for (String merchandiseId : merchandiseIds){
+            merchandiseService.removeMerchandise(merchandiseId);
+        }
+        accountService.closeShopAccount(shopId);
         return true;
     }
 
 
 
     @Transactional
-    public String approveOpenShopRequest(String shopName){
-        if (shopName == null){
+    public String approveOpenShopRequest(String shopId){
+        if (shopId == null){
             throw new RuntimeException();
         }
-        Shop shop = shopRepository.selectShopWithAllInfo(shopName);
+        Shop shop = shopRepository.selectShopWithAllInfo(shopId);
         if (shop == null){
             return null;
         }
@@ -179,12 +220,15 @@ public class ShopService {
         if (openShopRequest == null){
             throw new RuntimeException();
         }
-        Boolean updateNum = openShopRequestRepository.updateOpenShopRequest(openShopRequest.getOpenShopRequestId(), RequestStatus.APPROVE);
-        if (!updateNum){
+        int updateNum = openShopRequestMapper.deleteById(openShopRequest.getOpenShopRequestId());
+        if (updateNum <= 0){
             throw new RuntimeException();
         }
-        updateNum = shopRepository.updateShopStatus(openShopRequest.getShop().getShopId(), ShopStatus.NORMAL);
-        if (!updateNum){
+        Boolean num = shopRepository.updateShopStatus(openShopRequest.getShop().getShopId(), ShopStatus.NORMAL);
+        if (!num){
+            throw new RuntimeException();
+        }
+        if(!accountService.openShopAccount(shopId)){
             throw new RuntimeException();
         }
         return "success";
@@ -194,7 +238,7 @@ public class ShopService {
         return shopRepository.selectAllShopsOfStatusWithAllInfo(ShopStatus.NORMAL);
     }
 
-    public Shop shopOfUser(Long userId){
+    public Shop shopWithBasicInfoAndCommodityTypesOfUser(String userId){
         if (userId == null){
             return null;
         }
@@ -202,11 +246,11 @@ public class ShopService {
         if (user == null){
             return null;
         }
-        Long shopOwnerId = shopOwnerToUserMapper.selectShopOwnerByUser(user.getUserId());
+        String shopOwnerId = shopOwnerToUserMapper.selectShopOwnerByUser(user.getUserId());
         if (shopOwnerId == null){
             return null;
         }
-        Long shopId = shopOwnerToShopMapper.selectShopByShopOwner(shopOwnerId);
+        String shopId = shopOwnerToShopMapper.selectShopByShopOwner(shopOwnerId);
         if (shopId == null){
             return null;
         }
@@ -214,6 +258,24 @@ public class ShopService {
         if (shop == null){
             return null;
         }
+        String shopBasicInfoId = shopToShopBasicInfoMapper.selectShopBasicInfoByShop(shop.getShopId());
+        if (shopBasicInfoId == null){
+            return null;
+        }
+        ShopBasicInfo shopBasicInfo = shopBasicInfoMapper.selectById(shopBasicInfoId);
+        if (shopBasicInfo == null){
+            return null;
+        }
+        shop.setShopBasicInfo(shopBasicInfo);
+        List<String> commodityTypeId = shopToCommodityTypeMapper.selectCommodityTypeByShop(shop.getShopId());
+        if (commodityTypeId == null){
+            return null;
+        }
+        List<CommodityType> commodityTypes = commodityTypeMapper.selectBatchIds(commodityTypeId);
+        if (commodityTypes == null){
+            return null;
+        }
+        shop.setCommodityTypes(commodityTypes);
         return shop;
     }
 }

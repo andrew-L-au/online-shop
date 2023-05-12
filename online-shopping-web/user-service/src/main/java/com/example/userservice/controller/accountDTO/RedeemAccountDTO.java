@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class RedeemAccountDTO {
-    private Long accountId;
+    private String accountId;
     private Double amount;
 }

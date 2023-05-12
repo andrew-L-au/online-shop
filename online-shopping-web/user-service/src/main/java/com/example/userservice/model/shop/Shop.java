@@ -18,13 +18,12 @@ import java.util.List;
 @TableName("shop")
 public class Shop {
     @TableId(value = "shop_id",type = IdType.ASSIGN_ID)
-    private Long shopId;
+    private String shopId;
     @TableField(exist = false)
     private ShopBasicInfo shopBasicInfo;
     @TableField(exist = false)
     private ShopOwner shopOwner;
     @TableField(exist = false)
     private List<CommodityType> commodityTypes;
-    @TableField(exist = false)
     private ShopStatus shopStatus;
 }

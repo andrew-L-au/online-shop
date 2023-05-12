@@ -5,6 +5,8 @@
       <div v-for="(commodity, index) in shoppingCart.commodityList" :key="index" class="cart-item">
         <img :src="commodity.images[0].base64" alt="Product Image">
         <div class="item-name">{{ commodity.merchandiseName }}</div>
+        <button @click="decrementQuantity(index)">-</button>
+        <button @click="incrementQuantity(index)">+</button>
         <button @click="removeItem(index)">删除</button>
         <input type="checkbox" v-model="commodity.checked"/>
       </div>
@@ -30,7 +32,8 @@ export default {
               }
             ],
             description:'',
-            price:''
+            price:'',
+            quantity: 0
           }
         ],
       }
@@ -63,6 +66,42 @@ export default {
           .catch(err => {
             console.log(err);
           })
+    },
+
+    incrementQuantity(index) {
+      this.shoppingCart.commodityList[index].quantity++
+      //TODO:axios
+      this.$axios({
+        method: 'get',
+        url: 'http://192.168.31.196:50000/shop/current-shops',
+      })
+          .then(resp => {
+            this.shops = []
+            for (let i = 0; i < resp.data.length; i++) {
+              let tmp = resp.data[i];
+              this.shops.push(
+                  {
+                    shopId: tmp.shopId,
+                    commodities : []
+                  }
+              )
+            }
+            for (let index = 0; index < this.shops.length; index++) {
+              console.log(this.shops)
+              this.getItems(index);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+    },
+
+    decrementQuantity(index) {
+      if (this.shoppingCart.commodityList[index].quantity > 1) {
+        this.shoppingCart.commodityList[index].quantity--
+      } else {
+        this.removeItem(index)
+      }
     },
 
     removeItem(index) {

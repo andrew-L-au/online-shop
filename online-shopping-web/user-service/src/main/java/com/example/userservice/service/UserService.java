@@ -34,6 +34,9 @@ public class UserService {
     UserMapper userMapper;
 
     @Autowired
+    private AccountService accountService;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -61,7 +64,7 @@ public class UserService {
         return userBasicInfoRepository.selectUserBasicInfoByEmail(email) != null;
     }
 
-    public Boolean userBasicInfoConflicts(UserBasicInfo userBasicInfo){
+    public Boolean userBasicInfoConflicts(String userBasicInfoId, UserBasicInfo userBasicInfo){
         if (userBasicInfo == null || userBasicInfo.getUsername() == null || userBasicInfo.getIdCardNumber() == null || userBasicInfo.getPhoneNumber() == null || userBasicInfo.getEmail() == null){
             return false;
         }
@@ -112,21 +115,24 @@ public class UserService {
         }
         userAuthenticationMapper.insert(userAuthentication);
         if (userAuthentication.getUserAuthenticationId() == null){
-            return false;
+            throw new RuntimeException();
         }
         userMapper.insert(user);
         if (user.getUserId() == null){
-            return false;
+            throw new RuntimeException();
         }
         UserToUserBasicInfo userToUserBasicInfo = new UserToUserBasicInfo(null ,user.getUserId(),userBasicInfo.getUserBasicInfoId());
         userToUserBasicInfoMapper.insert(userToUserBasicInfo);
         if (userToUserBasicInfo.getId() == null){
-            return false;
+            throw new RuntimeException();
         }
         UserToUserAuthentication userToUserAuthentication = new UserToUserAuthentication(null, user.getUserId(),userAuthentication.getUserAuthenticationId());
         userToUserAuthenticationMapper.insert(userToUserAuthentication);
         if (userToUserAuthentication.getId() == null){
-            return false;
+            throw new RuntimeException();
+        }
+        if (!accountService.openPersonalAccount(user.getUserId())){
+            throw new RuntimeException();
         }
         return true;
     }
@@ -145,7 +151,7 @@ public class UserService {
         return userRepository.selectUser(principal);
     }
 
-    public UserBasicInfo findUserBasicInfo(Long userId){
+    public UserBasicInfo findUserBasicInfo(String userId){
         return userRepository.selectUserBasicInfo(userId);
     }
 
@@ -155,31 +161,47 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean changeUserBasicInfo(Long userId, UserBasicInfo newUserBasicInfo){
+    public Boolean changeUserBasicInfo(String userId, UserBasicInfo newUserBasicInfo){
         if (userId == null || newUserBasicInfo == null){
             return false;
         }
-        if (userBasicInfoConflicts(newUserBasicInfo)){
-            return false;
-        }
-        Long originalUserBasicInfoId = userToUserBasicInfoMapper.selectUserBasicInfoByUser(userId);
-        if (originalUserBasicInfoId == null){
+        String originalUserBasicInfoId = userToUserBasicInfoMapper.selectUserBasicInfoByUser(userId);
+        String originalUserAuthenticationId = userToUserAuthenticationMapper.selectUserAuthenticationByUser(userId);
+        if (originalUserBasicInfoId == null || originalUserAuthenticationId == null){
             return false;
         }
         UserBasicInfo originalUserBasicInfo = userBasicInfoMapper.selectById(originalUserBasicInfoId);
-        if (originalUserBasicInfo != null){
+        UserAuthentication originalUserAuthentication = userAuthenticationMapper.selectById(originalUserAuthenticationId);
+        if (!originalUserBasicInfo.getUsername().equals(newUserBasicInfo.getUsername())){
+            if (this.existOneInfoWithSameUsername(newUserBasicInfo.getUsername())){
+                return false;
+            }
+        }
+        if (!originalUserBasicInfo.getEmail().equals(newUserBasicInfo.getEmail())){
+            if (this.existOneInfoWithSameEmail(newUserBasicInfo.getEmail())){
+                return false;
+            }
+        }
+        if (!originalUserBasicInfo.getPhoneNumber().equals(newUserBasicInfo.getPhoneNumber())){
+            if (this.existOneInfoWithSamePhoneNumber(newUserBasicInfo.getPhoneNumber())){
+                return false;
+            }
+        }
+        if (originalUserBasicInfo != null || originalUserAuthentication != null){
             newUserBasicInfo.setUserBasicInfoId(originalUserBasicInfo.getUserBasicInfoId());
+            originalUserAuthentication.setPrincipal(newUserBasicInfo.getUsername());
             userBasicInfoMapper.updateById(newUserBasicInfo);
+            userAuthenticationMapper.updateById(originalUserAuthentication);
         }
         return true;
     }
 
     @Transactional
-    public boolean changePassword(Long userId,String password){
+    public boolean changePassword(String userId,String password){
         if (userId == null || password == null){
             return false;
         }
-        Long userAuthenticationId = userToUserAuthenticationMapper.findUserAuthenticationByUser(userId);
+        String userAuthenticationId = userToUserAuthenticationMapper.findUserAuthenticationByUser(userId);
         if (userAuthenticationId == null){
             return false;
         }

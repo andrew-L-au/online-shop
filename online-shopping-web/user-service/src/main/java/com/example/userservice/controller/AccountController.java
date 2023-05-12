@@ -1,13 +1,12 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.controller.accountDTO.AccountOfShopDTO;
+import com.example.userservice.controller.accountDTO.AccountOfUserDTO;
 import com.example.userservice.controller.accountDTO.RedeemAccountDTO;
 import com.example.userservice.model.account.Account;
 import com.example.userservice.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/account")
@@ -16,7 +15,8 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping(path = "/account-of-user")
-    public Account accountOfUser(@RequestBody Long userId){
+    public Account accountOfUser(@RequestBody AccountOfUserDTO accountOfUserDTO) {
+        String userId = accountOfUserDTO.getUserId();
         if (userId == null){
             return null;
         }
@@ -27,11 +27,30 @@ public class AccountController {
         }
     }
 
-    @PostMapping(path = "/account-of-shop")
-    public Account accountOfShop(@RequestBody Long shopId){
-        if (shopId == null){
+    @GetMapping(path = "/middle-account")
+    public Account middleAccount() {
+        try {
+            return accountService.middleAccount();
+        }catch (RuntimeException e) {
             return null;
         }
+    }
+
+    @GetMapping(path = "/profit-account")
+    public Account profitAccount() {
+        try {
+            return accountService.profitAccount();
+        }catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    @PostMapping(path = "/account-of-shop")
+    public Account accountOfShop(@RequestBody AccountOfShopDTO accountOfShopDTO){
+        if (accountOfShopDTO == null || accountOfShopDTO.getShopId() == null){
+            return null;
+        }
+        String shopId = accountOfShopDTO.getShopId();
         try {
             return accountService.accountOfShop(shopId);
         }catch (RuntimeException e) {
@@ -39,9 +58,9 @@ public class AccountController {
         }
     }
 
-    @PostMapping(path = "/account-of-user")
-    public Boolean redeemAccount(RedeemAccountDTO redeemAccountDTO) {
-        Long accountId = redeemAccountDTO.getAccountId();
+    @PostMapping(path = "/redeem-account")
+    public Boolean redeemAccount(@RequestBody RedeemAccountDTO redeemAccountDTO) {
+        String accountId = redeemAccountDTO.getAccountId();
         Double amount = redeemAccountDTO.getAmount();
         if (accountId == null) {
             return false;

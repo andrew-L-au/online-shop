@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommodityType {
     @TableId(value = "commodity_type_id",type = IdType.ASSIGN_ID)
-    private Long commodityTypeId;
+    private String commodityTypeId;
     private String commodityType;
 }

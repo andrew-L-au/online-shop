@@ -1,11 +1,11 @@
 package com.example.userservice.controller;
 
-import com.example.userservice.controller.merchandiseDTO.RequestModifyMerchandiseDTO;
-import com.example.userservice.controller.merchandiseDTO.RequestNewMerchandiseDTO;
+import com.example.userservice.controller.merchandiseDTO.*;
 import com.example.userservice.model.merchandise.Merchandise;
 import com.example.userservice.model.merchandise.ModifyMerchandiseRequest;
 import com.example.userservice.model.merchandise.NewMerchandiseRequest;
 import com.example.userservice.model.merchandise.RequestRecordMerchandise;
+import com.example.userservice.model.shop.Shop;
 import com.example.userservice.service.MerchandiseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class MerchandiseController {
             return null;
         }
         RequestRecordMerchandise requestRecordMerchandise = requestNewMerchandiseDTO.getRequestRecordMerchandise();
-        Long shopId = requestNewMerchandiseDTO.getShopId();
+        String shopId = requestNewMerchandiseDTO.getShopId();
         if (requestRecordMerchandise == null || shopId == null){
             return false;
         }
@@ -41,9 +41,9 @@ public class MerchandiseController {
         if (requestModifyMerchandiseDTO == null){
             return null;
         }
-        Long merchandiseId = requestModifyMerchandiseDTO.getMerchandiseId();
+        String merchandiseId = requestModifyMerchandiseDTO.getMerchandiseId();
         RequestRecordMerchandise requestRecordMerchandise = requestModifyMerchandiseDTO.getRequestRecordMerchandise();
-        Long shopId = requestModifyMerchandiseDTO.getShopId();
+        String shopId = requestModifyMerchandiseDTO.getShopId();
         if (merchandiseId == null || requestRecordMerchandise == null || shopId == null){
             return false;
         }
@@ -54,10 +54,11 @@ public class MerchandiseController {
         }
     }
     @PostMapping(path = "/remove-merchandise")
-    public Boolean removeMerchandise(@RequestBody Long merchandiseId){
-        if (merchandiseId == null){
+    public Boolean removeMerchandise(@RequestBody RemoveMerchandiseDTO removeMerchandiseDTO){
+        if (removeMerchandiseDTO == null || removeMerchandiseDTO.getMerchandiseId() == null){
             return false;
         }
+        String merchandiseId = removeMerchandiseDTO.getMerchandiseId();
         try {
             return merchandiseService.removeMerchandise(merchandiseId);
         }catch (RuntimeException e){
@@ -75,7 +76,7 @@ public class MerchandiseController {
     }
 
     @PostMapping("/new-merchandise-requests-of-shop")
-    public List<NewMerchandiseRequest> newMerchandiseRequestWithRequestRecordMerchandiseOfShop(Long shopId){
+    public List<NewMerchandiseRequest> newMerchandiseRequestWithRequestRecordMerchandiseOfShop(String shopId){
         try {
             return merchandiseService.findNewMerchandiseRequestWithRequestRecordMerchandiseOfShop(shopId);
         }catch (RuntimeException e){
@@ -93,7 +94,7 @@ public class MerchandiseController {
     }
 
     @PostMapping("/modify-merchandise-requests-of-shop")
-    public List<ModifyMerchandiseRequest> modifyMerchandiseRequestWithRequestRecordMerchandiseOfShop(Long shopId){
+    public List<ModifyMerchandiseRequest> modifyMerchandiseRequestWithRequestRecordMerchandiseOfShop(@RequestBody String shopId){
         try {
             return merchandiseService.findModifyMerchandiseRequestWithRequestRecordMerchandiseOfShop(shopId);
         }catch (RuntimeException e){
@@ -102,10 +103,11 @@ public class MerchandiseController {
     }
 
     @PostMapping("/approve-new-merchandise-request")
-    public Boolean approveNewMerchandiseRequest(Long newMerchandiseRequestId){
-        if (newMerchandiseRequestId == null){
+    public Boolean approveNewMerchandiseRequest(@RequestBody ApproveNewMerchandiseRequestDTO approveNewMerchandiseRequestDTO){
+        if (approveNewMerchandiseRequestDTO == null || approveNewMerchandiseRequestDTO.getNewMerchandiseRequestId() == null){
             return false;
         }
+        String newMerchandiseRequestId = approveNewMerchandiseRequestDTO.getNewMerchandiseRequestId();
         try {
             return merchandiseService.approveNewMerchandiseRequest(newMerchandiseRequestId);
         }catch (RuntimeException e){
@@ -114,10 +116,11 @@ public class MerchandiseController {
     }
 
     @PostMapping("/reject-new-merchandise-request")
-    public Boolean rejectNewMerchandiseRequest(Long newMerchandiseRequestId){
-        if (newMerchandiseRequestId == null){
+    public Boolean rejectNewMerchandiseRequest(@RequestBody RejectNewMerchandiseRequestDTO rejectNewMerchandiseRequestDTO){
+        if (rejectNewMerchandiseRequestDTO == null || rejectNewMerchandiseRequestDTO.getNewMerchandiseRequestId() == null){
             return false;
         }
+        String newMerchandiseRequestId = rejectNewMerchandiseRequestDTO.getNewMerchandiseRequestId();
         try {
             return merchandiseService.rejectNewMerchandiseRequest(newMerchandiseRequestId);
         }catch (RuntimeException e){
@@ -126,10 +129,11 @@ public class MerchandiseController {
     }
 
     @PostMapping("/approve-modify-merchandise-request")
-    public Boolean approveModifyMerchandiseRequest(Long modifyMerchandiseRequestId){
-        if (modifyMerchandiseRequestId == null){
+    public Boolean approveModifyMerchandiseRequest(@RequestBody ApproveModifyMerchandiseRequestDTO approveModifyMerchandiseRequestDTO){
+        if (approveModifyMerchandiseRequestDTO == null || approveModifyMerchandiseRequestDTO.getModifyMerchandiseRequestId() == null){
             return false;
         }
+        String modifyMerchandiseRequestId = approveModifyMerchandiseRequestDTO.getModifyMerchandiseRequestId();
         try {
             return merchandiseService.approveModifyMerchandiseRequest(modifyMerchandiseRequestId);
         }catch (RuntimeException e){
@@ -138,14 +142,28 @@ public class MerchandiseController {
     }
 
     @PostMapping("/reject-modify-merchandise-request")
-    public Boolean rejectModifyMerchandiseRequest(Long modifyMerchandiseRequestId){
-        if (modifyMerchandiseRequestId == null){
+    public Boolean rejectModifyMerchandiseRequest(@RequestBody RejectModifyMerchandiseRequestDTO requestModifyMerchandiseDTO){
+        if (requestModifyMerchandiseDTO == null ||requestModifyMerchandiseDTO.getModifyMerchandiseRequestId() == null){
             return false;
         }
+        String modifyMerchandiseRequestId = requestModifyMerchandiseDTO.getModifyMerchandiseRequestId();
         try {
             return merchandiseService.rejectModifyMerchandiseRequest(modifyMerchandiseRequestId);
         }catch (RuntimeException e){
             return false;
+        }
+    }
+
+    @PostMapping("/merchandises-of-shop")
+    public List<Merchandise> merchandisesOfShop(@RequestBody Shop shop){
+        if (shop == null || shop.getShopId() == null){
+            return null;
+        }
+        String shopId = shop.getShopId();
+        try{
+            return merchandiseService.merchandisesOfShop(shopId);
+        }catch (RuntimeException e){
+            return null;
         }
     }
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ShopOwnerToShop {
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
-    private Long shopOwnerId;
-    private Long shopId;
+    private String id;
+    private String shopOwnerId;
+    private String shopId;
 }

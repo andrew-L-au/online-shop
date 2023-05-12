@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class RemoveMerchandiseFromShoppingCartDTO {
-    private Long userId;
-    private Long merchandiseId;
+    private String userId;
+    private String merchandiseId;
 }

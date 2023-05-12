@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface OpenShopRequestToShopMapper extends BaseMapper<OpenShopRequestToShop> {
-    default Long selectOpenShopRequestByShop(Long shopId) {
+    default String selectOpenShopRequestByShop(String shopId) {
         OpenShopRequestToShop openShopRequestToShop = this.selectOne(new QueryWrapper<OpenShopRequestToShop>().eq("shop_id", shopId));
         if (openShopRequestToShop == null){
             return null;
@@ -15,7 +15,7 @@ public interface OpenShopRequestToShopMapper extends BaseMapper<OpenShopRequestT
         return openShopRequestToShop.getOpenShopRequestId();
     }
 
-    default Long selectShopByOpenShopRequest(Long openShopRequestId){
+    default String selectShopByOpenShopRequest(String openShopRequestId){
         OpenShopRequestToShop openShopRequestToShop = this.selectOne(new QueryWrapper<OpenShopRequestToShop>().eq("open_shop_request_id", openShopRequestId));
         if (openShopRequestToShop == null){
             return null;

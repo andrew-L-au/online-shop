@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class RequestNewMerchandiseDTO {
     private RequestRecordMerchandise requestRecordMerchandise;
-    private Long shopId;
+    private String shopId;
 }
